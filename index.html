@@ -1077,6 +1077,159 @@ nav a.nav-training-link {
 }
 nav a.nav-training-link:hover { opacity: .88; transform: translateY(-1px); text-decoration: none; }
 
+nav a.nav-projects-view-link {
+  background: linear-gradient(135deg, #2a807c, var(--teal));
+  color: #fff !important; padding: .3rem .8rem; border-radius: 999px;
+  font-weight: 700; font-size: .82rem; transition: opacity .2s, transform .2s;
+}
+nav a.nav-projects-view-link:hover { opacity: .88; transform: translateY(-1px); }
+nav a.nav-project-link {
+  background: linear-gradient(135deg, #b99a55, #9c7d35);
+  color: #fff !important;
+  padding: .3rem .8rem;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: .82rem;
+  transition: opacity .2s, transform .2s;
+}
+nav a.nav-project-link:hover { opacity: .88; transform: translateY(-1px); text-decoration: none; }
+
+/* ============================================================
+   PROJECT REGISTRATION MODAL
+   ============================================================ */
+.proj-overlay {
+  position: fixed; inset: 0; z-index: 1001;
+  background: rgba(10,20,40,.8);
+  backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
+  opacity: 0; pointer-events: none;
+  transition: opacity .3s;
+  display: flex; align-items: center; justify-content: center;
+  padding: 1rem;
+}
+.proj-overlay.open { opacity: 1; pointer-events: auto; }
+.proj-modal {
+  background: #fff;
+  border-radius: 24px;
+  width: min(820px, 100%);
+  max-height: 92vh;
+  overflow-y: auto;
+  transform: translateY(28px) scale(.96);
+  transition: transform .38s cubic-bezier(.34,1.56,.64,1);
+  box-shadow: 0 32px 80px rgba(0,0,0,.35);
+}
+.proj-overlay.open .proj-modal { transform: translateY(0) scale(1); }
+
+.proj-modal-header {
+  background: linear-gradient(135deg, var(--navy) 0%, #1b4060 55%, #b99a55 100%);
+  padding: 2rem 2rem 1.6rem;
+  border-radius: 24px 24px 0 0;
+  position: relative;
+}
+.proj-modal-header h2 { color: #fff; font-size: 1.4rem; margin: 0 2.5rem 0 0; line-height: 1.25; }
+.proj-modal-header p  { color: rgba(255,255,255,.75); font-size: .9rem; margin: .4rem 0 0; }
+.proj-modal-close {
+  position: absolute; top: 1.1rem; right: 1.1rem;
+  background: rgba(255,255,255,.18); border: none; color: #fff;
+  width: 36px; height: 36px; border-radius: 50%; font-size: 1.1rem;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: background .2s;
+}
+.proj-modal-close:hover { background: rgba(255,255,255,.3); }
+
+.proj-modal-body { padding: 1.8rem 2rem 2.2rem; }
+
+/* Form sections */
+.proj-section {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 1.2rem 1.3rem;
+  margin-bottom: 1rem;
+}
+.proj-section-title {
+  font-size: .78rem; font-weight: 800; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--blue);
+  margin-bottom: .9rem; display: flex; align-items: center; gap: .4rem;
+}
+.proj-row { display: grid; gap: .7rem; margin-bottom: .65rem; }
+.proj-row.cols2 { grid-template-columns: 1fr 1fr; }
+.proj-row.cols3 { grid-template-columns: 1fr 1fr 1fr; }
+.proj-row:last-child { margin-bottom: 0; }
+
+.proj-label {
+  font-size: .84rem; font-weight: 650; color: #15365e;
+  display: block; margin-bottom: .3rem;
+}
+.proj-label .req { color: #c33d49; }
+.proj-label .hint { color: var(--muted); font-weight: 400; font-size: .79rem; }
+
+.proj-input, .proj-select, .proj-textarea {
+  width: 100%; padding: .6rem .85rem;
+  border: 1.5px solid #cad5e0; border-radius: 10px;
+  font: .88rem/1.4 inherit; color: var(--ink); background: #fff;
+  transition: border-color .2s, box-shadow .2s; outline: none;
+}
+.proj-input:focus, .proj-select:focus, .proj-textarea:focus {
+  border-color: var(--teal); box-shadow: 0 0 0 3px rgba(54,166,160,.15);
+}
+.proj-textarea { resize: vertical; min-height: 80px; }
+.proj-select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%235d6b78' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right .7rem center; padding-right: 2.2rem; }
+
+/* Member rows */
+.proj-member-row {
+  display: grid; grid-template-columns: 1fr 1fr; gap: .6rem;
+  align-items: start; margin-bottom: .5rem;
+}
+.proj-member-row:last-child { margin-bottom: 0; }
+#proj-add-member {
+  background: none; border: 1.5px dashed var(--teal); color: var(--teal);
+  border-radius: 8px; padding: .45rem .9rem; font: 600 .82rem inherit;
+  cursor: pointer; display: inline-flex; align-items: center; gap: .3rem;
+  margin-top: .3rem; transition: background .2s;
+}
+#proj-add-member:hover { background: rgba(54,166,160,.08); }
+
+/* Completion section — hidden by default */
+.proj-completion { display: none; }
+.proj-completion.visible { display: block; }
+
+/* File upload */
+.proj-file-wrap {
+  position: relative; border: 1.5px dashed #cad5e0; border-radius: 10px;
+  padding: 1rem; text-align: center; cursor: pointer;
+  transition: border-color .2s, background .2s;
+}
+.proj-file-wrap:hover, .proj-file-wrap.drag { border-color: var(--teal); background: rgba(54,166,160,.05); }
+.proj-file-input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+.proj-file-label { font-size: .84rem; color: var(--muted); pointer-events: none; }
+.proj-file-label strong { color: var(--blue); }
+/* Submit button */
+.proj-submit {
+  width: 100%; padding: .95rem;
+  background: linear-gradient(135deg, var(--navy) 0%, #1b4060 100%);
+  color: #fff; border: none; border-radius: 12px;
+  font: 700 1rem inherit; cursor: pointer; margin-top: 1rem;
+  transition: transform .2s, box-shadow .2s;
+  display: flex; align-items: center; justify-content: center; gap: .5rem;
+}
+.proj-submit:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(16,38,63,.3); }
+.proj-submit:disabled { opacity: .6; cursor: wait; transform: none; }
+
+.proj-status { min-height: 1.4em; font-size: .88rem; margin-top: .6rem; text-align: center; overflow-wrap: anywhere; }
+.proj-status--success { color: #276444; font-weight: 600; }
+.proj-status--error   { color: #c33d49; font-weight: 600; }
+.proj-honeypot    { position: absolute; left: -9999px; opacity: 0; pointer-events: none; }
+.proj-input.invalid, .proj-select.invalid { border-color: #c33d49; box-shadow: 0 0 0 3px rgba(195,61,73,.12); }
+.proj-file-wrap.drag-over { border-color: var(--teal); background: rgba(54,166,160,.08); }
+.proj-file-name { font-size: .82rem; color: var(--teal); font-weight: 600; margin-top: .3rem; }
+
+@media (max-width: 600px) {
+  .proj-modal-header, .proj-modal-body { padding: 1.4rem 1.1rem; }
+  .proj-modal { border-radius: 20px; max-height: 95vh; }
+  .proj-row.cols2, .proj-row.cols3 { grid-template-columns: 1fr; }
+  .proj-member-row { grid-template-columns: 1fr; }
+}
+
 /* Footer gradient */
 footer {
   background: linear-gradient(135deg, #0d1f35, #10263f);
@@ -1339,7 +1492,7 @@ footer {
   <div class="wrap nav">
     <a class="brand" href="#home">SHARAN CHANDRAN M<small>Academic · Research · Student Mentorship</small></a>
     <nav aria-label="Main navigation">
-      <a href="#about">About</a><a href="#news">News</a><a href="news.html">📰 Field Updates</a><a href="#research">Research</a><a href="#consultancy">Consultancy</a><a href="#mentorship">Mentorship</a><a href="#publications">Publications</a><a href="#patents">Patents</a><a href="#contact">Contact</a><a href="#" class="nav-training-link" id="nav-fdp">🎓 FDP &amp; Training</a>
+      <a href="#about">About</a><a href="#news">News</a><a href="news.html">📰 Field Updates</a><a href="#research">Research</a><a href="#consultancy">Consultancy</a><a href="#mentorship">Mentorship</a><a href="#publications">Publications</a><a href="#patents">Patents</a><a href="#contact">Contact</a><a href="projects.html" class="nav-projects-view-link">🗂 Projects</a><a href="#" class="nav-training-link" id="nav-fdp">🎓 FDP &amp; Training</a><a href="#" class="nav-project-link" id="nav-projects">📋 Register Project</a>
     </nav>
   </div>
 </header>
@@ -1996,6 +2149,212 @@ footer {
   </div><!-- /fdp-modal -->
 </div><!-- /fdp-overlay -->
 
+<!-- ===== PROJECT REGISTRATION MODAL ===== -->
+<div class="proj-overlay" id="proj-overlay" role="dialog" aria-modal="true" aria-labelledby="proj-modal-title">
+  <div class="proj-modal" id="proj-modal">
+
+    <div class="proj-modal-header">
+      <button class="proj-modal-close" id="proj-modal-close" aria-label="Close">✕</button>
+      <h2 id="proj-modal-title">📋 Register Your Project</h2>
+      <p>Submit your project details for approval and showcase on this academic profile. Your report is stored securely and not publicly accessible.</p>
+    </div>
+
+    <div class="proj-modal-body">
+      <form id="proj-form" novalidate>
+        <div class="proj-honeypot" aria-hidden="true"><input type="text" name="website" tabindex="-1" autocomplete="off"></div>
+
+        <!-- Section 1: Registration -->
+        <div class="proj-section">
+          <div class="proj-section-title">🗓 Registration &amp; Duration</div>
+          <div class="proj-row cols3">
+            <div>
+              <label class="proj-label" for="p-semester">Semester <span class="req">*</span></label>
+              <select class="proj-select" id="p-semester" required>
+                <option value="">Select</option>
+                <option>Fall</option>
+                <option>Winter</option>
+              </select>
+            </div>
+            <div>
+              <label class="proj-label" for="p-year">Year <span class="req">*</span></label>
+              <select class="proj-select" id="p-year" required>
+                <option value="">Select</option>
+                <option>2022</option><option>2023</option><option>2024</option>
+                <option>2025</option><option>2026</option><option>2027</option>
+              </select>
+            </div>
+            <div>
+              <label class="proj-label" for="p-duration">Duration <span class="req">*</span></label>
+              <select class="proj-select" id="p-duration" required>
+                <option value="">Select</option>
+                <option>6 months</option>
+                <option>1 year</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2: Affiliation -->
+        <div class="proj-section">
+          <div class="proj-section-title">🏫 School &amp; Project Type</div>
+          <div class="proj-row cols2">
+            <div>
+              <label class="proj-label" for="p-school">School <span class="req">*</span></label>
+              <select class="proj-select" id="p-school" required>
+                <option value="">Select school</option>
+                <option>School of Advanced Sciences (SAS)</option>
+                <option>School of Bio Sciences &amp; Technology (SBST)</option>
+                <option>School of Civil Engineering (SCE)</option>
+                <option>School of Chemical Engineering (SCHEME)</option>
+                <option>School of Computer Science and Engineering (SCOPE)</option>
+                <option>School of Computer Science Engineering and Information Systems (SCORE)</option>
+                <option>School of Electrical Engineering (SELECT)</option>
+                <option>School of Electronics Engineering (SENSE)</option>
+                <option>School of Healthcare Science and Engineering (SHINE)</option>
+                <option>School of Mechanical Engineering (SMEC)</option>
+                <option>School of Social Sciences and Languages (SSL)</option>
+                <option>School of Hotel &amp; Tourism Management (HOT)</option>
+                <option>VIT School of Agricultural Innovations and Advanced Learning (VAIAL)</option>
+                <option>VIT Business School (VIT BS)</option>
+                <option>VIT School of Design (V-SIGN)</option>
+                <option>VIT School of Media, Arts and Technology (V-SMART)</option>
+                <option>School of Architecture (V-SPARC)</option>
+              </select>
+            </div>
+            <div>
+              <label class="proj-label" for="p-type">Project Type <span class="req">*</span></label>
+              <select class="proj-select" id="p-type" required>
+                <option value="">Select type</option>
+                <option>Capstone Project</option>
+                <option>7th Semester Project</option>
+                <option>Innovative Design Project</option>
+                <option>Multidisciplinary Project</option>
+                <option>Research Project</option>
+                <option>MTech Project</option>
+                <option>PhD Research</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 3: Project Details -->
+        <div class="proj-section">
+          <div class="proj-section-title">📌 Project Details</div>
+          <div class="proj-row">
+            <div>
+              <label class="proj-label" for="p-title">Project Title <span class="req">*</span></label>
+              <input class="proj-input" type="text" id="p-title" placeholder="Enter the full project title" required>
+            </div>
+          </div>
+          <div class="proj-section-title" style="margin-top:.6rem;">👥 Team Members <span style="font-weight:400;text-transform:none;font-size:.79rem;letter-spacing:0;color:var(--muted);">(up to 5; first member required)</span></div>
+          <div id="proj-members-wrap">
+            <div class="proj-member-row">
+              <div>
+                <label class="proj-label" for="p-m1-name">Name <span class="req">*</span></label>
+                <input class="proj-input" type="text" id="p-m1-name" placeholder="Full name" required>
+              </div>
+              <div>
+                <label class="proj-label" for="p-m1-reg">Registration No. <span class="req">*</span></label>
+                <input class="proj-input" type="text" id="p-m1-reg" placeholder="e.g. 21BCE1234" required>
+              </div>
+            </div>
+          </div>
+          <button type="button" id="proj-add-member">+ Add Member</button>
+        </div>
+
+        <!-- Section 4: Outcomes & SDG -->
+        <div class="proj-section">
+          <div class="proj-section-title">🎯 Expected Outcomes &amp; Goals</div>
+          <div class="proj-row cols2">
+            <div>
+              <label class="proj-label" for="p-outcome">Expected Outcome <span class="req">*</span></label>
+              <select class="proj-select" id="p-outcome" required>
+                <option value="">Select</option>
+                <option>Research Publication</option>
+                <option>Patent</option>
+                <option>New Product / Prototype</option>
+                <option>Research Publication &amp; Patent</option>
+                <option>Research Publication &amp; Product</option>
+                <option>Patent &amp; Product</option>
+                <option>All (Publication, Patent &amp; Product)</option>
+              </select>
+            </div>
+            <div>
+              <label class="proj-label" for="p-sdg">SDG Goal <span class="hint">(optional)</span></label>
+              <select class="proj-select" id="p-sdg">
+                <option value="">Not applicable / Not sure</option>
+                <option>SDG 1 — No Poverty</option>
+                <option>SDG 2 — Zero Hunger</option>
+                <option>SDG 3 — Good Health and Well-being</option>
+                <option>SDG 4 — Quality Education</option>
+                <option>SDG 5 — Gender Equality</option>
+                <option>SDG 6 — Clean Water and Sanitation</option>
+                <option>SDG 7 — Affordable and Clean Energy</option>
+                <option>SDG 8 — Decent Work and Economic Growth</option>
+                <option>SDG 9 — Industry, Innovation and Infrastructure</option>
+                <option>SDG 10 — Reduced Inequalities</option>
+                <option>SDG 11 — Sustainable Cities and Communities</option>
+                <option>SDG 12 — Responsible Consumption and Production</option>
+                <option>SDG 13 — Climate Action</option>
+                <option>SDG 14 — Life Below Water</option>
+                <option>SDG 15 — Life on Land</option>
+                <option>SDG 16 — Peace, Justice and Strong Institutions</option>
+                <option>SDG 17 — Partnerships for the Goals</option>
+              </select>
+            </div>
+          </div>
+          <div class="proj-row" style="margin-top:.65rem;">
+            <div>
+              <label class="proj-label" for="p-status">Current Status <span class="req">*</span></label>
+              <select class="proj-select" id="p-status" required>
+                <option value="">Select</option>
+                <option value="ongoing">Ongoing</option>
+                <option value="completed">Completed</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 5: Completion (shown when status = completed) -->
+        <div class="proj-section proj-completion" id="proj-completion">
+          <div class="proj-section-title">✅ Completion Details</div>
+          <div class="proj-row cols2">
+            <div>
+              <label class="proj-label" for="p-final-outcome">Final Outcome Achieved <span class="req">*</span></label>
+              <select class="proj-select" id="p-final-outcome">
+                <option value="">Select</option>
+                <option>Research Paper Published</option>
+                <option>Patent Granted</option>
+                <option>Patent Filed (Pending)</option>
+                <option>Product / Prototype Developed</option>
+                <option>Research Paper + Patent</option>
+                <option>Research Paper + Product</option>
+                <option>Patent + Product</option>
+                <option>All (Paper + Patent + Product)</option>
+              </select>
+            </div>
+            <div>
+              <label class="proj-label">Upload Final Report <span class="hint">(PDF, max 20 MB)</span></label>
+              <div class="proj-file-wrap" id="proj-file-wrap">
+                <input type="file" class="proj-file-input" id="p-report" accept=".pdf,.doc,.docx" aria-label="Upload final report">
+                <div class="proj-file-label"><strong>Click to browse</strong> or drag &amp; drop<br><small>PDF / Word · Max 20 MB</small></div>
+                <div class="proj-file-name" id="proj-file-name"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="proj-submit" id="proj-submit-btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Submit Project Registration
+        </button>
+        <p class="proj-status" id="proj-status" role="status" aria-live="polite"></p>
+      </form>
+    </div><!-- /proj-modal-body -->
+
+  </div><!-- /proj-modal -->
+</div><!-- /proj-overlay -->
+
 <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <!-- FDP MODAL SCRIPT -->
@@ -2143,6 +2502,220 @@ footer {
     location.href = 'mailto:' + (C.ENQUIRY_EMAIL || 'sharancm2009@gmail.com') +
                     '?subject=' + subject + '&body=' + body;
     statusEl.textContent = 'Opening your email app…';
+    submitBtn.disabled = false;
+  });
+})();
+</script>
+
+<!-- PROJECT MODAL JS -->
+<script>
+(function () {
+  /* ---- Supabase config (same keys used elsewhere on the page) ---- */
+  var SB_URL  = 'https://xtnkiwxfkuwmmnxqwxif.supabase.co';
+  var SB_KEY  = 'sb_publishable_KFm9V1b_7Q-nWPULjE1p32QKNLPa3GHZE0cWkOmKhJQ';
+  var BUCKET  = 'project-reports';
+
+  /* ---- Elements ---- */
+  var overlay    = document.getElementById('proj-overlay');
+  var modal      = document.getElementById('proj-modal');
+  var closeBtn   = document.getElementById('proj-modal-close');
+  var navTrigger = document.getElementById('nav-projects');
+  var form       = document.getElementById('proj-form');
+  var statusEl   = document.getElementById('proj-status');
+  var submitBtn  = document.getElementById('proj-submit-btn');
+  var statusSel  = document.getElementById('p-status');
+  var completion = document.getElementById('proj-completion');
+  var addMember  = document.getElementById('proj-add-member');
+  var membersWrap= document.getElementById('proj-members-wrap');
+  var fileInput  = document.getElementById('p-report');
+  var fileNameEl = document.getElementById('proj-file-name');
+  var fileWrap   = document.getElementById('proj-file-wrap');
+
+  if (!overlay || !navTrigger) return;
+
+  var memberCount = 1;
+
+  /* ---- Open / close ---- */
+  function openModal() {
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    setTimeout(function () { document.getElementById('p-semester').focus(); }, 300);
+  }
+  function closeModal() {
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  navTrigger.addEventListener('click', function (e) { e.preventDefault(); openModal(); });
+  closeBtn.addEventListener('click', closeModal);
+  overlay.addEventListener('click', function (e) { if (e.target === overlay) closeModal(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
+
+  /* ---- Show/hide completion section ---- */
+  statusSel.addEventListener('change', function () {
+    if (statusSel.value === 'completed') {
+      completion.style.display = 'block';
+      document.getElementById('p-final-outcome').required = true;
+    } else {
+      completion.style.display = 'none';
+      document.getElementById('p-final-outcome').required = false;
+    }
+  });
+
+  /* ---- Add member rows (up to 5) ---- */
+  addMember.addEventListener('click', function () {
+    if (memberCount >= 5) return;
+    memberCount++;
+    var row = document.createElement('div');
+    row.className = 'proj-member-row';
+    row.innerHTML =
+      '<div><label class="proj-label">Name</label>' +
+      '<input class="proj-input" type="text" placeholder="Full name" data-member-name="' + memberCount + '"></div>' +
+      '<div><label class="proj-label">Registration No.</label>' +
+      '<input class="proj-input" type="text" placeholder="e.g. 21BCE1234" data-member-reg="' + memberCount + '"></div>';
+    membersWrap.appendChild(row);
+    if (memberCount >= 5) addMember.style.display = 'none';
+  });
+
+  /* ---- File drag-and-drop UX ---- */
+  fileWrap.addEventListener('dragover', function (e) { e.preventDefault(); fileWrap.classList.add('drag-over'); });
+  fileWrap.addEventListener('dragleave', function () { fileWrap.classList.remove('drag-over'); });
+  fileWrap.addEventListener('drop', function (e) {
+    e.preventDefault(); fileWrap.classList.remove('drag-over');
+    if (e.dataTransfer.files[0]) { fileInput.files = e.dataTransfer.files; updateFileName(); }
+  });
+  fileInput.addEventListener('change', updateFileName);
+  function updateFileName() {
+    fileNameEl.textContent = fileInput.files[0] ? '📎 ' + fileInput.files[0].name : '';
+  }
+
+  /* ---- Helper: status message ---- */
+  function setStatus(msg, type) {
+    statusEl.textContent = msg;
+    statusEl.className = 'proj-status' + (type ? ' proj-status--' + type : '');
+  }
+
+  /* ---- Collect team members ---- */
+  function collectTeamMembers() {
+    var members = [];
+    // First member (uses IDs)
+    var n1 = document.getElementById('p-m1-name').value.trim();
+    var r1 = document.getElementById('p-m1-reg').value.trim();
+    if (n1) members.push({ name: n1, reg: r1 });
+    // Additional members (use data attrs)
+    for (var i = 2; i <= memberCount; i++) {
+      var n = form.querySelector('[data-member-name="' + i + '"]');
+      var r = form.querySelector('[data-member-reg="' + i + '"]');
+      if (n && n.value.trim()) members.push({ name: n.value.trim(), reg: r ? r.value.trim() : '' });
+    }
+    return members;
+  }
+
+  /* ---- Upload file to Supabase Storage ---- */
+  async function uploadReport(file) {
+    if (!file) return null;
+    var ext  = file.name.split('.').pop();
+    var path = Date.now() + '_' + Math.random().toString(36).slice(2) + '.' + ext;
+    var resp = await fetch(
+      SB_URL + '/storage/v1/object/' + BUCKET + '/' + path,
+      {
+        method: 'POST',
+        headers: {
+          'apikey':         SB_KEY,
+          'Authorization':  'Bearer ' + SB_KEY,
+          'Content-Type':   file.type || 'application/octet-stream',
+          'x-upsert':       'false'
+        },
+        body: file
+      }
+    );
+    if (!resp.ok) {
+      var err = await resp.text();
+      throw new Error('File upload failed: ' + err);
+    }
+    return path;   // store only the path, not a public URL
+  }
+
+  /* ---- Form submit ---- */
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    /* Honeypot */
+    if (form.querySelector('[name="website"]').value) return;
+
+    /* Validate required */
+    var required = form.querySelectorAll('[required]');
+    var valid = true;
+    required.forEach(function (el) {
+      el.classList.toggle('invalid', !el.value.trim());
+      if (!el.value.trim()) valid = false;
+    });
+    if (!valid) { setStatus('Please fill in all required fields.', 'error'); return; }
+
+    /* File size check */
+    var reportFile = fileInput.files[0] || null;
+    if (reportFile && reportFile.size > 20 * 1024 * 1024) {
+      setStatus('Report file must be smaller than 20 MB.', 'error'); return;
+    }
+
+    submitBtn.disabled = true;
+    setStatus('Submitting your project…', '');
+
+    try {
+      /* Upload report if present */
+      var reportPath = await uploadReport(reportFile);
+
+      /* Build payload */
+      var members = collectTeamMembers();
+      var semester = document.getElementById('p-semester').value + ' ' + document.getElementById('p-year').value;
+      var payload = {
+        semester:         semester,
+        reg_year:         document.getElementById('p-year').value,
+        duration:         document.getElementById('p-duration').value,
+        school:           document.getElementById('p-school').value,
+        project_type:     document.getElementById('p-type').value,
+        title:            document.getElementById('p-title').value.trim(),
+        team_members:     JSON.stringify(members),
+        expected_outcome: document.getElementById('p-outcome').value,
+        sdg_goal:         document.getElementById('p-sdg').value,
+        current_status:   statusSel.value,
+        final_outcome:    statusSel.value === 'completed' ? document.getElementById('p-final-outcome').value : null,
+        report_path:      reportPath,
+        approval_status:  'pending'
+      };
+
+      /* Insert into Supabase */
+      var res = await fetch(SB_URL + '/rest/v1/projects', {
+        method:  'POST',
+        headers: {
+          'apikey':       SB_KEY,
+          'Content-Type': 'application/json',
+          'Prefer':       'return=minimal'
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!res.ok) {
+        var errText = await res.text();
+        throw new Error(errText);
+      }
+
+      setStatus('✅ Project registered successfully! It will appear on the showcase page after approval.', 'success');
+      form.reset();
+      completion.style.display = 'none';
+      fileNameEl.textContent = '';
+      /* Reset member rows back to 1 */
+      var extra = membersWrap.querySelectorAll('.proj-member-row:not(:first-child)');
+      extra.forEach(function (r) { r.remove(); });
+      memberCount = 1;
+      addMember.style.display = '';
+      setTimeout(closeModal, 3500);
+
+    } catch (err) {
+      console.error(err);
+      setStatus('❌ Submission failed: ' + (err.message || 'Unknown error. Please try again.'), 'error');
+    }
+
     submitBtn.disabled = false;
   });
 })();
@@ -2508,6 +3081,19 @@ window.SITE_CONFIG = {
   }
 
   loadPreview();
+})();
+</script>
+
+<!-- Auto-open project modal if navigating back from projects.html -->
+<script>
+(function () {
+  if (sessionStorage.getItem('openProjectModal') === '1') {
+    sessionStorage.removeItem('openProjectModal');
+    window.addEventListener('load', function () {
+      var trigger = document.getElementById('nav-projects');
+      if (trigger) trigger.click();
+    });
+  }
 })();
 </script>
 </body>

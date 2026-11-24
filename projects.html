@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Student &amp; Research Projects — Dr. Sharan Chandran M</title>
+<meta name="description" content="Approved student and research projects mentored by Dr. Sharan Chandran M at VIT Vellore. Browse by school, type, SDG, and status.">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-N2LJT0N760"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-N2LJT0N760');</script>
+<style>
+/* ===== RESET & BASE ===== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#10263f;--blue:#1b4c65;--teal:#36a6a0;--gold:#c9a84c;
+  --paper:#f7f5f0;--white:#fff;--muted:#6b7280;--border:#e2ddd5;
+  --text:#1a2535;
+  --r:16px;--rs:10px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--paper);color:var(--text);line-height:1.6}
+a{color:inherit;text-decoration:none}
+
+/* ===== HEADER ===== */
+header{
+  background:linear-gradient(135deg,var(--navy),var(--blue));
+  color:#fff;padding:1rem 2rem;
+  position:sticky;top:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  box-shadow:0 4px 20px rgba(0,0,0,.2);
+}
+.hdr-left{display:flex;align-items:center;gap:1rem}
+.hdr-back{
+  display:inline-flex;align-items:center;gap:.4rem;
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);
+  padding:.38rem .85rem;border-radius:999px;font-size:.85rem;font-weight:600;
+  color:#fff;transition:background .2s;
+}
+.hdr-back:hover{background:rgba(255,255,255,.22)}
+header h1{font-size:1.1rem;font-weight:700;line-height:1.2}
+header p{font-size:.8rem;color:rgba(255,255,255,.7)}
+.hdr-register{
+  display:inline-flex;align-items:center;gap:.4rem;
+  background:linear-gradient(135deg,var(--gold),#b99a55);
+  color:#fff;padding:.45rem 1.1rem;border-radius:999px;
+  font-size:.85rem;font-weight:700;transition:opacity .2s,transform .2s;
+  white-space:nowrap;
+}
+.hdr-register:hover{opacity:.9;transform:translateY(-1px)}
+
+/* ===== HERO STATS ===== */
+.hero-stats{
+  background:linear-gradient(135deg,var(--navy),#1b4c65 60%,#1e5c72);
+  color:#fff;padding:2.5rem 2rem 2rem;text-align:center;
+}
+.hero-stats h2{font-size:1.5rem;margin-bottom:.3rem}
+.hero-stats p{color:rgba(255,255,255,.7);font-size:.95rem;max-width:560px;margin:0 auto 1.5rem}
+.stats-row{display:flex;justify-content:center;gap:2rem;flex-wrap:wrap}
+.stat-box{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);
+  padding:.8rem 1.5rem;border-radius:14px;min-width:100px}
+.stat-box .num{font-size:2rem;font-weight:800;color:var(--gold)}
+.stat-box .lbl{font-size:.78rem;color:rgba(255,255,255,.7);margin-top:.1rem}
+
+/* ===== FILTERS ===== */
+.filters-bar{
+  background:#fff;border-bottom:1px solid var(--border);
+  padding:.9rem 2rem;position:sticky;top:65px;z-index:90;
+  display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;
+}
+.search-wrap{position:relative;flex:1;min-width:200px;max-width:340px}
+.search-wrap svg{position:absolute;left:.7rem;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--muted)}
+.search-wrap input{
+  width:100%;padding:.5rem .75rem .5rem 2.1rem;
+  border:1px solid var(--border);border-radius:999px;
+  font:inherit;font-size:.88rem;outline:none;
+  background:var(--paper);transition:border-color .2s,box-shadow .2s;
+}
+.search-wrap input:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(54,166,160,.12)}
+.filter-sel{
+  padding:.45rem .75rem;border:1px solid var(--border);border-radius:999px;
+  font:inherit;font-size:.82rem;background:var(--paper);cursor:pointer;outline:none;
+  color:var(--text);transition:border-color .2s;
+}
+.filter-sel:focus{border-color:var(--teal)}
+.filter-count{
+  margin-left:auto;font-size:.8rem;color:var(--muted);white-space:nowrap;
+}
+
+/* ===== GRID ===== */
+.projects-section{padding:2rem;max-width:1300px;margin:0 auto}
+.projects-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(330px,1fr));
+  gap:1.4rem;
+}
+
+/* ===== PROJECT CARD ===== */
+.proj-card{
+  background:#fff;border-radius:var(--r);border:1px solid var(--border);
+  overflow:hidden;transition:transform .2s,box-shadow .2s;
+  display:flex;flex-direction:column;
+}
+.proj-card:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(16,38,63,.12)}
+.proj-card-top{
+  padding:1.2rem 1.3rem .9rem;
+  border-bottom:1px solid var(--border);
+  background:linear-gradient(135deg,rgba(16,38,63,.03),rgba(54,166,160,.04));
+}
+.proj-tags{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:.6rem}
+.proj-tag{
+  font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:999px;
+  letter-spacing:.03em;text-transform:uppercase;
+}
+.tag-type   {background:rgba(27,76,101,.12);color:var(--blue)}
+.tag-status-ongoing   {background:rgba(54,166,160,.12);color:#2a807c}
+.tag-status-completed {background:rgba(39,100,68,.12);color:#276444}
+.tag-sdg    {background:rgba(201,168,76,.14);color:#9a6f10}
+.proj-title{font-size:1rem;font-weight:700;line-height:1.35;color:var(--navy);margin-bottom:.4rem}
+.proj-school{font-size:.78rem;color:var(--muted);display:flex;align-items:center;gap:.3rem}
+.proj-card-body{padding:.9rem 1.3rem 1rem;flex:1}
+.proj-meta-row{display:flex;flex-wrap:wrap;gap:.5rem 1rem;margin-bottom:.7rem}
+.proj-meta-item{font-size:.8rem;color:var(--muted);display:flex;align-items:center;gap:.25rem}
+.proj-meta-item strong{color:var(--text);font-weight:600}
+.proj-members-title{font-size:.77rem;text-transform:uppercase;letter-spacing:.06em;
+  color:var(--muted);font-weight:700;margin-bottom:.35rem}
+.proj-members{display:flex;flex-wrap:wrap;gap:.3rem}
+.proj-member-chip{
+  font-size:.77rem;background:var(--paper);border:1px solid var(--border);
+  padding:.15rem .55rem;border-radius:999px;color:var(--text);
+}
+.proj-outcome-row{margin-top:.7rem;padding-top:.6rem;border-top:1px dashed var(--border);
+  font-size:.8rem;color:var(--muted)}
+.proj-outcome-row strong{color:var(--text)}
+
+/* ===== SKELETON ===== */
+@keyframes shimmer{0%{background-position:-400px 0}100%{background-position:400px 0}}
+.skel{border-radius:var(--r);background:#e9e5de;
+  background:linear-gradient(90deg,#e9e5de 25%,#f1ede7 50%,#e9e5de 75%);
+  background-size:800px 100%;animation:shimmer 1.6s infinite;
+}
+.skel-card{height:260px}
+
+/* ===== EMPTY / ERROR ===== */
+.empty-state,.error-state{
+  grid-column:1/-1;text-align:center;padding:3.5rem 1rem;
+}
+.empty-state svg,.error-state svg{opacity:.3;margin-bottom:1rem}
+.empty-state h3,.error-state h3{font-size:1.1rem;color:var(--navy);margin-bottom:.4rem}
+.empty-state p,.error-state p{color:var(--muted);font-size:.9rem}
+
+/* ===== LOAD MORE ===== */
+.load-more-wrap{text-align:center;margin-top:2rem}
+.btn-load-more{
+  display:inline-block;padding:.65rem 2rem;
+  background:#fff;border:2px solid var(--navy);border-radius:999px;
+  color:var(--navy);font:700 .9rem inherit;cursor:pointer;
+  transition:background .2s,color .2s;
+}
+.btn-load-more:hover{background:var(--navy);color:#fff}
+.btn-load-more:disabled{opacity:.4;cursor:default}
+
+/* ===== CTA BANNER ===== */
+.cta-banner{
+  background:linear-gradient(135deg,var(--navy),var(--blue));
+  color:#fff;text-align:center;padding:3rem 2rem;margin-top:1rem;
+}
+.cta-banner h3{font-size:1.3rem;margin-bottom:.5rem}
+.cta-banner p{color:rgba(255,255,255,.75);max-width:500px;margin:0 auto 1.3rem}
+.cta-btn{
+  display:inline-block;padding:.7rem 1.8rem;
+  background:linear-gradient(135deg,var(--gold),#b99a55);
+  color:#fff;font:700 1rem inherit;border-radius:999px;
+  transition:opacity .2s,transform .2s;
+}
+.cta-btn:hover{opacity:.9;transform:translateY(-2px)}
+
+/* ===== FOOTER ===== */
+footer{background:var(--navy);color:rgba(255,255,255,.55);text-align:center;
+  padding:1.2rem;font-size:.82rem}
+footer a{color:rgba(255,255,255,.75)}
+footer a:hover{color:#fff}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:600px){
+  header{padding:.8rem 1rem;flex-wrap:wrap}
+  header h1{font-size:.95rem}
+  .filters-bar{padding:.7rem 1rem;top:60px}
+  .projects-section{padding:1.2rem 1rem}
+  .projects-grid{grid-template-columns:1fr}
+  .hero-stats{padding:2rem 1rem 1.5rem}
+  .stats-row{gap:1rem}
+  .stat-box{padding:.6rem 1rem}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="hdr-left">
+    <a href="index.html" class="hdr-back">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      Back
+    </a>
+    <div>
+      <h1>Projects Showcase</h1>
+      <p>Mentored by Dr. Sharan Chandran M · VIT Vellore</p>
+    </div>
+  </div>
+  <a href="index.html#nav-projects" class="hdr-register" onclick="history.back()">📋 Register Your Project</a>
+</header>
+
+<!-- HERO STATS -->
+<div class="hero-stats">
+  <h2>Student &amp; Research Projects</h2>
+  <p>All approved projects mentored and guided across schools and disciplines. Reports are stored securely and not publicly accessible.</p>
+  <div class="stats-row">
+    <div class="stat-box"><div class="num" id="stat-total">—</div><div class="lbl">Total Projects</div></div>
+    <div class="stat-box"><div class="num" id="stat-ongoing">—</div><div class="lbl">Ongoing</div></div>
+    <div class="stat-box"><div class="num" id="stat-completed">—</div><div class="lbl">Completed</div></div>
+    <div class="stat-box"><div class="num" id="stat-schools">—</div><div class="lbl">Schools</div></div>
+  </div>
+</div>
+
+<!-- FILTERS -->
+<div class="filters-bar">
+  <div class="search-wrap">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="search" id="proj-search" placeholder="Search by title or member name…" autocomplete="off">
+  </div>
+  <select class="filter-sel" id="fil-school">
+    <option value="">All Schools</option>
+    <option>SAS</option><option>SBST</option><option>SCE</option><option>SCHEME</option>
+    <option>SCOPE</option><option>SCORE</option><option>SELECT</option><option>SENSE</option>
+    <option>SHINE</option><option>SMEC</option><option>SSL</option><option>HOT</option>
+    <option>VAIAL</option><option>VIT BS</option><option>V-SIGN</option><option>V-SMART</option>
+    <option>V-SPARC</option>
+  </select>
+  <select class="filter-sel" id="fil-type">
+    <option value="">All Types</option>
+    <option>Capstone Project</option>
+    <option>7th Semester Project</option>
+    <option>Innovative Design Project</option>
+    <option>Multidisciplinary Project</option>
+    <option>Research Project</option>
+    <option>MTech Project</option>
+    <option>PhD Research</option>
+  </select>
+  <select class="filter-sel" id="fil-status">
+    <option value="">All Statuses</option>
+    <option value="ongoing">Ongoing</option>
+    <option value="completed">Completed</option>
+  </select>
+  <select class="filter-sel" id="fil-sdg">
+    <option value="">All SDGs</option>
+    <option>SDG 1 — No Poverty</option>
+    <option>SDG 2 — Zero Hunger</option>
+    <option>SDG 3 — Good Health and Well-being</option>
+    <option>SDG 4 — Quality Education</option>
+    <option>SDG 5 — Gender Equality</option>
+    <option>SDG 6 — Clean Water and Sanitation</option>
+    <option>SDG 7 — Affordable and Clean Energy</option>
+    <option>SDG 8 — Decent Work and Economic Growth</option>
+    <option>SDG 9 — Industry, Innovation and Infrastructure</option>
+    <option>SDG 10 — Reduced Inequalities</option>
+    <option>SDG 11 — Sustainable Cities and Communities</option>
+    <option>SDG 12 — Responsible Consumption and Production</option>
+    <option>SDG 13 — Climate Action</option>
+    <option>SDG 14 — Life Below Water</option>
+    <option>SDG 15 — Life on Land</option>
+    <option>SDG 16 — Peace, Justice and Strong Institutions</option>
+    <option>SDG 17 — Partnerships for the Goals</option>
+  </select>
+  <span class="filter-count" id="filter-count"></span>
+</div>
+
+<!-- PROJECTS GRID -->
+<section class="projects-section">
+  <div class="projects-grid" id="projects-grid">
+    <!-- skeletons -->
+    <div class="skel skel-card"></div>
+    <div class="skel skel-card"></div>
+    <div class="skel skel-card"></div>
+    <div class="skel skel-card"></div>
+    <div class="skel skel-card"></div>
+    <div class="skel skel-card"></div>
+  </div>
+  <div class="load-more-wrap" id="load-more-wrap" style="display:none">
+    <button class="btn-load-more" id="btn-load-more">Load More Projects</button>
+  </div>
+</section>
+
+<!-- CTA BANNER -->
+<div class="cta-banner">
+  <h3>Have a project to register?</h3>
+  <p>Submit your project details for approval and get it featured on this showcase page.</p>
+  <a href="index.html" class="cta-btn" id="cta-register-link">📋 Register Your Project</a>
+</div>
+
+<footer>
+  <p>© <span id="year"></span> Dr. Sharan Chandran M · <a href="index.html">sharanchandran.com</a></p>
+  <p style="margin-top:.3rem;font-size:.75rem">All project data is approved before publication. Reports are stored securely and not publicly accessible.</p>
+</footer>
+
+<script>
+(function () {
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  var SB_URL = 'https://xtnkiwxfkuwmmnxqwxif.supabase.co';
+  var SB_KEY = 'sb_publishable_KFm9V1b_7Q-nWPULjE1p32QKNLPa3GHZE0cWkOmKhJQ';
+
+  var allProjects = [];
+  var filtered    = [];
+  var PAGE_SIZE   = 12;
+  var shown       = 0;
+
+  var grid        = document.getElementById('projects-grid');
+  var loadMoreWrap= document.getElementById('load-more-wrap');
+  var loadMoreBtn = document.getElementById('btn-load-more');
+  var searchEl    = document.getElementById('proj-search');
+  var filSchool   = document.getElementById('fil-school');
+  var filType     = document.getElementById('fil-type');
+  var filStatus   = document.getElementById('fil-status');
+  var filSdg      = document.getElementById('fil-sdg');
+  var countEl     = document.getElementById('filter-count');
+
+  /* ---- Helper: extract school acronym ---- */
+  function acronym(school) {
+    var m = school && school.match(/\(([^)]+)\)/);
+    return m ? m[1] : school;
+  }
+
+  /* ---- Parse team members JSON ---- */
+  function parseMembers(raw) {
+    try { return JSON.parse(raw) || []; } catch(e) { return []; }
+  }
+
+  /* ---- Build card HTML ---- */
+  function cardHTML(p) {
+    var members = parseMembers(p.team_members);
+    var statusCls = p.current_status === 'completed' ? 'tag-status-completed' : 'tag-status-ongoing';
+    var statusLabel = p.current_status === 'completed' ? 'Completed' : 'Ongoing';
+
+    var tagsHTML =
+      '<span class="proj-tag tag-type">' + (p.project_type || '') + '</span>' +
+      '<span class="proj-tag ' + statusCls + '">' + statusLabel + '</span>' +
+      (p.sdg_goal ? '<span class="proj-tag tag-sdg">' + p.sdg_goal.replace('— ', '').split(' ')[0] + ' ' + p.sdg_goal.replace('— ', '').split(' ')[1] + '</span>' : '');
+
+    var membersHTML = members.map(function (m) {
+      return '<span class="proj-member-chip">' + (m.name || '') + '</span>';
+    }).join('');
+
+    var metaHTML =
+      '<div class="proj-meta-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><strong>' + (p.semester || '') + '</strong></div>' +
+      '<div class="proj-meta-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><strong>' + (p.duration || '') + '</strong></div>';
+
+    var outcomeHTML = '';
+    if (p.expected_outcome) {
+      outcomeHTML += '<div class="proj-outcome-row">🎯 <strong>Expected:</strong> ' + p.expected_outcome + '</div>';
+    }
+    if (p.final_outcome && p.current_status === 'completed') {
+      outcomeHTML += '<div class="proj-outcome-row">✅ <strong>Outcome:</strong> ' + p.final_outcome + '</div>';
+    }
+
+    return '<div class="proj-card">' +
+      '<div class="proj-card-top">' +
+        '<div class="proj-tags">' + tagsHTML + '</div>' +
+        '<div class="proj-title">' + p.title + '</div>' +
+        '<div class="proj-school">🏫 ' + (p.school || '') + '</div>' +
+      '</div>' +
+      '<div class="proj-card-body">' +
+        '<div class="proj-meta-row">' + metaHTML + '</div>' +
+        (members.length ? '<div class="proj-members-title">Team Members</div><div class="proj-members">' + membersHTML + '</div>' : '') +
+        outcomeHTML +
+      '</div>' +
+    '</div>';
+  }
+
+  /* ---- Render a page of results ---- */
+  function renderPage() {
+    var slice = filtered.slice(shown, shown + PAGE_SIZE);
+    slice.forEach(function (p) {
+      var el = document.createElement('div');
+      el.innerHTML = cardHTML(p);
+      grid.appendChild(el.firstChild);
+    });
+    shown += slice.length;
+    loadMoreWrap.style.display = shown < filtered.length ? 'block' : 'none';
+    loadMoreBtn.disabled = false;
+  }
+
+  /* ---- Apply filters ---- */
+  function applyFilters() {
+    var q       = (searchEl.value || '').trim().toLowerCase();
+    var school  = filSchool.value;
+    var type    = filType.value;
+    var status  = filStatus.value;
+    var sdg     = filSdg.value;
+
+    filtered = allProjects.filter(function (p) {
+      if (school && !p.school.includes(school)) return false;
+      if (type   && p.project_type !== type)     return false;
+      if (status && p.current_status !== status) return false;
+      if (sdg    && p.sdg_goal !== sdg)           return false;
+      if (q) {
+        var haystack = (p.title + ' ' + p.team_members).toLowerCase();
+        if (!haystack.includes(q)) return false;
+      }
+      return true;
+    });
+
+    grid.innerHTML = '';
+    shown = 0;
+
+    if (filtered.length === 0) {
+      grid.innerHTML = '<div class="empty-state"><svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><h3>No projects found</h3><p>Try adjusting your filters or search term.</p></div>';
+      loadMoreWrap.style.display = 'none';
+    } else {
+      renderPage();
+    }
+
+    countEl.textContent = filtered.length + ' project' + (filtered.length === 1 ? '' : 's');
+  }
+
+  /* ---- Update stats ---- */
+  function updateStats() {
+    document.getElementById('stat-total').textContent     = allProjects.length;
+    document.getElementById('stat-ongoing').textContent   = allProjects.filter(function(p){return p.current_status==='ongoing'}).length;
+    document.getElementById('stat-completed').textContent = allProjects.filter(function(p){return p.current_status==='completed'}).length;
+    var schools = new Set(allProjects.map(function(p){return p.school}));
+    document.getElementById('stat-schools').textContent   = schools.size;
+  }
+
+  /* ---- Fetch from Supabase ---- */
+  fetch(SB_URL + '/rest/v1/projects?approval_status=eq.approved&order=created_at.desc&select=id,semester,duration,school,project_type,title,team_members,expected_outcome,sdg_goal,current_status,final_outcome', {
+    headers: { 'apikey': SB_KEY, 'Accept': 'application/json' }
+  })
+  .then(function (r) {
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    return r.json();
+  })
+  .then(function (data) {
+    allProjects = data || [];
+    updateStats();
+    applyFilters();
+    if (allProjects.length === 0) {
+      grid.innerHTML = '<div class="empty-state"><svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg><h3>No projects yet</h3><p>Be the first to <a href="index.html" style="color:var(--teal)">register a project</a>!</p></div>';
+      countEl.textContent = '0 projects';
+    }
+  })
+  .catch(function (err) {
+    console.error(err);
+    grid.innerHTML = '<div class="error-state"><svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><h3>Could not load projects</h3><p>Please check your connection and try refreshing.</p></div>';
+    ['stat-total','stat-ongoing','stat-completed','stat-schools'].forEach(function(id){document.getElementById(id).textContent='—'});
+  });
+
+  /* ---- Events ---- */
+  loadMoreBtn.addEventListener('click', function () {
+    loadMoreBtn.disabled = true;
+    renderPage();
+  });
+  searchEl.addEventListener('input',  applyFilters);
+  filSchool.addEventListener('change', applyFilters);
+  filType.addEventListener('change',   applyFilters);
+  filStatus.addEventListener('change', applyFilters);
+  filSdg.addEventListener('change',    applyFilters);
+
+  /* ---- Register CTA: open project modal on main page ---- */
+  document.getElementById('cta-register-link').addEventListener('click', function (e) {
+    e.preventDefault();
+    window.location.href = 'index.html';
+    // After nav, the modal is triggered by the #nav-projects hash click on index.html
+    sessionStorage.setItem('openProjectModal', '1');
+  });
+})();
+</script>
+</body>
+</html>
