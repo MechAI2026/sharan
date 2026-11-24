@@ -996,6 +996,38 @@ footer a { color: #9fe3dc; }
   z-index: 0;
 }
 
+/* ── Hero testimonials CTA pill ─────────────────────────── */
+.hero-testi-cta {
+  display: inline-flex; align-items: center; gap: .55rem;
+  margin-top: 1.1rem;
+  background: rgba(255,255,255,.1);
+  border: 1.5px solid rgba(255,255,255,.28);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: .55rem 1.1rem .55rem .9rem;
+  border-radius: 999px;
+  color: #fff !important;
+  font-size: .88rem; font-weight: 650; letter-spacing: .01em;
+  text-decoration: none !important;
+  animation: heroCtaFloat 3.4s ease-in-out infinite;
+  box-shadow: 0 4px 20px rgba(0,0,0,.18), 0 0 0 0 rgba(54,166,160,.0);
+  transition: background .22s, box-shadow .22s, border-color .22s;
+}
+.hero-testi-cta:hover {
+  background: rgba(255,255,255,.18);
+  border-color: rgba(255,255,255,.55);
+  box-shadow: 0 8px 28px rgba(0,0,0,.22), 0 0 20px rgba(54,166,160,.35);
+  animation-play-state: paused;
+}
+.htc-stars { color: #fbbf24; font-size: .9rem; letter-spacing: .05em; }
+.htc-label { flex: 1; }
+.htc-arrow { opacity: .7; transition: transform .2s; flex-shrink: 0; }
+.hero-testi-cta:hover .htc-arrow { transform: translateX(3px); opacity: 1; }
+@keyframes heroCtaFloat {
+  0%, 100% { transform: translateY(0px); box-shadow: 0 4px 20px rgba(0,0,0,.18); }
+  50%       { transform: translateY(-5px); box-shadow: 0 10px 28px rgba(0,0,0,.24), 0 0 16px rgba(54,166,160,.2); }
+}
+
 /* Better card hover */
 .card {
   transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
@@ -1126,6 +1158,52 @@ footer {
   .fdp-cta { grid-template-columns: 1fr; padding: 1.5rem; }
   .fdp-cta .btn-fdp-open { justify-self: start; }
 }
+/* ---------- FIELD NEWS SECTION ---------- */
+.field-news-viewall {
+  display: inline-flex; align-items: center; gap: .4rem;
+  font-size: .85rem; font-weight: 700; color: var(--blue);
+  padding: .45rem 1.1rem; border: 1.5px solid var(--line);
+  border-radius: 999px; white-space: nowrap; transition: all .2s; flex-shrink: 0;
+}
+.field-news-viewall:hover { background: var(--blue); color: #fff; border-color: var(--blue); text-decoration: none; }
+.fn-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.2rem;
+}
+.fn-card {
+  background: var(--white); border: 1px solid var(--line); border-radius: 16px;
+  padding: 1.4rem 1.4rem 1.2rem; display: flex; flex-direction: column; gap: .6rem;
+  transition: transform .2s, box-shadow .2s; text-decoration: none !important;
+  position: relative; overflow: hidden;
+}
+.fn-card::after {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--teal), var(--blue)); opacity: 0; transition: opacity .2s;
+}
+.fn-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,.1); }
+.fn-card:hover::after { opacity: 1; }
+.fn-tag {
+  display: inline-block; font-size: .7rem; font-weight: 800; letter-spacing: .1em;
+  text-transform: uppercase; padding: .18rem .6rem; border-radius: 999px;
+  background: rgba(54,166,160,.12); color: var(--teal);
+}
+.fn-tag.ai { background: rgba(31,107,134,.12); color: var(--blue); }
+.fn-tag.mat { background: rgba(185,154,85,.15); color: var(--gold); }
+.fn-tag.eng { background: rgba(16,38,63,.1); color: var(--navy); }
+.fn-title {
+  font-size: .95rem; font-weight: 700; color: var(--navy);
+  line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+}
+.fn-meta { font-size: .77rem; color: var(--muted); margin-top: auto; }
+.fn-skel {
+  background: var(--white); border: 1px solid var(--line); border-radius: 16px;
+  padding: 1.4rem; min-height: 160px;
+  background-image: linear-gradient(90deg, #f0f4f8 25%, #e4eaef 50%, #f0f4f8 75%);
+  background-size: 200% 100%;
+  animation: fnShimmer 1.4s infinite;
+}
+@keyframes fnShimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
 /* ---------- FESTIVAL GREETING STRIP ---------- */
 .festival-strip {
   position: relative;
@@ -1261,7 +1339,7 @@ footer {
   <div class="wrap nav">
     <a class="brand" href="#home">SHARAN CHANDRAN M<small>Academic · Research · Student Mentorship</small></a>
     <nav aria-label="Main navigation">
-      <a href="#about">About</a><a href="#news">News</a><a href="#research">Research</a><a href="#consultancy">Consultancy</a><a href="#mentorship">Mentorship</a><a href="#publications">Publications</a><a href="#patents">Patents</a><a href="#contact">Contact</a><a href="#" class="nav-training-link" id="nav-fdp">🎓 FDP &amp; Training</a>
+      <a href="#about">About</a><a href="#news">News</a><a href="news.html">📰 Field Updates</a><a href="#research">Research</a><a href="#consultancy">Consultancy</a><a href="#mentorship">Mentorship</a><a href="#publications">Publications</a><a href="#patents">Patents</a><a href="#contact">Contact</a><a href="#" class="nav-training-link" id="nav-fdp">🎓 FDP &amp; Training</a>
     </nav>
   </div>
 </header>
@@ -1279,10 +1357,10 @@ footer {
         <a class="btn" id="book-call" href="#" target="_blank" rel="noopener" hidden>Book a call</a>
         <a class="btn" href="#contact">Contact</a>
       </div>
-      <a href="testimonials.html" style="display:inline-flex;align-items:center;gap:.45rem;margin-top:.9rem;font-size:.87rem;color:rgba(255,255,255,.75);font-weight:600;letter-spacing:.01em;padding:.38rem 0;border-bottom:1px solid rgba(255,255,255,.25);transition:color .2s,border-color .2s;" onmouseover="this.style.color='#fff';this.style.borderColor='rgba(255,255,255,.7)';" onmouseout="this.style.color='rgba(255,255,255,.75)';this.style.borderColor='rgba(255,255,255,.25)';">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        See what students &amp; collaborators say about him
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:.6"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      <a href="testimonials.html" class="hero-testi-cta">
+        <span class="htc-stars" aria-hidden="true">★★★★★</span>
+        <span class="htc-label">See what students &amp; collaborators say</span>
+        <svg class="htc-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
       </a>
       <div class="audience"><span>I am a</span>
         <a href="#mentorship">Prospective student</a><a href="#consultancy">Industry / client</a><a href="#publications">Researcher</a><a href="#testimonials">Student / alumnus</a>
@@ -1346,6 +1424,26 @@ footer {
 
     </div>
 </section>
+
+<!-- ===== LATEST IN THE FIELD (live RSS news) ===== -->
+<section id="field-news">
+  <div class="section-head" style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:.5rem;">
+    <div>
+      <div class="kicker">Latest in the Field</div>
+      <h2>AI, Engineering &amp; Materials</h2>
+      <p class="lead">Live updates from leading journals, news outlets and industry sources.</p>
+    </div>
+    <a href="news.html" class="field-news-viewall">
+      View all updates
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </a>
+  </div>
+  <div class="fn-grid" id="fn-preview-grid">
+    <!-- Skeletons -->
+    <div class="fn-skel"></div><div class="fn-skel"></div><div class="fn-skel"></div><div class="fn-skel"></div>
+  </div>
+</section>
+
 <section id="research">
   <div class="section-head"><div class="kicker">Research</div><h2>Research interests</h2><p class="lead">Research themes spanning materials performance, sustainable design, manufacturing, and computational approaches.</p></div>
   <div class="grid">
@@ -1751,11 +1849,7 @@ footer {
 <footer><div class="wrap footer-row"><div><strong>Dr. Sharan Chandran M</strong><br><span>Academic · Research · Student Mentorship</span></div><div>© <span id="year">2026</span> Dr. Sharan Chandran M. All rights reserved.</div></div></footer>
 
 <!-- ===== FLOATING FDP TRIGGER BUTTON ===== -->
-<button class="fdp-trigger" id="fdp-trigger" aria-label="Request FDP or Training Program" aria-haspopup="dialog">
-  <span class="fdp-icon">🎓</span>
-  <span>FDP &amp; Training</span>
-  <span class="fdp-badge">NEW</span>
-</button>
+<!-- FDP floating button removed; modal still accessible via nav and consultancy section -->
 
 <!-- ===== FDP / TRAINING REQUEST MODAL ===== -->
 <div class="fdp-overlay" id="fdp-overlay" role="dialog" aria-modal="true" aria-labelledby="fdp-modal-title">
@@ -2350,6 +2444,70 @@ window.SITE_CONFIG = {
     } catch (err) { st.textContent = 'Could not send. Please email me directly.'; }
     btn.disabled = false;
   });
+})();
+</script>
+
+<!-- ===== FIELD NEWS PREVIEW ===== -->
+<script>
+(function () {
+  'use strict';
+
+  var PROXY  = 'https://api.rss2json.com/v1/api.json?count=3&rss_url=';
+  var FEEDS  = [
+    { url: 'https://www.sciencedaily.com/rss/matter_energy/materials_science.xml', tag: 'Materials', cls: 'mat' },
+    { url: 'https://www.sciencedaily.com/rss/computers_math/artificial_intelligence.xml', tag: 'AI', cls: 'ai' },
+    { url: 'https://news.mit.edu/rss/topic/mechanical-engineering', tag: 'Mechanical', cls: 'eng' },
+    { url: 'https://phys.org/rss-feed/material-sciences-news/', tag: 'Materials', cls: 'mat' }
+  ];
+
+  function timeAgo(dateStr) {
+    var d = new Date(dateStr), now = new Date();
+    var diff = Math.floor((now - d) / 86400000);
+    if (diff < 1) return 'Today';
+    if (diff === 1) return '1 day ago';
+    if (diff < 30) return diff + ' days ago';
+    if (diff < 365) return Math.floor(diff / 30) + 'mo ago';
+    return Math.floor(diff / 365) + 'y ago';
+  }
+
+  function escH(s) {
+    return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  async function fetchFeed(feed) {
+    try {
+      var r = await fetch(PROXY + encodeURIComponent(feed.url));
+      if (!r.ok) return [];
+      var json = await r.json();
+      return (json.items || []).slice(0, 2).map(function (item) {
+        return { title: item.title, link: item.link, date: item.pubDate, tag: feed.tag, cls: feed.cls };
+      });
+    } catch (e) { return []; }
+  }
+
+  async function loadPreview() {
+    var grid = document.getElementById('fn-preview-grid');
+    if (!grid) return;
+    var results = await Promise.allSettled(FEEDS.map(fetchFeed));
+    var all = [];
+    results.forEach(function (r) { if (r.status === 'fulfilled') all = all.concat(r.value); });
+    // shuffle & pick 4
+    for (var i = all.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = all[i]; all[i] = all[j]; all[j] = tmp;
+    }
+    var items = all.slice(0, 4);
+    if (!items.length) { grid.innerHTML = '<p style="color:var(--muted);grid-column:1/-1">Could not load news. <a href="news.html">Visit the news page →</a></p>'; return; }
+    grid.innerHTML = items.map(function (item) {
+      return '<a class="fn-card" href="' + escH(item.link) + '" target="_blank" rel="noopener noreferrer">' +
+        '<span class="fn-tag ' + item.cls + '">' + escH(item.tag) + '</span>' +
+        '<span class="fn-title">' + escH(item.title) + '</span>' +
+        '<span class="fn-meta">' + (item.date ? timeAgo(item.date) : '') + '</span>' +
+      '</a>';
+    }).join('');
+  }
+
+  loadPreview();
 })();
 </script>
 </body>
