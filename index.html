@@ -2603,7 +2603,7 @@ footer {
   var fileNameEl = document.getElementById('proj-file-name');
   var fileWrap   = document.getElementById('proj-file-wrap');
 
-  if (!overlay || !navTrigger) return;
+  if (!overlay) return;
 
   var memberCount = 1;
 
@@ -2618,7 +2618,7 @@ footer {
     document.body.style.overflow = '';
   }
 
-  navTrigger.addEventListener('click', function (e) { e.preventDefault(); openModal(); });
+  if (navTrigger) navTrigger.addEventListener('click', function (e) { e.preventDefault(); openModal(); });
   closeBtn.addEventListener('click', closeModal);
   overlay.addEventListener('click', function (e) { if (e.target === overlay) closeModal(); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
