@@ -160,6 +160,35 @@ tbody td{padding:.6rem 1rem;vertical-align:middle}
 .upload-status.ok{color:#276444;font-weight:600}
 .upload-status.err{color:#c33d49;font-weight:600}
 
+/* ===== ADMIN AUTH OVERLAY ===== */
+#admin-auth-overlay{position:fixed;inset:0;z-index:600;
+  background:rgba(10,20,38,.96);backdrop-filter:blur(10px);
+  display:flex;align-items:center;justify-content:center;padding:1rem}
+.auth-box{background:#fff;border-radius:18px;padding:2rem 2rem 1.8rem;
+  width:min(400px,100%);box-shadow:0 32px 80px rgba(0,0,0,.45)}
+.auth-box-hdr{background:linear-gradient(135deg,#0d1f35,#174d68);
+  margin:-2rem -2rem 1.5rem;padding:1.4rem 1.8rem;border-radius:18px 18px 0 0;color:#fff}
+.auth-box-hdr h2{font-size:1.1rem;margin:0 0 .2rem}
+.auth-box-hdr p{font-size:.78rem;color:rgba(255,255,255,.65);margin:0}
+.auth-label{display:block;font-size:.75rem;font-weight:700;color:#374151;
+  letter-spacing:.03em;margin-bottom:.3rem}
+.auth-input{width:100%;padding:.52rem .85rem;border:1.5px solid #d1d5db;border-radius:9px;
+  font-size:.95rem;font-family:inherit;color:#111;outline:none;
+  transition:border-color .15s;box-sizing:border-box}
+.auth-input:focus{border-color:#36a6a0;box-shadow:0 0 0 3px rgba(54,166,160,.12)}
+.auth-input.otp-input{letter-spacing:.35em;font-size:1.3rem;text-align:center;
+  font-weight:700;padding:.6rem .85rem}
+.btn-auth{width:100%;padding:.6rem;background:linear-gradient(135deg,#174d68,#36a6a0);
+  color:#fff;border:none;border-radius:9px;font:700 .95rem inherit;
+  cursor:pointer;margin-top:.8rem;transition:opacity .2s}
+.btn-auth:hover{opacity:.88}
+.btn-auth:disabled{opacity:.45;cursor:not-allowed}
+.auth-status{font-size:.8rem;min-height:1.2em;margin-top:.6rem}
+.auth-status.ok{color:#276444;font-weight:600}
+.auth-status.err{color:#c33d49;font-weight:600}
+.auth-back{background:none;border:none;color:#6b7280;font-size:.78rem;
+  cursor:pointer;padding:.4rem 0;text-decoration:underline}
+
 /* ===== MATERIAL ADMIN FORM ===== */
 .mat-admin-form{background:#fff;border:1.5px dashed var(--gold);border-radius:var(--r);
   padding:1.2rem 1.4rem;margin-bottom:1.4rem}
@@ -616,14 +645,7 @@ fetch(SB_URL + '/rest/v1/courses?id=eq.' + COURSE_ID + '&select=*', {
    ================================================================ */
 var STUDENTS = [{"prog":"BME","reg":"25BME0031","name":"S VARUN","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":7.22},{"prog":"BME","reg":"25BME0036","name":"YASH MOHAN","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.16},{"prog":"BME","reg":"25BME0037","name":"RAPATE AARYA","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":7.59},{"prog":"BME","reg":"25BME0040","name":"AGHILVEANTHAN S R","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.13},{"prog":"BME","reg":"25BME0051","name":"UDAY ANILKUMAR CHAKALAKKAL","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.14},{"prog":"BME","reg":"25BME0078","name":"AAYUSH SHARMA","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.39},{"prog":"BME","reg":"25BME0079","name":"TANMAY NANDA","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":6.12},{"prog":"BME","reg":"25BME0082","name":"SWETHA C J","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":7.84},{"prog":"BME","reg":"25BME0095","name":"PATEL HILL MANISHBHAI ","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.16},{"prog":"BME","reg":"25BME0100","name":"SHREYA SUBODH JOGLEKAR","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.29},{"prog":"BME","reg":"25BME0104","name":"PEDDIRAJU ROHAN","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.35},{"prog":"BME","reg":"25BME0111","name":"GANDHI DIPESH AVINASH","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.73},{"prog":"BME","reg":"25BME0140","name":"JONADH THOMAS","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.0},{"prog":"BME","reg":"25BME0147","name":"AMITH MADHAV A T","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":6.1},{"prog":"BME","reg":"25BME0161","name":"PRANAV P K","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":6.27},{"prog":"BME","reg":"25BME0163","name":"PRATYUSH GHOSH","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":7.84},{"prog":"BME","reg":"25BME0180","name":"RACHANA REDDY R","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.0},{"prog":"BME","reg":"25BME0182","name":"SOJIN JOJI","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":4.43},{"prog":"BME","reg":"25BME0188","name":"LAXMAN VISHAAL KATHIRESAN","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.9},{"prog":"BME","reg":"25BME0192","name":"SHIVAM KUMAR SINGH","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":6.98},{"prog":"BME","reg":"25BME0195","name":"K PRADHOSH","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.31},{"prog":"BME","reg":"25BME0204","name":"SK AMIR AHEMAD","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.55},{"prog":"BME","reg":"25BME0211","name":"ASHIRWAD PANDA","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.08},{"prog":"BME","reg":"25BME0214","name":"RANVEER PRAKASH","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.37},{"prog":"BME","reg":"25BME0215","name":"AADYANT AKHAURI","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":7.49},{"prog":"BME","reg":"25BME0222","name":"GURUSHANTH S S","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.57},{"prog":"BME","reg":"25BME0226","name":"SAGNIK DAS","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.55},{"prog":"BME","reg":"25BME0227","name":"SHASHANK S H","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.65},{"prog":"BME","reg":"25BME0235","name":"NIHAAL YASHWANT N","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":7.53},{"prog":"BME","reg":"25BME0255","name":"TINESH DEVAKUMAR","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.29},{"prog":"BME","reg":"25BME0264","name":"DUVVURI SRAVAN","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":6.02},{"prog":"BME","reg":"25BME0299","name":"AARUSHI VIJAY MAHADIK","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":7.73},{"prog":"BME","reg":"25BME0327","name":"PUNYA TANMAY THAKKAR","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.98},{"prog":"BME","reg":"25BME0337","name":"SOLAPURKAR ANSHUL HRISHIKESH","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":7.84},{"prog":"BME","reg":"25BME0339","name":"TEJASVI SINGH","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.65},{"prog":"BME","reg":"25BME0341","name":"AYUSH RAY","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":7.9},{"prog":"BME","reg":"25BME0345","name":"PRANESH D","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.33},{"prog":"BME","reg":"25BME0351","name":"MUSKAN KUMAR","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.38},{"prog":"BME","reg":"25BME0353","name":"DESAI ATHARVA SUDHINDRA","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.04},{"prog":"BME","reg":"25BME0355","name":"AARUSH MOVVA","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":9.0},{"prog":"BME","reg":"25BME0356","name":"SHARAYANI PANDE","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.49},{"prog":"BME","reg":"25BME0357","name":"PRATHAP K","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":7.37},{"prog":"BME","reg":"25BME0380","name":"RAGHU NANDHA J","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":7.67},{"prog":"BME","reg":"25BME0390","name":"MUHAMMED NAFIH M","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":7.61},{"prog":"BME","reg":"25BME0411","name":"DIVIRTH SAAI R J","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.45},{"prog":"BME","reg":"25BME0412","name":"ASHWIN KUMAR SINGH","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":7.96},{"prog":"BME","reg":"25BME0418","name":"A SAHITHYAN","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":4.78},{"prog":"BME","reg":"25BME0427","name":"TARUNIKA SHREE D","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":6.37},{"prog":"BME","reg":"25BME0434","name":"IPSHITA AGRAWAL","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.04},{"prog":"BME","reg":"25BME0436","name":"AL AQMAR M DOHADWALA","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":7.98},{"prog":"BME","reg":"25BME0439","name":"NANDANA PRADEEP","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.04},{"prog":"BME","reg":"25BME0443","name":"RISHIKESH DENNIS","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":6.67},{"prog":"BME","reg":"25BME0451","name":"SIDDHARTH SAJIV","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.38},{"prog":"BME","reg":"25BME0452","name":"ARFAN ARSHAD","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.91},{"prog":"BME","reg":"25BME0457","name":"AJAYENDRA NARENDRA KANKARIYA","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":6.98},{"prog":"BME","reg":"25BME0468","name":"ATHISH PRANEETH K S","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.04},{"prog":"BME","reg":"25BME0472","name":"PAVAN KAILASH H T","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.14},{"prog":"BME","reg":"25BME0475","name":"BHAVANKUMAR S","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":2.49},{"prog":"BME","reg":"25BME0476","name":"GAGANA SURYA CHARAN GAJAVALLI","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.27},{"prog":"BME","reg":"25BME0486","name":"PARRVAESH A C","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":7.43},{"prog":"BME","reg":"25BME0487","name":"MANE SHUBHAM SUDHIR","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":6.92},{"prog":"BME","reg":"25BME0488","name":"RUDALFIN LEO L","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":7.71},{"prog":"BME","reg":"25BME0489","name":"SHARMA AARSH AADARSH","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":7.41},{"prog":"BME","reg":"25BME0490","name":"ROJER TITUS R","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":7.18},{"prog":"BME","reg":"25BME0493","name":"ABHYANKAR WAMAN VINAYAK","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.94},{"prog":"BME","reg":"25BME0496","name":"MAYUKHA K B","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":7.04},{"prog":"BME","reg":"25BME0498","name":"ADHISRIRAM R K","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":7.71},{"prog":"BME","reg":"25BME0506","name":"SHIVA GURUBARAN S","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.98},{"prog":"BME","reg":"25BME0514","name":"KEERTHI SELVAN S","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.39},{"prog":"BME","reg":"25BME0515","name":"UTKARSH KUMAR SINGH","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":6.92}];
 
-/* ================================================================
-   ADMIN MODE — show upload panel if ?admin in URL
-   ================================================================ */
-(function () {
-  if (window.location.search.indexOf('admin') !== -1) {
-    document.getElementById('admin-upload-panel').style.display = 'block';
-  }
-})();
+/* admin panels now shown by auth system below */
 
 /* ================================================================
    STUDENT TABLE — loads from localStorage if available, else STUDENTS
@@ -796,13 +818,116 @@ var STUDENTS = [{"prog":"BME","reg":"25BME0031","name":"S VARUN","school":"SMEC"
 })();
 
 /* ================================================================
-   ADMIN — ADD MATERIAL
+   ADMIN AUTH — Email OTP via Supabase
+   Only shown when ?admin is in the URL.
+   After login, stores JWT in sessionStorage so the user stays
+   logged in until the browser tab is closed.
    ================================================================ */
 (function () {
   if (window.location.search.indexOf('admin') === -1) return;
 
-  var panel = document.getElementById('admin-mat-panel');
-  if (panel) panel.style.display = 'block';
+  var ALLOWED = 'sharanchandran.m@vit.ac.in'; /* only this email is authorised */
+  var SS_KEY  = 'admin_jwt_bamee402';
+  var stored  = sessionStorage.getItem(SS_KEY);
+  var pendingEmail = '';
+
+  /* Already have a token from this session — show panels straight away */
+  if (stored) { _showPanels(stored); return; }
+
+  /* Show the login overlay */
+  document.getElementById('admin-auth-overlay').style.display = 'flex';
+
+  var step1   = document.getElementById('auth-step1');
+  var step2   = document.getElementById('auth-step2');
+  var emailIn = document.getElementById('auth-email');
+  var otpIn   = document.getElementById('auth-otp');
+  var s1      = document.getElementById('auth-s1');
+  var s2      = document.getElementById('auth-s2');
+
+  document.getElementById('btn-send-otp').addEventListener('click', function () {
+    var email = emailIn.value.trim().toLowerCase();
+    if (!email) { s1.textContent='Enter your email.'; s1.className='auth-status err'; return; }
+    if (email !== ALLOWED) {
+      s1.textContent='❌ This email is not authorised to manage this course.';
+      s1.className='auth-status err'; return;
+    }
+    s1.textContent='Sending code…'; s1.className='auth-status';
+    this.disabled = true;
+    pendingEmail  = email;
+
+    fetch(SB_URL + '/auth/v1/otp', {
+      method: 'POST',
+      headers: { 'apikey': SB_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email, create_user: false })
+    })
+    .then(function (r) {
+      if (!r.ok) return r.json().then(function (e) {
+        throw new Error(e.msg || e.error_description || ('HTTP ' + r.status));
+      });
+      step1.style.display = 'none';
+      step2.style.display = '';
+      s2.textContent = '✉ Code sent to ' + email + '. Check your inbox (and spam folder).';
+      s2.className = 'auth-status ok';
+    })
+    .catch(function (e) {
+      s1.textContent = '❌ ' + e.message;
+      s1.className = 'auth-status err';
+      document.getElementById('btn-send-otp').disabled = false;
+    });
+  });
+
+  document.getElementById('btn-verify-otp').addEventListener('click', function () {
+    var token = otpIn.value.trim();
+    if (!token || token.length < 6) { s2.textContent='Enter the 6-digit code.'; s2.className='auth-status err'; return; }
+    s2.textContent = 'Verifying…'; s2.className = 'auth-status';
+    this.disabled = true;
+
+    fetch(SB_URL + '/auth/v1/verify', {
+      method: 'POST',
+      headers: { 'apikey': SB_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ type: 'email', token: token, email: pendingEmail })
+    })
+    .then(function (r) {
+      if (!r.ok) return r.json().then(function (e) {
+        throw new Error(e.msg || e.error_description || 'Invalid or expired code');
+      });
+      return r.json();
+    })
+    .then(function (data) {
+      var jwt = data.access_token;
+      sessionStorage.setItem(SS_KEY, jwt);
+      document.getElementById('admin-auth-overlay').style.display = 'none';
+      _showPanels(jwt);
+    })
+    .catch(function (e) {
+      s2.textContent = '❌ ' + e.message;
+      s2.className = 'auth-status err';
+      document.getElementById('btn-verify-otp').disabled = false;
+    });
+  });
+
+  document.getElementById('btn-auth-back').addEventListener('click', function () {
+    step2.style.display = 'none';
+    step1.style.display = '';
+    s1.textContent = '';
+    document.getElementById('btn-send-otp').disabled = false;
+    otpIn.value = '';
+  });
+
+  function _showPanels(jwt) {
+    window.ADMIN_TOKEN = jwt; /* used by add-material script */
+    var stuPanel = document.getElementById('admin-upload-panel');
+    if (stuPanel) stuPanel.style.display = 'block';
+    var matPanel = document.getElementById('admin-mat-panel');
+    if (matPanel) matPanel.style.display = 'block';
+  }
+})();
+
+/* ================================================================
+   ADMIN — ADD MATERIAL
+   ================================================================ */
+(function () {
+  if (!window.ADMIN_TOKEN) return;
 
   var typeEl   = document.getElementById('mat-type');
   var titleEl  = document.getElementById('mat-title');
@@ -839,7 +964,7 @@ var STUDENTS = [{"prog":"BME","reg":"25BME0031","name":"S VARUN","school":"SMEC"
         method: 'POST',
         headers: {
           'apikey':        SB_KEY,
-          'Authorization': 'Bearer ' + SB_KEY,
+          'Authorization': 'Bearer ' + window.ADMIN_TOKEN,
           'Content-Type':  'application/json',
           'Prefer':        'return=minimal'
         },
@@ -880,7 +1005,7 @@ var STUDENTS = [{"prog":"BME","reg":"25BME0031","name":"S VARUN","school":"SMEC"
         method:  'POST',
         headers: {
           'apikey':        SB_KEY,
-          'Authorization': 'Bearer ' + SB_KEY,
+          'Authorization': 'Bearer ' + window.ADMIN_TOKEN,
           'Content-Type':  file.type || 'application/octet-stream',
           'x-upsert':      'true'
         },
@@ -1185,5 +1310,33 @@ async function submitPifForm(e) {
   submitBtn.disabled = false;
 }
 </script>
+<!-- ===== ADMIN AUTH OVERLAY ===== -->
+<div id="admin-auth-overlay" style="display:none">
+  <div class="auth-box">
+    <div class="auth-box-hdr">
+      <h2>🔒 Instructor Login</h2>
+      <p>BAMEE402 · AI Driven Engineering Design</p>
+    </div>
+    <!-- Step 1: email -->
+    <div id="auth-step1">
+      <label class="auth-label" for="auth-email">Institutional Email</label>
+      <input class="auth-input" type="email" id="auth-email"
+        placeholder="yourname@vit.ac.in" autocomplete="email">
+      <button class="btn-auth" id="btn-send-otp">Send Login Code →</button>
+      <div class="auth-status" id="auth-s1"></div>
+    </div>
+    <!-- Step 2: OTP code -->
+    <div id="auth-step2" style="display:none">
+      <p style="font-size:.82rem;color:#6b7280;margin-bottom:1rem">
+        A 6-digit code was sent to your email. Enter it below.</p>
+      <label class="auth-label" for="auth-otp">Login Code</label>
+      <input class="auth-input otp-input" type="text" id="auth-otp"
+        maxlength="6" placeholder="000000" inputmode="numeric">
+      <button class="btn-auth" id="btn-verify-otp">Verify &amp; Enter →</button>
+      <div class="auth-status" id="auth-s2"></div>
+      <button class="auth-back" id="btn-auth-back">← Use a different email</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
