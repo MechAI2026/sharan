@@ -160,6 +160,28 @@ tbody td{padding:.6rem 1rem;vertical-align:middle}
 .upload-status.ok{color:#276444;font-weight:600}
 .upload-status.err{color:#c33d49;font-weight:600}
 
+/* ===== MATERIAL ADMIN FORM ===== */
+.mat-admin-form{background:#fff;border:1.5px dashed var(--gold);border-radius:var(--r);
+  padding:1.2rem 1.4rem;margin-bottom:1.4rem}
+.mat-admin-form h4{font-size:.88rem;font-weight:700;color:var(--gold);margin-bottom:.25rem}
+.mat-admin-form p{font-size:.79rem;color:var(--muted);margin-bottom:.9rem}
+.mat-fg{display:grid;grid-template-columns:1fr 1fr;gap:.6rem .9rem;margin-bottom:.7rem}
+.mat-ff{display:flex;flex-direction:column;gap:.28rem}
+.mat-ff.full{grid-column:1/-1}
+.mat-ff label{font-size:.74rem;font-weight:700;color:var(--text);letter-spacing:.03em}
+.mat-ff input[type=text],.mat-ff input[type=url],.mat-ff select{
+  width:100%;padding:.42rem .7rem;border:1.5px solid var(--border);border-radius:8px;
+  font-size:.84rem;font-family:inherit;color:var(--text);background:#fff;
+  transition:border-color .15s;outline:none}
+.mat-ff input:focus,.mat-ff select:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(54,166,160,.1)}
+.mat-ff input[type=file]{font-size:.8rem;color:var(--muted);padding:.3rem 0}
+.btn-mat-save{margin-top:.2rem;padding:.48rem 1.3rem;
+  background:linear-gradient(135deg,var(--teal),#1e8a84);
+  color:#fff;border:none;border-radius:8px;font:700 .85rem inherit;
+  cursor:pointer;transition:opacity .2s}
+.btn-mat-save:hover{opacity:.88}
+.btn-mat-save:disabled{opacity:.45;cursor:not-allowed}
+
 /* ===== MATERIALS ===== */
 .mat-toolbar{display:flex;gap:.7rem;margin-bottom:1rem;flex-wrap:wrap;align-items:center}
 .mat-filter-btns{display:flex;gap:.4rem;flex-wrap:wrap}
@@ -442,6 +464,44 @@ footer a:hover{color:#fff}
 
   <!-- TAB: MATERIALS -->
   <div class="tab-panel" id="tab-materials">
+
+    <!-- Admin: Add Material (visible only with ?admin) -->
+    <div class="mat-admin-form" id="admin-mat-panel" style="display:none">
+      <h4>📂 Add Course Material</h4>
+      <p>Upload a file (PDF, PPT, notes) or add an external link (YouTube, Google Drive, etc.).</p>
+      <div class="mat-fg">
+        <div class="mat-ff">
+          <label>Type *</label>
+          <select id="mat-type">
+            <option value="ppt">📊 Slides / PPT</option>
+            <option value="pdf">📄 PDF / Document</option>
+            <option value="notes">📝 Notes</option>
+            <option value="book">📖 Reference / Book</option>
+            <option value="video">🎥 Video</option>
+            <option value="link">🔗 External Link</option>
+          </select>
+        </div>
+        <div class="mat-ff">
+          <label>Title *</label>
+          <input type="text" id="mat-title" placeholder="e.g. Week 3 Lecture Slides">
+        </div>
+        <div class="mat-ff full">
+          <label>Description (optional)</label>
+          <input type="text" id="mat-desc" placeholder="Short description shown on the card">
+        </div>
+        <div class="mat-ff full" id="mat-file-row">
+          <label>File *</label>
+          <input type="file" id="mat-file" accept=".pdf,.ppt,.pptx,.doc,.docx,.txt,.png,.jpg,.zip,.mp4">
+        </div>
+        <div class="mat-ff full" id="mat-url-row" style="display:none">
+          <label>URL *</label>
+          <input type="url" id="mat-url" placeholder="https://youtube.com/...  or  https://drive.google.com/...">
+        </div>
+      </div>
+      <button class="btn-mat-save" id="btn-mat-save">⬆ Upload &amp; Save</button>
+      <div class="upload-status" id="mat-status"></div>
+    </div>
+
     <div class="mat-toolbar">
       <div class="mat-filter-btns" id="mat-filters">
         <button class="mat-filter-btn active" data-type="">All</button>
@@ -732,6 +792,114 @@ var STUDENTS = [{"prog":"BME","reg":"25BME0031","name":"S VARUN","school":"SMEC"
     document.querySelectorAll('.mat-filter-btn').forEach(function (b) { b.classList.remove('active'); });
     btn.classList.add('active');
     renderMats(btn.dataset.type);
+  });
+})();
+
+/* ================================================================
+   ADMIN — ADD MATERIAL
+   ================================================================ */
+(function () {
+  if (window.location.search.indexOf('admin') === -1) return;
+
+  var panel = document.getElementById('admin-mat-panel');
+  if (panel) panel.style.display = 'block';
+
+  var typeEl   = document.getElementById('mat-type');
+  var titleEl  = document.getElementById('mat-title');
+  var descEl   = document.getElementById('mat-desc');
+  var fileEl   = document.getElementById('mat-file');
+  var urlEl    = document.getElementById('mat-url');
+  var fileRow  = document.getElementById('mat-file-row');
+  var urlRow   = document.getElementById('mat-url-row');
+  var saveBtn  = document.getElementById('btn-mat-save');
+  var statusEl = document.getElementById('mat-status');
+
+  /* Show file input or URL input depending on type */
+  typeEl.addEventListener('change', function () {
+    var t = typeEl.value;
+    var isLink = (t === 'link' || t === 'video');
+    fileRow.style.display = isLink ? 'none' : '';
+    urlRow.style.display  = isLink ? ''     : 'none';
+  });
+
+  saveBtn.addEventListener('click', function () {
+    var type  = typeEl.value;
+    var title = titleEl.value.trim();
+    var desc  = descEl.value.trim();
+    if (!title) { alert('Title is required.'); return; }
+
+    statusEl.textContent = 'Saving…';
+    statusEl.className   = 'upload-status';
+    saveBtn.disabled     = true;
+
+    var isLink = (type === 'link' || type === 'video');
+
+    function insertRow(storagePath, url) {
+      return fetch(SB_URL + '/rest/v1/course_materials', {
+        method: 'POST',
+        headers: {
+          'apikey':        SB_KEY,
+          'Authorization': 'Bearer ' + SB_KEY,
+          'Content-Type':  'application/json',
+          'Prefer':        'return=minimal'
+        },
+        body: JSON.stringify({
+          course_id:     COURSE_ID,
+          title:         title,
+          description:   desc  || null,
+          material_type: type,
+          storage_path:  storagePath || null,
+          url:           url         || null,
+          is_visible:    true
+        })
+      }).then(function (r) {
+        if (!r.ok) return r.json().then(function (e) { throw new Error(e.message || r.status); });
+      });
+    }
+
+    if (isLink) {
+      var linkUrl = urlEl.value.trim();
+      if (!linkUrl) { statusEl.textContent = '❌ URL is required.'; statusEl.className='upload-status err'; saveBtn.disabled=false; return; }
+      insertRow(null, linkUrl)
+        .then(function () {
+          statusEl.textContent = '✅ Link saved! Reload the Materials tab to see it.';
+          statusEl.className   = 'upload-status ok';
+          titleEl.value = descEl.value = urlEl.value = '';
+        })
+        .catch(function (e) { statusEl.textContent='❌ '+e.message; statusEl.className='upload-status err'; })
+        .finally(function () { saveBtn.disabled = false; });
+    } else {
+      var file = fileEl.files[0];
+      if (!file) { statusEl.textContent='❌ Please select a file.'; statusEl.className='upload-status err'; saveBtn.disabled=false; return; }
+
+      var safeName    = Date.now() + '_' + file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+      var storagePath = 'course_' + COURSE_ID + '/' + safeName;
+      statusEl.textContent = 'Uploading file…';
+
+      fetch(SB_URL + '/storage/v1/object/course-materials/' + storagePath, {
+        method:  'POST',
+        headers: {
+          'apikey':        SB_KEY,
+          'Authorization': 'Bearer ' + SB_KEY,
+          'Content-Type':  file.type || 'application/octet-stream',
+          'x-upsert':      'true'
+        },
+        body: file
+      })
+      .then(function (r) {
+        if (!r.ok) return r.json().then(function (e) { throw new Error('Storage: ' + (e.message || r.status)); });
+        statusEl.textContent = 'File uploaded — saving record…';
+        return insertRow(storagePath, null);
+      })
+      .then(function () {
+        statusEl.textContent = '✅ Saved! Reload the Materials tab to see it.';
+        statusEl.className   = 'upload-status ok';
+        titleEl.value = descEl.value = '';
+        fileEl.value  = '';
+      })
+      .catch(function (e) { statusEl.textContent='❌ '+e.message; statusEl.className='upload-status err'; })
+      .finally(function () { saveBtn.disabled = false; });
+    }
   });
 })();
 
