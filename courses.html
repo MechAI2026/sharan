@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>My Courses — Dr. Sharan Chandran M</title>
+<meta name="description" content="Course portal for students of Dr. Sharan Chandran M — materials, announcements, assignments and project registrations.">
+<!-- SheetJS for Excel parsing -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<!-- Google tag -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-N2LJT0N760"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-N2LJT0N760');</script>
+<style>
+/* ===== RESET & TOKENS ===== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#10263f;--blue:#1b4c65;--teal:#36a6a0;--gold:#c9a84c;
+  --paper:#f7f5f0;--white:#fff;--muted:#6b7280;--border:#e2ddd5;
+  --text:#1a2535;--r:14px;--rs:8px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--paper);color:var(--text);line-height:1.6}
+a{color:inherit;text-decoration:none}
+
+/* ===== HEADER ===== */
+header{background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff;
+  padding:.85rem 2rem;position:sticky;top:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  box-shadow:0 4px 20px rgba(0,0,0,.2);}
+.hdr-left{display:flex;align-items:center;gap:1rem}
+.hdr-back{display:inline-flex;align-items:center;gap:.4rem;
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);
+  padding:.35rem .8rem;border-radius:999px;font-size:.82rem;font-weight:600;
+  color:#fff;transition:background .2s;}
+.hdr-back:hover{background:rgba(255,255,255,.22)}
+.hdr-title h1{font-size:1.05rem;font-weight:700}
+.hdr-title p{font-size:.75rem;color:rgba(255,255,255,.65)}
+.hdr-sem{font-size:.78rem;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);
+  padding:.3rem .75rem;border-radius:999px;color:rgba(255,255,255,.85);white-space:nowrap}
+
+/* ===== COURSE CARD ===== */
+.course-hero{background:linear-gradient(135deg,#0d1f35,#174d68 55%,#1b7b82);
+  color:#fff;padding:2rem 2rem 0;}
+.course-card{max-width:1200px;margin:0 auto;
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);
+  border-radius:var(--r) var(--r) 0 0;
+  display:grid;grid-template-columns:1fr auto;gap:1.5rem;
+  padding:1.5rem 2rem 1.2rem;align-items:start;}
+.course-code{font-size:.72rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:.3rem}
+.course-name{font-size:1.6rem;font-weight:800;line-height:1.2;margin-bottom:.5rem}
+.course-meta{display:flex;flex-wrap:wrap;gap:.5rem 1.4rem}
+.course-meta-item{font-size:.82rem;color:rgba(255,255,255,.75);display:flex;align-items:center;gap:.35rem}
+.course-meta-item strong{color:#fff}
+.course-stats{display:flex;flex-direction:column;gap:.6rem;align-items:flex-end}
+.cstat{text-align:right}
+.cstat .n{font-size:1.8rem;font-weight:800;color:var(--gold);line-height:1}
+.cstat .l{font-size:.7rem;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.05em}
+
+/* ===== TABS ===== */
+.tabs-bar{background:rgba(255,255,255,.06);border-top:1px solid rgba(255,255,255,.12);max-width:1200px;margin:0 auto;}
+.tabs-nav{display:flex;gap:0;overflow-x:auto;scrollbar-width:none}
+.tabs-nav::-webkit-scrollbar{display:none}
+.tab-btn{background:none;border:none;color:rgba(255,255,255,.65);
+  font:600 .88rem inherit;padding:.75rem 1.3rem;cursor:pointer;
+  border-bottom:3px solid transparent;white-space:nowrap;
+  transition:color .2s,border-color .2s;}
+.tab-btn:hover{color:#fff}
+.tab-btn.active{color:#fff;border-bottom-color:var(--gold)}
+.course-hero-end{background:linear-gradient(135deg,#0d1f35,#174d68 55%,#1b7b82);padding-bottom:0;}
+
+/* ===== CONTENT AREA ===== */
+.content-area{max-width:1200px;margin:0 auto;padding:1.8rem 2rem 3rem}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+
+/* ===== INSTRUCTIONS PANEL ===== */
+.instr-box{background:#fff;border-radius:var(--r);border:1px solid var(--border);padding:1.5rem 2rem}
+.instr-box h3{font-size:1.1rem;color:var(--navy);margin-bottom:.8rem;
+  display:flex;align-items:center;gap:.5rem}
+.instr-content{color:var(--text);font-size:.93rem;line-height:1.75}
+.instr-content h2,.instr-content h3,.instr-content h4{color:var(--navy);margin:1rem 0 .4rem}
+.instr-content ul,.instr-content ol{padding-left:1.4rem;margin:.4rem 0}
+.instr-content li{margin-bottom:.25rem}
+
+/* ===== STUDENTS TABLE ===== */
+.students-toolbar{display:flex;gap:.7rem;margin-bottom:1rem;flex-wrap:wrap;align-items:center}
+.search-wrap{position:relative;flex:1;min-width:200px;max-width:360px}
+.search-wrap svg{position:absolute;left:.7rem;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--muted)}
+.search-wrap input{width:100%;padding:.5rem .75rem .5rem 2.1rem;border:1px solid var(--border);
+  border-radius:999px;font:inherit;font-size:.88rem;outline:none;background:#fff;
+  transition:border-color .2s,box-shadow .2s;}
+.search-wrap input:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(54,166,160,.12)}
+.stu-count{font-size:.82rem;color:var(--muted);margin-left:auto}
+.table-wrap{background:#fff;border-radius:var(--r);border:1px solid var(--border);overflow:hidden}
+table{width:100%;border-collapse:collapse;font-size:.86rem}
+thead tr{background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff}
+thead th{padding:.75rem 1rem;text-align:left;font-weight:700;font-size:.78rem;
+  letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
+tbody tr{border-bottom:1px solid var(--border);transition:background .15s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:#f0faf9}
+tbody td{padding:.6rem 1rem;vertical-align:middle}
+.sno{color:var(--muted);font-size:.78rem;width:36px}
+.stu-name{font-weight:600;color:var(--navy)}
+.stu-reg{font-family:monospace;font-size:.82rem;color:var(--blue)}
+.status-badge{font-size:.7rem;padding:.18rem .6rem;border-radius:999px;font-weight:700;
+  background:rgba(39,100,68,.1);color:#276444}
+/* ===== ADMIN UPLOAD ===== */
+.admin-panel{background:#fff;border:1.5px dashed var(--gold);border-radius:var(--r);
+  padding:1.2rem 1.5rem;margin-bottom:1.2rem}
+.admin-panel h4{font-size:.88rem;font-weight:700;color:var(--gold);
+  display:flex;align-items:center;gap:.4rem;margin-bottom:.6rem}
+.admin-panel p{font-size:.8rem;color:var(--muted);margin-bottom:.8rem}
+.btn-upload-xls{display:inline-flex;align-items:center;gap:.45rem;
+  padding:.5rem 1.1rem;border-radius:999px;font:700 .85rem inherit;
+  background:linear-gradient(135deg,var(--gold),#b08c3a);color:#fff;
+  border:none;cursor:pointer;transition:opacity .2s;}
+.btn-upload-xls:hover{opacity:.88}
+.upload-status{font-size:.8rem;margin-top:.5rem;min-height:1.2em}
+.upload-status.ok{color:#276444;font-weight:600}
+.upload-status.err{color:#c33d49;font-weight:600}
+
+/* ===== MATERIALS ===== */
+.mat-toolbar{display:flex;gap:.7rem;margin-bottom:1rem;flex-wrap:wrap;align-items:center}
+.mat-filter-btns{display:flex;gap:.4rem;flex-wrap:wrap}
+.mat-filter-btn{padding:.3rem .8rem;border:1.5px solid var(--border);border-radius:999px;
+  background:#fff;font:600 .78rem inherit;cursor:pointer;color:var(--muted);
+  transition:all .2s;}
+.mat-filter-btn.active,.mat-filter-btn:hover{background:var(--navy);color:#fff;border-color:var(--navy)}
+.mat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem}
+.mat-card{background:#fff;border:1px solid var(--border);border-radius:var(--r);
+  padding:1.1rem 1.3rem;display:flex;flex-direction:column;gap:.6rem;
+  transition:transform .2s,box-shadow .2s;}
+.mat-card:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(16,38,63,.1)}
+.mat-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;
+  justify-content:center;font-size:1.3rem;flex-shrink:0}
+.mat-icon.book   {background:rgba(201,168,76,.15)}
+.mat-icon.video  {background:rgba(220,53,69,.1)}
+.mat-icon.ppt    {background:rgba(255,102,0,.1)}
+.mat-icon.notes  {background:rgba(54,166,160,.1)}
+.mat-icon.link   {background:rgba(27,76,101,.1)}
+.mat-icon.other  {background:rgba(107,114,128,.1)}
+.mat-type-badge{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;
+  padding:.15rem .55rem;border-radius:999px;background:var(--paper);color:var(--muted);border:1px solid var(--border)}
+.mat-title{font-size:.95rem;font-weight:700;color:var(--navy);line-height:1.3}
+.mat-desc{font-size:.8rem;color:var(--muted)}
+.mat-actions{display:flex;gap:.5rem;margin-top:auto;padding-top:.4rem}
+.btn-download{display:inline-flex;align-items:center;gap:.35rem;
+  padding:.4rem .9rem;border-radius:999px;font:600 .8rem inherit;
+  background:linear-gradient(135deg,var(--teal),#2a807c);color:#fff;
+  border:none;cursor:pointer;transition:opacity .2s,transform .2s;text-decoration:none;}
+.btn-download:hover{opacity:.88;transform:translateY(-1px)}
+.btn-link-out{display:inline-flex;align-items:center;gap:.35rem;
+  padding:.4rem .9rem;border-radius:999px;font:600 .8rem inherit;
+  background:#fff;color:var(--blue);border:1.5px solid var(--blue);
+  cursor:pointer;transition:all .2s;text-decoration:none;}
+.btn-link-out:hover{background:var(--blue);color:#fff}
+.mat-empty{grid-column:1/-1;text-align:center;padding:2.5rem 1rem;color:var(--muted);font-size:.9rem}
+
+/* ===== ANNOUNCEMENTS ===== */
+.ann-list{display:flex;flex-direction:column;gap:1rem}
+.ann-card{background:#fff;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;
+  transition:box-shadow .2s;}
+.ann-card:hover{box-shadow:0 8px 24px rgba(16,38,63,.09)}
+.ann-header{padding:1rem 1.4rem .8rem;display:flex;align-items:flex-start;gap:1rem;cursor:pointer}
+.ann-type-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;
+  justify-content:center;font-size:1.4rem;flex-shrink:0}
+.ann-type-icon.announcement{background:rgba(27,76,101,.1)}
+.ann-type-icon.quiz         {background:rgba(220,53,69,.1)}
+.ann-type-icon.project      {background:rgba(39,100,68,.1)}
+.ann-type-icon.assignment   {background:rgba(201,168,76,.15)}
+.ann-meta{flex:1}
+.ann-type-badge{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;
+  padding:.15rem .6rem;border-radius:999px;margin-bottom:.35rem;display:inline-block}
+.badge-announcement{background:rgba(27,76,101,.1);color:var(--blue)}
+.badge-quiz        {background:rgba(220,53,69,.1);color:#c0392b}
+.badge-project     {background:rgba(39,100,68,.1);color:#276444}
+.badge-assignment  {background:rgba(201,168,76,.15);color:#9a6f10}
+.ann-title{font-size:1rem;font-weight:700;color:var(--navy);line-height:1.3}
+.ann-subtitle{font-size:.8rem;color:var(--muted);margin-top:.2rem;display:flex;gap:.8rem;flex-wrap:wrap}
+.ann-chevron{flex-shrink:0;color:var(--muted);transition:transform .3s;margin-top:.2rem}
+.ann-card.open .ann-chevron{transform:rotate(180deg)}
+.ann-body{display:none;padding:0 1.4rem 1.2rem;border-top:1px dashed var(--border)}
+.ann-card.open .ann-body{display:block}
+.ann-desc{font-size:.9rem;color:var(--text);margin-top:.8rem;line-height:1.7}
+.rubrics-box{margin-top:1rem;background:var(--paper);border-radius:var(--rs);padding:1rem 1.2rem;
+  border-left:3px solid var(--gold)}
+.rubrics-box h4{font-size:.82rem;text-transform:uppercase;letter-spacing:.07em;color:var(--gold);
+  font-weight:800;margin-bottom:.5rem}
+.rubrics-content{font-size:.85rem;color:var(--text);line-height:1.6}
+.rubrics-content table{width:100%;border-collapse:collapse;margin-top:.5rem;font-size:.82rem}
+.rubrics-content th{background:var(--navy);color:#fff;padding:.4rem .7rem;text-align:left;font-size:.75rem}
+.rubrics-content td{padding:.4rem .7rem;border-bottom:1px solid var(--border)}
+.rubrics-content tr:last-child td{border-bottom:none}
+.ann-proj-btn{margin-top:1rem}
+
+/* ===== PROJECT REGISTRATION INLINE ===== */
+.proj-inline-form{background:var(--paper);border-radius:var(--rs);border:1.5px solid var(--teal);
+  padding:1.2rem 1.4rem;margin-top:1rem}
+.proj-inline-form h4{font-size:.9rem;font-weight:700;color:var(--teal);margin-bottom:.8rem;
+  display:flex;align-items:center;gap:.4rem}
+.pif-row{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;margin-bottom:.7rem}
+.pif-row.full{grid-template-columns:1fr}
+.pif-label{display:block;font-size:.75rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:.05em;color:var(--muted);margin-bottom:.2rem}
+.pif-input,.pif-select,.pif-textarea{width:100%;padding:.45rem .7rem;
+  border:1px solid var(--border);border-radius:var(--rs);
+  font:inherit;font-size:.88rem;background:#fff;outline:none;
+  transition:border-color .2s,box-shadow .2s;}
+.pif-input:focus,.pif-select:focus,.pif-textarea:focus{
+  border-color:var(--teal);box-shadow:0 0 0 3px rgba(54,166,160,.12)}
+.pif-textarea{resize:vertical;min-height:60px}
+.member-rows{display:flex;flex-direction:column;gap:.5rem;margin-bottom:.5rem}
+.member-row-pif{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+.btn-add-member-pif{background:none;border:1.5px dashed var(--teal);color:var(--teal);
+  font:600 .8rem inherit;padding:.35rem .8rem;border-radius:var(--rs);cursor:pointer;
+  transition:background .2s;}
+.btn-add-member-pif:hover{background:rgba(54,166,160,.08)}
+.btn-submit-proj{width:100%;margin-top:.8rem;padding:.75rem;
+  background:linear-gradient(135deg,var(--navy),var(--blue));
+  color:#fff;border:none;border-radius:var(--rs);
+  font:700 .95rem inherit;cursor:pointer;display:flex;align-items:center;
+  justify-content:center;gap:.5rem;transition:opacity .2s,transform .2s;}
+.btn-submit-proj:hover{opacity:.88;transform:translateY(-1px)}
+.btn-submit-proj:disabled{opacity:.5;cursor:wait;transform:none}
+.pif-status{font-size:.83rem;text-align:center;min-height:1.2em;margin-top:.4rem}
+.pif-status.ok{color:#276444;font-weight:600}
+.pif-status.err{color:#c33d49;font-weight:600}
+.req{color:#c33d49}
+.hint{color:var(--muted);font-weight:400;font-size:.75rem;text-transform:none;letter-spacing:0}
+
+/* ===== SKELETON ===== */
+@keyframes shimmer{0%{background-position:-400px 0}100%{background-position:400px 0}}
+.skel{background:linear-gradient(90deg,#e9e5de 25%,#f1ede7 50%,#e9e5de 75%);
+  background-size:800px 100%;animation:shimmer 1.6s infinite;border-radius:var(--r)}
+
+/* ===== EMPTY STATE ===== */
+.empty-panel{text-align:center;padding:3rem 1rem;color:var(--muted)}
+.empty-panel h3{font-size:1rem;color:var(--navy);margin-bottom:.3rem}
+
+/* ===== FOOTER ===== */
+footer{background:var(--navy);color:rgba(255,255,255,.5);text-align:center;
+  padding:1rem;font-size:.8rem}
+footer a{color:rgba(255,255,255,.7)}
+footer a:hover{color:#fff}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:700px){
+  header{padding:.7rem 1rem;flex-wrap:wrap}
+  .course-card{grid-template-columns:1fr;gap:.8rem}
+  .course-stats{flex-direction:row;align-items:center}
+  .content-area{padding:1.2rem 1rem 2rem}
+  .pif-row{grid-template-columns:1fr}
+  thead th:nth-child(5),thead th:nth-child(6),tbody td:nth-child(5),tbody td:nth-child(6){display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="hdr-left">
+    <a href="index.html" class="hdr-back">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      Back
+    </a>
+    <div class="hdr-title">
+      <h1>Course Portal</h1>
+      <p>Dr. Sharan Chandran M · VIT Vellore</p>
+    </div>
+  </div>
+  <div class="hdr-sem">Winter 2026–27</div>
+</header>
+
+<!-- COURSE HERO -->
+<div class="course-hero">
+  <div class="course-card">
+    <div>
+      <div class="course-code">BAMEE402</div>
+      <div class="course-name">Applied Mechanics &amp; Engineering</div>
+      <div class="course-meta">
+        <div class="course-meta-item">🏫 <strong>SMEC</strong></div>
+        <div class="course-meta-item">📚 <strong>BME · 4 Credits</strong></div>
+        <div class="course-meta-item">🕐 <strong>TH · VL2026270505978</strong></div>
+        <div class="course-meta-item">📅 <strong>Winter 2026–27</strong></div>
+      </div>
+    </div>
+    <div class="course-stats">
+      <div class="cstat"><div class="n">70</div><div class="l">Students</div></div>
+      <div class="cstat"><div class="n" id="stat-materials">—</div><div class="l">Materials</div></div>
+      <div class="cstat"><div class="n" id="stat-announcements">—</div><div class="l">Announcements</div></div>
+    </div>
+  </div>
+  <div class="tabs-bar">
+    <div class="tabs-nav">
+      <button class="tab-btn active" data-tab="instructions">📋 Instructions</button>
+      <button class="tab-btn" data-tab="students">👥 Students (70)</button>
+      <button class="tab-btn" data-tab="materials">📂 Materials</button>
+      <button class="tab-btn" data-tab="announcements">📣 Announcements</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="content-area">
+
+  <!-- TAB: INSTRUCTIONS -->
+  <div class="tab-panel active" id="tab-instructions">
+    <div class="instr-box">
+      <h3>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Course Instructions
+      </h3>
+      <div class="instr-content" id="instr-content">
+        <p style="color:var(--muted);font-style:italic">Loading instructions…</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: STUDENTS -->
+  <div class="tab-panel" id="tab-students">
+    <!-- Admin upload panel (visible only with ?admin in URL) -->
+    <div class="admin-panel" id="admin-upload-panel" style="display:none">
+      <h4>🔒 Instructor · Update Class List</h4>
+      <p>Upload the VIT enrollment Excel export (the same format as the original). The new list replaces the current one for this course and is saved in your browser — no server required.</p>
+      <input type="file" id="xls-file-input" accept=".xlsx,.xls" style="display:none">
+      <button class="btn-upload-xls" onclick="document.getElementById('xls-file-input').click()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        Choose Excel File (.xlsx)
+      </button>
+      <div class="upload-status" id="upload-status"></div>
+    </div>
+
+    <div class="students-toolbar">
+      <div class="search-wrap">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="search" id="stu-search" placeholder="Search by name or reg number…">
+      </div>
+      <span class="stu-count" id="stu-count"></span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Reg No.</th>
+            <th>Programme</th>
+            <th>Mode</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="stu-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB: MATERIALS -->
+  <div class="tab-panel" id="tab-materials">
+    <div class="mat-toolbar">
+      <div class="mat-filter-btns" id="mat-filters">
+        <button class="mat-filter-btn active" data-type="">All</button>
+        <button class="mat-filter-btn" data-type="book">📖 Books</button>
+        <button class="mat-filter-btn" data-type="video">🎥 Videos</button>
+        <button class="mat-filter-btn" data-type="ppt">📊 Slides / PPT</button>
+        <button class="mat-filter-btn" data-type="notes">📝 Notes</button>
+        <button class="mat-filter-btn" data-type="link">🔗 Links</button>
+      </div>
+    </div>
+    <div class="mat-grid" id="mat-grid">
+      <div class="skel" style="height:140px"></div>
+      <div class="skel" style="height:140px"></div>
+      <div class="skel" style="height:140px"></div>
+    </div>
+  </div>
+
+  <!-- TAB: ANNOUNCEMENTS -->
+  <div class="tab-panel" id="tab-announcements">
+    <div class="ann-list" id="ann-list">
+      <div class="skel" style="height:80px"></div>
+      <div class="skel" style="height:80px"></div>
+    </div>
+  </div>
+
+</div><!-- /content-area -->
+
+<footer>
+  <p>© <span id="year"></span> Dr. Sharan Chandran M · <a href="index.html">sharanchandran.com</a></p>
+</footer>
+
+<!-- PROJECT REGISTRATION MODAL (reused from main site) -->
+<div class="proj-overlay" id="proj-overlay" role="dialog" aria-modal="true" style="
+  position:fixed;inset:0;background:rgba(10,20,38,.65);backdrop-filter:blur(6px);
+  display:flex;align-items:center;justify-content:center;z-index:999;
+  opacity:0;pointer-events:none;transition:opacity .3s;">
+  <div id="proj-modal-inner" style="
+    background:#fff;border-radius:20px;max-width:620px;width:calc(100% - 2rem);
+    max-height:90vh;overflow-y:auto;transform:translateY(30px) scale(.97);
+    transition:transform .35s cubic-bezier(.34,1.56,.64,1);">
+    <div style="background:linear-gradient(135deg,var(--navy),var(--blue));
+      color:#fff;padding:1.4rem 1.6rem;border-radius:20px 20px 0 0;position:sticky;top:0;z-index:2">
+      <button id="proj-modal-close2" aria-label="Close" style="
+        position:absolute;top:.9rem;right:.9rem;width:30px;height:30px;
+        border-radius:50%;background:rgba(255,255,255,.15);border:none;color:#fff;
+        font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
+      <h2 style="font-size:1.2rem;margin:0 2rem 0 0">📋 Register Project</h2>
+      <p id="proj-modal-ann-title" style="font-size:.82rem;color:rgba(255,255,255,.7);margin:.3rem 0 0"></p>
+    </div>
+    <div style="padding:1.4rem 1.6rem 1.8rem" id="proj-modal-body2"></div>
+  </div>
+</div>
+
+<script>
+/* ================================================================
+   CONFIGURATION
+   ================================================================ */
+var SB_URL  = 'https://xtnkiwxfkuwmmnxqwxif.supabase.co';
+var SB_KEY  = 'sb_publishable_KFm9V1b_7Q-nWPULjE1p32QKNLPa3GHZE0cWkOmKhJQ';
+var COURSE_ID = 1;  /* Update to match the id from your courses table */
+var BUCKET  = 'project-reports';
+
+document.getElementById('year').textContent = new Date().getFullYear();
+
+/* ================================================================
+   TABS
+   ================================================================ */
+var tabBtns   = document.querySelectorAll('.tab-btn');
+var tabPanels = document.querySelectorAll('.tab-panel');
+tabBtns.forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    tabBtns.forEach(function (b) { b.classList.remove('active'); });
+    tabPanels.forEach(function (p) { p.classList.remove('active'); });
+    btn.classList.add('active');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+  });
+});
+
+/* ================================================================
+   INLINE MARKDOWN RENDERER (simple, no deps)
+   ================================================================ */
+function renderMd(md) {
+  if (!md) return '';
+  return md
+    .replace(/^## (.+)$/gm, '<h3 style="margin:1rem 0 .4rem;color:var(--navy)">$1</h3>')
+    .replace(/^### (.+)$/gm, '<h4 style="margin:.7rem 0 .3rem;color:var(--blue)">$1</h4>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    .replace(/^- (.+)$/gm, '<li>$1</li>')
+    .replace(/(<li>.*<\/li>)/gs, '<ul style="padding-left:1.3rem;margin:.4rem 0">$1</ul>')
+    .replace(/\n\n/g, '<br><br>');
+}
+
+/* ================================================================
+   LOAD COURSE INSTRUCTIONS FROM SUPABASE
+   ================================================================ */
+fetch(SB_URL + '/rest/v1/courses?id=eq.' + COURSE_ID + '&select=*', {
+  headers: { 'apikey': SB_KEY }
+})
+.then(function (r) { return r.json(); })
+.then(function (data) {
+  var c = data && data[0];
+  if (!c) return;
+  document.getElementById('instr-content').innerHTML =
+    c.instructions ? renderMd(c.instructions) :
+    '<p style="color:var(--muted)">No instructions posted yet.</p>';
+})
+.catch(function () {});
+
+/* ================================================================
+   STUDENTS — embedded data (from enrolled list Excel)
+   ================================================================ */
+var STUDENTS = [{"prog":"BME","reg":"25BME0031","name":"S VARUN","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":7.22},{"prog":"BME","reg":"25BME0036","name":"YASH MOHAN","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.16},{"prog":"BME","reg":"25BME0037","name":"RAPATE AARYA","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":7.59},{"prog":"BME","reg":"25BME0040","name":"AGHILVEANTHAN S R","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.13},{"prog":"BME","reg":"25BME0051","name":"UDAY ANILKUMAR CHAKALAKKAL","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.14},{"prog":"BME","reg":"25BME0078","name":"AAYUSH SHARMA","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.39},{"prog":"BME","reg":"25BME0079","name":"TANMAY NANDA","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":6.12},{"prog":"BME","reg":"25BME0082","name":"SWETHA C J","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":7.84},{"prog":"BME","reg":"25BME0095","name":"PATEL HILL MANISHBHAI ","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.16},{"prog":"BME","reg":"25BME0100","name":"SHREYA SUBODH JOGLEKAR","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.29},{"prog":"BME","reg":"25BME0104","name":"PEDDIRAJU ROHAN","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.35},{"prog":"BME","reg":"25BME0111","name":"GANDHI DIPESH AVINASH","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.73},{"prog":"BME","reg":"25BME0140","name":"JONADH THOMAS","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.0},{"prog":"BME","reg":"25BME0147","name":"AMITH MADHAV A T","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":6.1},{"prog":"BME","reg":"25BME0161","name":"PRANAV P K","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":6.27},{"prog":"BME","reg":"25BME0163","name":"PRATYUSH GHOSH","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":7.84},{"prog":"BME","reg":"25BME0180","name":"RACHANA REDDY R","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.0},{"prog":"BME","reg":"25BME0182","name":"SOJIN JOJI","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":4.43},{"prog":"BME","reg":"25BME0188","name":"LAXMAN VISHAAL KATHIRESAN","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.9},{"prog":"BME","reg":"25BME0192","name":"SHIVAM KUMAR SINGH","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":6.98},{"prog":"BME","reg":"25BME0195","name":"K PRADHOSH","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.31},{"prog":"BME","reg":"25BME0204","name":"SK AMIR AHEMAD","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.55},{"prog":"BME","reg":"25BME0211","name":"ASHIRWAD PANDA","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.08},{"prog":"BME","reg":"25BME0214","name":"RANVEER PRAKASH","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.37},{"prog":"BME","reg":"25BME0215","name":"AADYANT AKHAURI","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":7.49},{"prog":"BME","reg":"25BME0222","name":"GURUSHANTH S S","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.57},{"prog":"BME","reg":"25BME0226","name":"SAGNIK DAS","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.55},{"prog":"BME","reg":"25BME0227","name":"SHASHANK S H","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.65},{"prog":"BME","reg":"25BME0235","name":"NIHAAL YASHWANT N","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":7.53},{"prog":"BME","reg":"25BME0255","name":"TINESH DEVAKUMAR","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.29},{"prog":"BME","reg":"25BME0264","name":"DUVVURI SRAVAN","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":6.02},{"prog":"BME","reg":"25BME0299","name":"AARUSHI VIJAY MAHADIK","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":7.73},{"prog":"BME","reg":"25BME0327","name":"PUNYA TANMAY THAKKAR","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.98},{"prog":"BME","reg":"25BME0337","name":"SOLAPURKAR ANSHUL HRISHIKESH","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":7.84},{"prog":"BME","reg":"25BME0339","name":"TEJASVI SINGH","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.65},{"prog":"BME","reg":"25BME0341","name":"AYUSH RAY","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":7.9},{"prog":"BME","reg":"25BME0345","name":"PRANESH D","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.33},{"prog":"BME","reg":"25BME0351","name":"MUSKAN KUMAR","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.38},{"prog":"BME","reg":"25BME0353","name":"DESAI ATHARVA SUDHINDRA","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.04},{"prog":"BME","reg":"25BME0355","name":"AARUSH MOVVA","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":9.0},{"prog":"BME","reg":"25BME0356","name":"SHARAYANI PANDE","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.49},{"prog":"BME","reg":"25BME0357","name":"PRATHAP K","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":7.37},{"prog":"BME","reg":"25BME0380","name":"RAGHU NANDHA J","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":7.67},{"prog":"BME","reg":"25BME0390","name":"MUHAMMED NAFIH M","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":7.61},{"prog":"BME","reg":"25BME0411","name":"DIVIRTH SAAI R J","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.45},{"prog":"BME","reg":"25BME0412","name":"ASHWIN KUMAR SINGH","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":7.96},{"prog":"BME","reg":"25BME0418","name":"A SAHITHYAN","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":4.78},{"prog":"BME","reg":"25BME0427","name":"TARUNIKA SHREE D","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":6.37},{"prog":"BME","reg":"25BME0434","name":"IPSHITA AGRAWAL","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.04},{"prog":"BME","reg":"25BME0436","name":"AL AQMAR M DOHADWALA","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":7.98},{"prog":"BME","reg":"25BME0439","name":"NANDANA PRADEEP","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.04},{"prog":"BME","reg":"25BME0443","name":"RISHIKESH DENNIS","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":6.67},{"prog":"BME","reg":"25BME0451","name":"SIDDHARTH SAJIV","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.38},{"prog":"BME","reg":"25BME0452","name":"ARFAN ARSHAD","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.91},{"prog":"BME","reg":"25BME0457","name":"AJAYENDRA NARENDRA KANKARIYA","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":6.98},{"prog":"BME","reg":"25BME0468","name":"ATHISH PRANEETH K S","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.04},{"prog":"BME","reg":"25BME0472","name":"PAVAN KAILASH H T","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.14},{"prog":"BME","reg":"25BME0475","name":"BHAVANKUMAR S","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":2.49},{"prog":"BME","reg":"25BME0476","name":"GAGANA SURYA CHARAN GAJAVALLI","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.27},{"prog":"BME","reg":"25BME0486","name":"PARRVAESH A C","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":7.43},{"prog":"BME","reg":"25BME0487","name":"MANE SHUBHAM SUDHIR","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":6.92},{"prog":"BME","reg":"25BME0488","name":"RUDALFIN LEO L","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":7.71},{"prog":"BME","reg":"25BME0489","name":"SHARMA AARSH AADARSH","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":7.41},{"prog":"BME","reg":"25BME0490","name":"ROJER TITUS R","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":7.18},{"prog":"BME","reg":"25BME0493","name":"ABHYANKAR WAMAN VINAYAK","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.94},{"prog":"BME","reg":"25BME0496","name":"MAYUKHA K B","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":7.04},{"prog":"BME","reg":"25BME0498","name":"ADHISRIRAM R K","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":7.71},{"prog":"BME","reg":"25BME0506","name":"SHIVA GURUBARAN S","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.98},{"prog":"BME","reg":"25BME0514","name":"KEERTHI SELVAN S","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":8.39},{"prog":"BME","reg":"25BME0515","name":"UTKARSH KUMAR SINGH","school":"SMEC","mode":"Regular","regDate":"01-Nov-2026","status":"Registered and Approved","cgpa":6.92}];
+
+/* ================================================================
+   ADMIN MODE — show upload panel if ?admin in URL
+   ================================================================ */
+(function () {
+  if (window.location.search.indexOf('admin') !== -1) {
+    document.getElementById('admin-upload-panel').style.display = 'block';
+  }
+})();
+
+/* ================================================================
+   STUDENT TABLE — loads from localStorage if available, else STUDENTS
+   ================================================================ */
+(function () {
+  var LS_KEY  = 'students_course_' + COURSE_ID;
+  var tbody   = document.getElementById('stu-tbody');
+  var countEl = document.getElementById('stu-count');
+  var search  = document.getElementById('stu-search');
+
+  /* Use localStorage data if stored, else fall back to embedded */
+  function loadData() {
+    try {
+      var stored = localStorage.getItem(LS_KEY);
+      if (stored) return JSON.parse(stored);
+    } catch(e) {}
+    return STUDENTS;
+  }
+
+  var currentData = loadData();
+  var sorted = currentData.slice().sort(function (a, b) { return a.name.localeCompare(b.name); });
+
+  function updateCount(list) {
+    countEl.textContent = list.length + ' of ' + currentData.length + ' students';
+  }
+
+  function render(list) {
+    tbody.innerHTML = list.map(function (s, i) {
+      return '<tr>' +
+        '<td class="sno">' + (i + 1) + '</td>' +
+        '<td class="stu-name">' + s.name + '</td>' +
+        '<td class="stu-reg">' + s.reg + '</td>' +
+        '<td>' + (s.prog || '—') + '</td>' +
+        '<td><span style="font-size:.78rem">' + (s.mode || '—') + '</span></td>' +
+        '<td><span class="status-badge">✓ Approved</span></td>' +
+      '</tr>';
+    }).join('');
+    updateCount(list);
+  }
+
+  render(sorted);
+
+  search.addEventListener('input', function () {
+    var q = search.value.trim().toLowerCase();
+    if (!q) { render(sorted); return; }
+    render(sorted.filter(function (s) {
+      return s.name.toLowerCase().includes(q) || s.reg.toLowerCase().includes(q);
+    }));
+  });
+
+  /* ---- Excel Upload (admin only) ---- */
+  var fileInput  = document.getElementById('xls-file-input');
+  var statusEl   = document.getElementById('upload-status');
+  if (!fileInput) return;
+
+  fileInput.addEventListener('change', function (e) {
+    var file = e.target.files[0];
+    if (!file) return;
+    statusEl.textContent = 'Reading file…';
+    statusEl.className   = 'upload-status';
+
+    var reader = new FileReader();
+    reader.onload = function (ev) {
+      try {
+        var wb   = XLSX.read(ev.target.result, {type:'array'});
+        var ws   = wb.Sheets[wb.SheetNames[0]];
+        var rows = XLSX.utils.sheet_to_json(ws, {defval:''});
+
+        if (!rows.length) throw new Error('No rows found in the first sheet.');
+
+        /* Map VIT column names (flexible — matches any capitalisation) */
+        var mapped = rows.map(function (r) {
+          var keys = Object.keys(r);
+          function col(hint) {
+            var k = keys.find(function(k){ return k.toLowerCase().replace(/\s/g,'').indexOf(hint) !== -1; });
+            return k ? String(r[k]).trim() : '';
+          }
+          return {
+            prog:    col('programme') || col('prog'),
+            reg:     col('registrationnumber') || col('regno') || col('reg'),
+            name:    col('studentname') || col('name'),
+            school:  col('school'),
+            mode:    col('mode'),
+            regDate: col('registrationdate') || col('regdate') || col('date'),
+            status:  col('status')
+          };
+        }).filter(function (s) { return s.name && s.reg; });
+
+        if (!mapped.length) throw new Error('Could not detect name/reg columns. Check the file format.');
+
+        /* Save to localStorage */
+        localStorage.setItem(LS_KEY, JSON.stringify(mapped));
+        currentData = mapped;
+        sorted = mapped.slice().sort(function (a,b){ return a.name.localeCompare(b.name); });
+        render(sorted);
+
+        /* Update tab label count */
+        var tabBtnStudents = document.querySelector('[data-tab="students"]');
+        if (tabBtnStudents) tabBtnStudents.textContent = '👥 Students (' + mapped.length + ')';
+
+        statusEl.textContent = '✅ ' + mapped.length + ' students loaded and saved.';
+        statusEl.className   = 'upload-status ok';
+      } catch(err) {
+        statusEl.textContent = '❌ ' + err.message;
+        statusEl.className   = 'upload-status err';
+      }
+    };
+    reader.readAsArrayBuffer(file);
+    fileInput.value = ''; /* reset so same file can be re-uploaded */
+  });
+})();
+
+/* ================================================================
+   MATERIALS — from Supabase
+   ================================================================ */
+(function () {
+  var grid = document.getElementById('mat-grid');
+  var allMats = [];
+  var ICONS = {book:'📖',video:'🎥',ppt:'📊',notes:'📝',link:'🔗',other:'📁'};
+
+  fetch(SB_URL + '/rest/v1/course_materials?course_id=eq.' + COURSE_ID + '&is_visible=eq.true&order=created_at.desc', {
+    headers: { 'apikey': SB_KEY }
+  })
+  .then(function (r) { return r.json(); })
+  .then(function (data) {
+    allMats = data || [];
+    document.getElementById('stat-materials').textContent = allMats.length;
+    renderMats('');
+  })
+  .catch(function () {
+    grid.innerHTML = '<p class="mat-empty">Could not load materials. Please check your connection.</p>';
+  });
+
+  function renderMats(type) {
+    var list = type ? allMats.filter(function (m) { return m.material_type === type; }) : allMats;
+    if (list.length === 0) {
+      grid.innerHTML = '<p class="mat-empty">No materials posted yet for this filter.</p>';
+      return;
+    }
+    grid.innerHTML = list.map(function (m) {
+      var icon = ICONS[m.material_type] || '📁';
+      var dlBtn = '';
+      if (m.storage_path) {
+        var dlUrl = SB_URL + '/storage/v1/object/public/course-materials/' + m.storage_path;
+        dlBtn = '<a class="btn-download" href="' + dlUrl + '" download target="_blank">' +
+          '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download</a>';
+      } else if (m.url) {
+        dlBtn = '<a class="btn-link-out" href="' + m.url + '" target="_blank" rel="noopener">' +
+          '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Open</a>';
+      }
+      return '<div class="mat-card">' +
+        '<div style="display:flex;align-items:center;gap:.7rem">' +
+          '<div class="mat-icon ' + (m.material_type||'other') + '">' + icon + '</div>' +
+          '<span class="mat-type-badge">' + (m.material_type||'other') + '</span>' +
+        '</div>' +
+        '<div class="mat-title">' + m.title + '</div>' +
+        (m.description ? '<div class="mat-desc">' + m.description + '</div>' : '') +
+        '<div class="mat-actions">' + dlBtn + '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  document.getElementById('mat-filters').addEventListener('click', function (e) {
+    var btn = e.target.closest('.mat-filter-btn');
+    if (!btn) return;
+    document.querySelectorAll('.mat-filter-btn').forEach(function (b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+    renderMats(btn.dataset.type);
+  });
+})();
+
+/* ================================================================
+   ANNOUNCEMENTS — from Supabase
+   ================================================================ */
+(function () {
+  var list = document.getElementById('ann-list');
+  var TYPE_ICONS = { announcement:'📢', quiz:'📝', project:'🗂', assignment:'📌' };
+
+  fetch(SB_URL + '/rest/v1/announcements?course_id=eq.' + COURSE_ID + '&is_visible=eq.true&order=created_at.desc', {
+    headers: { 'apikey': SB_KEY }
+  })
+  .then(function (r) { return r.json(); })
+  .then(function (data) {
+    var anns = data || [];
+    document.getElementById('stat-announcements').textContent = anns.length;
+    if (anns.length === 0) {
+      list.innerHTML = '<div class="empty-panel"><h3>No announcements yet</h3><p>Check back soon.</p></div>';
+      return;
+    }
+    list.innerHTML = anns.map(function (a) {
+      var icon  = TYPE_ICONS[a.type] || '📢';
+      var badge = 'badge-' + a.type;
+      var meta  = [];
+      if (a.due_date) meta.push('📅 Due: ' + a.due_date);
+      if (a.total_marks) meta.push('🎯 ' + a.total_marks + ' marks');
+
+      var rubrics = '';
+      if (a.rubrics) {
+        rubrics = '<div class="rubrics-box"><h4>📋 Rubrics</h4><div class="rubrics-content">' + renderMd(a.rubrics) + '</div></div>';
+      }
+
+      var projBtn = '';
+      if (a.type === 'project') {
+        projBtn = '<div class="ann-proj-btn">' +
+          '<button class="btn-submit-proj" style="width:auto;padding:.55rem 1.4rem" ' +
+          'data-ann-id="' + a.id + '" data-ann-title="' + encodeURIComponent(a.title) + '" ' +
+          'onclick="openProjModal(this)">' +
+          '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>' +
+          'Register Your Project</button></div>';
+      }
+
+      return '<div class="ann-card">' +
+        '<div class="ann-header" onclick="toggleAnn(this)">' +
+          '<div class="ann-type-icon ' + a.type + '">' + icon + '</div>' +
+          '<div class="ann-meta">' +
+            '<span class="ann-type-badge ' + badge + '">' + a.type.toUpperCase() + '</span>' +
+            '<div class="ann-title">' + a.title + '</div>' +
+            (meta.length ? '<div class="ann-subtitle">' + meta.join('<span>·</span>') + '</div>' : '') +
+          '</div>' +
+          '<svg class="ann-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>' +
+        '</div>' +
+        '<div class="ann-body">' +
+          (a.description ? '<div class="ann-desc">' + renderMd(a.description) + '</div>' : '') +
+          rubrics + projBtn +
+        '</div>' +
+      '</div>';
+    }).join('');
+  })
+  .catch(function () {
+    list.innerHTML = '<div class="empty-panel"><h3>Could not load announcements</h3><p>Please refresh the page.</p></div>';
+  });
+})();
+
+function toggleAnn(header) {
+  header.closest('.ann-card').classList.toggle('open');
+}
+
+/* ================================================================
+   PROJECT REGISTRATION MODAL (inline, feeds same `projects` table)
+   ================================================================ */
+var currentAnnId    = null;
+var currentAnnTitle = '';
+var pifMemberCount  = 1;
+
+function openProjModal(btn) {
+  currentAnnId    = btn.dataset.annId;
+  currentAnnTitle = decodeURIComponent(btn.dataset.annTitle);
+  document.getElementById('proj-modal-ann-title').textContent = 'For: ' + currentAnnTitle;
+  renderProjForm();
+  var ov = document.getElementById('proj-overlay');
+  var mo = document.getElementById('proj-modal-inner');
+  ov.style.pointerEvents = 'auto';
+  ov.style.opacity = '1';
+  mo.style.transform = 'translateY(0) scale(1)';
+  document.body.style.overflow = 'hidden';
+  pifMemberCount = 1;
+}
+
+function closeProjModal() {
+  var ov = document.getElementById('proj-overlay');
+  var mo = document.getElementById('proj-modal-inner');
+  ov.style.opacity = '0';
+  ov.style.pointerEvents = 'none';
+  mo.style.transform = 'translateY(30px) scale(.97)';
+  document.body.style.overflow = '';
+}
+
+document.getElementById('proj-modal-close2').addEventListener('click', closeProjModal);
+document.getElementById('proj-overlay').addEventListener('click', function (e) {
+  if (e.target === this) closeProjModal();
+});
+document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeProjModal(); });
+
+function renderProjForm() {
+  var body = document.getElementById('proj-modal-body2');
+  body.innerHTML = '' +
+  '<form id="pif-form" novalidate>' +
+  /* Row 1 */
+  '<div class="pif-row">' +
+    '<div><label class="pif-label">Semester <span class="req">*</span></label>' +
+    '<select class="pif-select" id="pif-semester" required>' +
+    '<option value="">Select</option><option>Fall</option><option>Winter</option></select></div>' +
+    '<div><label class="pif-label">Year <span class="req">*</span></label>' +
+    '<select class="pif-select" id="pif-year" required>' +
+    '<option value="">Select</option><option>2024</option><option>2025</option><option>2026</option><option>2027</option></select></div>' +
+  '</div>' +
+  /* Row 2 */
+  '<div class="pif-row">' +
+    '<div><label class="pif-label">Duration <span class="req">*</span></label>' +
+    '<select class="pif-select" id="pif-duration" required>' +
+    '<option value="">Select</option><option>6 months</option><option>1 year</option></select></div>' +
+    '<div><label class="pif-label">Project Type <span class="req">*</span></label>' +
+    '<select class="pif-select" id="pif-type" required onchange="togglePifOther(this)">' +
+    '<option value="">Select</option>' +
+    '<option>Capstone Project</option><option>7th Semester Project</option>' +
+    '<option>Innovative Design Project</option><option>Multidisciplinary Project</option>' +
+    '<option>Research Project</option><option>MTech Project</option>' +
+    '<option>PhD Research</option><option value="Other">Other</option>' +
+    '</select>' +
+    '<div id="pif-type-other-wrap" style="display:none;margin-top:.4rem">' +
+    '<input class="pif-input" id="pif-type-other" placeholder="Specify type…" maxlength="100"></div>' +
+    '</div>' +
+  '</div>' +
+  /* Title */
+  '<div class="pif-row full"><div><label class="pif-label">Project Title <span class="req">*</span></label>' +
+  '<input class="pif-input" id="pif-title" type="text" placeholder="Full project title" required></div></div>' +
+  /* Members */
+  '<label class="pif-label" style="margin-bottom:.4rem;display:block">Team Members <span class="req">*</span></label>' +
+  '<div class="member-rows" id="pif-members-wrap">' +
+    '<div class="member-row-pif">' +
+      '<div><input class="pif-input" id="pif-m1-name" placeholder="Name" required></div>' +
+      '<div><input class="pif-input" id="pif-m1-reg"  placeholder="Reg No." required></div>' +
+    '</div>' +
+  '</div>' +
+  '<button type="button" class="btn-add-member-pif" onclick="addPifMember()">+ Add Member</button>' +
+  /* Outcome + SDG */
+  '<div class="pif-row" style="margin-top:.7rem">' +
+    '<div><label class="pif-label">Expected Outcome <span class="req">*</span></label>' +
+    '<select class="pif-select" id="pif-outcome" required>' +
+    '<option value="">Select</option>' +
+    '<option>Research Publication</option><option>Patent</option>' +
+    '<option>New Product / Prototype</option>' +
+    '<option>Research Publication &amp; Patent</option>' +
+    '<option>All (Publication, Patent &amp; Product)</option>' +
+    '</select></div>' +
+    '<div><label class="pif-label">SDG Goal <span class="hint">(optional)</span></label>' +
+    '<select class="pif-select" id="pif-sdg">' +
+    '<option value="">Not applicable</option>' +
+    '<option>SDG 7 — Affordable and Clean Energy</option>' +
+    '<option>SDG 9 — Industry, Innovation and Infrastructure</option>' +
+    '<option>SDG 11 — Sustainable Cities and Communities</option>' +
+    '<option>SDG 12 — Responsible Consumption and Production</option>' +
+    '<option>SDG 13 — Climate Action</option>' +
+    '<option>SDG 3 — Good Health and Well-being</option>' +
+    '<option>SDG 4 — Quality Education</option>' +
+    '<option>SDG 1 — No Poverty</option><option>SDG 2 — Zero Hunger</option>' +
+    '<option>SDG 5 — Gender Equality</option><option>SDG 6 — Clean Water and Sanitation</option>' +
+    '<option>SDG 8 — Decent Work and Economic Growth</option>' +
+    '<option>SDG 10 — Reduced Inequalities</option>' +
+    '<option>SDG 14 — Life Below Water</option><option>SDG 15 — Life on Land</option>' +
+    '<option>SDG 16 — Peace, Justice and Strong Institutions</option>' +
+    '<option>SDG 17 — Partnerships for the Goals</option>' +
+    '</select></div>' +
+  '</div>' +
+  /* Submit */
+  '<button type="submit" class="btn-submit-proj" id="pif-submit-btn">' +
+    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>' +
+    'Submit Registration' +
+  '</button>' +
+  '<p class="pif-status" id="pif-status"></p>' +
+  '</form>';
+
+  document.getElementById('pif-form').addEventListener('submit', submitPifForm);
+}
+
+function togglePifOther(sel) {
+  var w = document.getElementById('pif-type-other-wrap');
+  var i = document.getElementById('pif-type-other');
+  var isOther = sel.value === 'Other';
+  w.style.display = isOther ? 'block' : 'none';
+  i.required = isOther;
+}
+
+function addPifMember() {
+  if (pifMemberCount >= 5) return;
+  pifMemberCount++;
+  var wrap = document.getElementById('pif-members-wrap');
+  var row  = document.createElement('div');
+  row.className = 'member-row-pif';
+  row.innerHTML =
+    '<div><input class="pif-input" placeholder="Name" data-pif-name="' + pifMemberCount + '"></div>' +
+    '<div><input class="pif-input" placeholder="Reg No." data-pif-reg="' + pifMemberCount + '"></div>';
+  wrap.appendChild(row);
+}
+
+async function submitPifForm(e) {
+  e.preventDefault();
+  var statusEl  = document.getElementById('pif-status');
+  var submitBtn = document.getElementById('pif-submit-btn');
+
+  /* collect + validate */
+  var semEl   = document.getElementById('pif-semester');
+  var yearEl  = document.getElementById('pif-year');
+  var durEl   = document.getElementById('pif-duration');
+  var typeEl  = document.getElementById('pif-type');
+  var titleEl = document.getElementById('pif-title');
+  var outEl   = document.getElementById('pif-outcome');
+  var m1name  = document.getElementById('pif-m1-name');
+  var m1reg   = document.getElementById('pif-m1-reg');
+
+  var missing = [semEl,yearEl,durEl,typeEl,titleEl,outEl,m1name,m1reg].filter(function(el){return !el.value.trim()});
+  if (missing.length) {
+    missing.forEach(function(el){el.style.borderColor='#c33d49'});
+    statusEl.textContent = 'Please fill in all required fields.';
+    statusEl.className = 'pif-status err';
+    return;
+  }
+
+  /* members */
+  var members = [{name: m1name.value.trim(), reg: m1reg.value.trim()}];
+  for (var i = 2; i <= pifMemberCount; i++) {
+    var n = document.querySelector('[data-pif-name="' + i + '"]');
+    var r = document.querySelector('[data-pif-reg="' + i + '"]');
+    if (n && n.value.trim()) members.push({name: n.value.trim(), reg: r ? r.value.trim() : ''});
+  }
+
+  var typeOtherEl = document.getElementById('pif-type-other');
+  var projectType = typeEl.value === 'Other'
+    ? 'Other: ' + (typeOtherEl ? typeOtherEl.value.trim() : '')
+    : typeEl.value;
+
+  submitBtn.disabled = true;
+  statusEl.textContent = 'Submitting…';
+  statusEl.className = 'pif-status';
+
+  try {
+    var payload = {
+      semester:         semEl.value + ' ' + yearEl.value,
+      reg_year:         yearEl.value,
+      duration:         durEl.value,
+      school:           'School of Mechanical Engineering (SMEC)',
+      project_type:     projectType,
+      title:            titleEl.value.trim(),
+      team_members:     JSON.stringify(members),
+      expected_outcome: outEl.value,
+      sdg_goal:         document.getElementById('pif-sdg').value,
+      current_status:   'ongoing',
+      approval_status:  'pending',
+      course_id:        COURSE_ID,
+      announcement_id:  currentAnnId ? parseInt(currentAnnId) : null
+    };
+
+    var res = await fetch(SB_URL + '/rest/v1/projects', {
+      method: 'POST',
+      headers: {
+        'apikey':       SB_KEY,
+        'Content-Type': 'application/json',
+        'Prefer':       'return=minimal'
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (!res.ok) throw new Error(await res.text());
+    statusEl.textContent = '✅ Registered! Your project will appear on the showcase after approval.';
+    statusEl.className = 'pif-status ok';
+    setTimeout(closeProjModal, 2800);
+  } catch (err) {
+    statusEl.textContent = '❌ ' + (err.message || 'Submission failed. Try again.');
+    statusEl.className = 'pif-status err';
+  }
+  submitBtn.disabled = false;
+}
+</script>
+</body>
+</html>

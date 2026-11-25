@@ -89,14 +89,19 @@ header {
 .nav {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: .85rem 0;
+  gap: .75rem;
+  padding: .7rem 0;
+  flex-wrap: nowrap;
 }
-.brand { font-weight: 750; letter-spacing: .02em; color: #fff; }
-.brand small { display: block; color: #b9d9e1; font-weight: 400; font-size: .72rem; }
-nav { display: flex; gap: 1.1rem; flex-wrap: wrap; }
-nav a { color: #e5f2f5; font-size: .9rem; }
+.brand { font-weight: 750; letter-spacing: .02em; color: #fff; flex-shrink: 0; }
+.brand small { display: block; color: #b9d9e1; font-weight: 400; font-size: .68rem; }
+nav { display: flex; align-items: center; gap: .65rem; flex-wrap: nowrap; flex: 1; justify-content: flex-end; }
+nav a { color: #e5f2f5; font-size: .82rem; white-space: nowrap; }
+/* pill buttons stay on same row, slightly smaller */
+nav a.nav-training-link,
+nav a.nav-projects-view-link,
+nav a.nav-courses-link,
+nav a.nav-project-link { font-size: .78rem; padding: .28rem .7rem; }
 
 /* =========================================================
    3. HERO
@@ -635,8 +640,10 @@ footer a { color: #9fe3dc; }
 }
 
 @media (max-width: 780px) {
-  .nav { align-items: flex-start; flex-direction: column; }
-  nav { gap: .7rem; }
+  .nav { align-items: flex-start; flex-direction: column; flex-wrap: wrap; }
+  nav { gap: .5rem; flex-wrap: wrap; justify-content: flex-start; }
+  nav a { font-size: .82rem; }
+  nav a.nav-training-link, nav a.nav-projects-view-link, nav a.nav-courses-link, nav a.nav-project-link { font-size: .78rem; }
   .grid, .two-col { grid-template-columns: 1fr; }
   .hero { padding: 3.7rem 0 3rem; }
   .hero-inner { flex-direction: column-reverse; text-align: center; }
@@ -1077,6 +1084,12 @@ nav a.nav-training-link {
 }
 nav a.nav-training-link:hover { opacity: .88; transform: translateY(-1px); text-decoration: none; }
 
+nav a.nav-courses-link {
+  background: linear-gradient(135deg, #1b6faf, var(--blue));
+  color: #fff !important; padding: .3rem .8rem; border-radius: 999px;
+  font-weight: 700; font-size: .78rem; transition: opacity .2s, transform .2s;
+}
+nav a.nav-courses-link:hover { opacity: .88; transform: translateY(-1px); }
 nav a.nav-projects-view-link {
   background: linear-gradient(135deg, #2a807c, var(--teal));
   color: #fff !important; padding: .3rem .8rem; border-radius: 999px;
@@ -1492,7 +1505,7 @@ footer {
   <div class="wrap nav">
     <a class="brand" href="#home">SHARAN CHANDRAN M<small>Academic · Research · Student Mentorship</small></a>
     <nav aria-label="Main navigation">
-      <a href="#about">About</a><a href="#news">News</a><a href="news.html">📰 Field Updates</a><a href="#research">Research</a><a href="#consultancy">Consultancy</a><a href="#mentorship">Mentorship</a><a href="#publications">Publications</a><a href="#patents">Patents</a><a href="#contact">Contact</a><a href="projects.html" class="nav-projects-view-link">🗂 Projects</a><a href="#" class="nav-training-link" id="nav-fdp">🎓 FDP &amp; Training</a><a href="#" class="nav-project-link" id="nav-projects">📋 Register Project</a>
+      <a href="#about">About</a><a href="#news">News</a><a href="news.html">📰 Field Updates</a><a href="#research">Research</a><a href="#consultancy">Consultancy</a><a href="#mentorship">Mentorship</a><a href="#publications">Publications</a><a href="#patents">Patents</a><a href="#contact">Contact</a><a href="courses.html" class="nav-courses-link">📚 Courses</a><a href="projects.html" class="nav-projects-view-link">🗂 Projects</a><a href="#" class="nav-training-link" id="nav-fdp">🎓 FDP &amp; Training</a><a href="#" class="nav-project-link" id="nav-projects">📋 Register Project</a>
     </nav>
   </div>
 </header>
@@ -2232,7 +2245,11 @@ footer {
                 <option>Research Project</option>
                 <option>MTech Project</option>
                 <option>PhD Research</option>
+                <option value="Other">Other</option>
               </select>
+              <div id="p-type-other-wrap" style="display:none;margin-top:.5rem;">
+                <input class="proj-input" type="text" id="p-type-other" placeholder="Please specify the project type…" maxlength="120">
+              </div>
             </div>
           </div>
         </div>
@@ -2551,6 +2568,18 @@ footer {
   overlay.addEventListener('click', function (e) { if (e.target === overlay) closeModal(); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
 
+  /* ---- Show/hide "Other" project type field ---- */
+  var typeSel         = document.getElementById('p-type');
+  var typeOtherWrap   = document.getElementById('p-type-other-wrap');
+  var typeOtherInput  = document.getElementById('p-type-other');
+
+  typeSel.addEventListener('change', function () {
+    var isOther = typeSel.value === 'Other';
+    typeOtherWrap.style.display = isOther ? 'block' : 'none';
+    typeOtherInput.required     = isOther;
+    if (!isOther) typeOtherInput.value = '';
+  });
+
   /* ---- Show/hide completion section ---- */
   statusSel.addEventListener('change', function () {
     if (statusSel.value === 'completed') {
@@ -2673,7 +2702,9 @@ footer {
         reg_year:         document.getElementById('p-year').value,
         duration:         document.getElementById('p-duration').value,
         school:           document.getElementById('p-school').value,
-        project_type:     document.getElementById('p-type').value,
+        project_type:     typeSel.value === 'Other'
+                            ? 'Other: ' + (typeOtherInput.value.trim() || 'Unspecified')
+                            : typeSel.value,
         title:            document.getElementById('p-title').value.trim(),
         team_members:     JSON.stringify(members),
         expected_outcome: document.getElementById('p-outcome').value,
