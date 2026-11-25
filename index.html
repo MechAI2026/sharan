@@ -1207,7 +1207,7 @@ footer a { color: #9fe3dc; }
 
 /* Member rows */
 .proj-member-row {
-  display: grid; grid-template-columns: 1fr 1fr; gap: .6rem;
+  display: grid; grid-template-columns: 1fr 1fr 1.4fr; gap: .6rem;
   align-items: start; margin-bottom: .5rem;
 }
 .proj-member-row:last-child { margin-bottom: 0; }
@@ -2319,6 +2319,16 @@ footer {
                 <label class="proj-label" for="p-m1-reg">Registration No. <span class="req">*</span></label>
                 <input class="proj-input" type="text" id="p-m1-reg" placeholder="e.g. 21BCE1234" required>
               </div>
+              <div>
+                <label class="proj-label" for="p-m1-school">School <span class="req">*</span></label>
+                <select class="proj-select" id="p-m1-school" required>
+                  <option value="">Select school</option>
+                  <option>SAS</option><option>SBST</option><option>SCE</option><option>SCHEME</option>
+                  <option>SCOPE</option><option>SCORE</option><option>SELECT</option><option>SENSE</option>
+                  <option>SHINE</option><option>SMEC</option><option>SSL</option><option>HOT</option>
+                  <option>VAIAL</option><option>VIT BS</option><option>V-SIGN</option><option>V-SMART</option><option>V-SPARC</option>
+                </select>
+              </div>
             </div>
           </div>
           <button type="button" id="proj-add-member">+ Add Member</button>
@@ -2642,11 +2652,14 @@ footer {
     memberCount++;
     var row = document.createElement('div');
     row.className = 'proj-member-row';
+    var schoolOpts = '<option value="">Select school</option><option>SAS</option><option>SBST</option><option>SCE</option><option>SCHEME</option><option>SCOPE</option><option>SCORE</option><option>SELECT</option><option>SENSE</option><option>SHINE</option><option>SMEC</option><option>SSL</option><option>HOT</option><option>VAIAL</option><option>VIT BS</option><option>V-SIGN</option><option>V-SMART</option><option>V-SPARC</option>';
     row.innerHTML =
       '<div><label class="proj-label">Name</label>' +
       '<input class="proj-input" type="text" placeholder="Full name" data-member-name="' + memberCount + '"></div>' +
       '<div><label class="proj-label">Registration No.</label>' +
-      '<input class="proj-input" type="text" placeholder="e.g. 21BCE1234" data-member-reg="' + memberCount + '"></div>';
+      '<input class="proj-input" type="text" placeholder="e.g. 21BCE1234" data-member-reg="' + memberCount + '"></div>' +
+      '<div><label class="proj-label">School</label>' +
+      '<select class="proj-select" data-member-school="' + memberCount + '">' + schoolOpts + '</select></div>';
     membersWrap.appendChild(row);
     if (memberCount >= 5) addMember.style.display = 'none';
   });
@@ -2675,12 +2688,14 @@ footer {
     // First member (uses IDs)
     var n1 = document.getElementById('p-m1-name').value.trim();
     var r1 = document.getElementById('p-m1-reg').value.trim();
-    if (n1) members.push({ name: n1, reg: r1 });
+    var s1 = document.getElementById('p-m1-school').value.trim();
+    if (n1) members.push({ name: n1, reg: r1, school: s1 });
     // Additional members (use data attrs)
     for (var i = 2; i <= memberCount; i++) {
       var n = form.querySelector('[data-member-name="' + i + '"]');
       var r = form.querySelector('[data-member-reg="' + i + '"]');
-      if (n && n.value.trim()) members.push({ name: n.value.trim(), reg: r ? r.value.trim() : '' });
+      var s = form.querySelector('[data-member-school="' + i + '"]');
+      if (n && n.value.trim()) members.push({ name: n.value.trim(), reg: r ? r.value.trim() : '', school: s ? s.value.trim() : '' });
     }
     return members;
   }

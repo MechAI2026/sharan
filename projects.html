@@ -347,7 +347,8 @@ footer a:hover{color:#fff}
       (p.sdg_goal ? '<span class="proj-tag tag-sdg">' + p.sdg_goal.replace('— ', '').split(' ')[0] + ' ' + p.sdg_goal.replace('— ', '').split(' ')[1] + '</span>' : '');
 
     var membersHTML = members.map(function (m) {
-      return '<span class="proj-member-chip">' + (m.name || '') + '</span>';
+      var schoolTag = m.school ? ' <span style="font-size:.7rem;opacity:.7;font-weight:400;">(' + m.school + ')</span>' : '';
+      return '<span class="proj-member-chip">' + (m.name || '') + schoolTag + '</span>';
     }).join('');
 
     var metaHTML =
