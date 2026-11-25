@@ -681,13 +681,21 @@ footer a { color: #9fe3dc; }
 
 @media (max-width: 780px) {
   .hdr-top { flex-wrap: wrap; gap: .5rem; padding: .5rem 0 .35rem; }
-  .hdr-pills { flex-wrap: wrap; gap: .35rem; }
+  .hdr-pills { flex-wrap: wrap; gap: .35rem; flex-shrink: 1; max-width: 100%; }
   .nav-pill { font-size: .72rem; padding: .28rem .6rem; }
   .hdr-nav-row nav a { font-size: .72rem; padding: .2rem .4rem; }
   .grid, .two-col { grid-template-columns: 1fr; }
   .hero { padding: 3.7rem 0 3rem; }
   .hero-inner { flex-direction: column-reverse; text-align: center; }
   .actions { justify-content: center; }
+}
+
+@media (max-width: 480px) {
+  /* On very small screens, hide Register Project pill from header
+     (it's still accessible as a button on the page) */
+  .nav-project-link { display: none; }
+  .hdr-pills { justify-content: flex-end; }
+  .nav-pill { font-size: .7rem; padding: .25rem .5rem; }
 }
 
 @media (max-width: 768px) {
@@ -1525,9 +1533,12 @@ footer {
       </a>
       <a href="#" class="nav-pill nav-training-link" id="nav-fdp">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
-        Training Programs
+        FDP &amp; Training
       </a>
-      
+      <a href="#" class="nav-pill nav-project-link" id="nav-projects">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Register Project
+      </a>
     </div>
   </div>
   <!-- Row 2: Section links -->
@@ -3159,8 +3170,11 @@ window.SITE_CONFIG = {
   if (sessionStorage.getItem('openProjectModal') === '1') {
     sessionStorage.removeItem('openProjectModal');
     window.addEventListener('load', function () {
-      var trigger = document.getElementById('nav-projects');
-      if (trigger) trigger.click();
+      var overlay = document.getElementById('proj-overlay');
+      if (overlay) {
+        overlay.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
     });
   }
 })();
