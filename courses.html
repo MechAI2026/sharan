@@ -7,6 +7,8 @@
 <meta name="description" content="Course portal for students of Dr. Sharan Chandran M — materials, announcements, assignments and project registrations.">
 <!-- SheetJS for Excel parsing -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<!-- Google Identity Services (for Drive uploads) -->
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <!-- Google tag -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-N2LJT0N760"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-N2LJT0N760');</script>
@@ -599,14 +601,16 @@ footer a:hover{color:#fff}
       <button class="btn-auth" id="btn-send-otp">Send Login Code →</button>
       <div class="auth-status" id="auth-s1"></div>
     </div>
-    <!-- Step 2: OTP code -->
+    <!-- Step 2: magic link sent -->
     <div id="auth-step2" style="display:none">
-      <p style="font-size:.82rem;color:#6b7280;margin-bottom:1rem">
-        A 6-digit code was sent to your email. Enter it below.</p>
-      <label class="auth-label" for="auth-otp">Login Code</label>
-      <input class="auth-input otp-input" type="text" id="auth-otp"
-        maxlength="6" placeholder="000000" inputmode="numeric">
-      <button class="btn-auth" id="btn-verify-otp">Verify &amp; Enter →</button>
+      <div style="text-align:center;padding:1rem 0">
+        <div style="font-size:2.5rem;margin-bottom:.6rem">✉️</div>
+        <p style="font-size:1rem;font-weight:600;color:#111827;margin:0 0 .4rem">Check your email</p>
+        <p style="font-size:.85rem;color:#6b7280;margin:0 0 1.2rem;line-height:1.5">
+          A sign-in link was sent to <strong>sharancm2009@gmail.com</strong>.<br>
+          Click <strong>"Sign in"</strong> in that email — this page will log you in automatically.</p>
+        <p style="font-size:.78rem;color:#9ca3af">Link expires in 60 minutes. Check your spam folder if you don't see it.</p>
+      </div>
       <div class="auth-status" id="auth-s2"></div>
       <button class="auth-back" id="btn-auth-back">← Use a different email</button>
     </div>
@@ -621,6 +625,72 @@ var SB_URL  = 'https://gmgaoutklvhiudovvkie.supabase.co';
 var SB_KEY  = 'sb_publishable_aHL1lexC4P7JLAcT8Y391A_MjKyxcfN';
 var COURSE_ID = 1;  /* Update to match the id from your courses table */
 var BUCKET  = 'project-reports';
+
+/* ================================================================
+   GOOGLE DRIVE STORAGE
+   Files are uploaded directly to Google Drive instead of Supabase.
+   Set GDRIVE_CLIENT_ID to your OAuth 2.0 Web Client ID from
+   Google Cloud Console → APIs & Services → Credentials.
+   ================================================================ */
+var GDRIVE_CLIENT_ID = '976302999993-ls276lg8i5d4cghi3viu6468cvmd8gqh.apps.googleusercontent.com';
+var GDRIVE_FOLDER_ID = '1L52uIUxBJwfaOAhlspntehZUr_lRnu_r';
+var _gDriveToken     = null;
+
+function _getGDriveToken() {
+  return new Promise(function (resolve, reject) {
+    if (_gDriveToken) { resolve(_gDriveToken); return; }
+    if (!window.google || !window.google.accounts || !window.google.accounts.oauth2) {
+      reject(new Error('Google Sign-In library not loaded yet. Please wait a moment and try again.')); return;
+    }
+    google.accounts.oauth2.initTokenClient({
+      client_id: GDRIVE_CLIENT_ID,
+      scope: 'https://www.googleapis.com/auth/drive.file',
+      callback: function (resp) {
+        if (resp.error) { reject(new Error('Google auth: ' + resp.error)); return; }
+        _gDriveToken = resp.access_token;
+        resolve(_gDriveToken);
+      }
+    }).requestAccessToken();
+  });
+}
+
+function _uploadToDrive(file, onProgress) {
+  return _getGDriveToken().then(function (token) {
+    return new Promise(function (resolve, reject) {
+      var meta = JSON.stringify({ name: file.name, parents: [GDRIVE_FOLDER_ID] });
+      var form = new FormData();
+      form.append('metadata', new Blob([meta], { type: 'application/json' }));
+      form.append('file', file);
+
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', 'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id');
+      xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+      if (onProgress) xhr.upload.onprogress = function (e) {
+        if (e.lengthComputable) onProgress(Math.round(e.loaded / e.total * 100));
+      };
+      xhr.onload = function () {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          var fileId = JSON.parse(xhr.responseText).id;
+          /* Make file publicly readable */
+          fetch('https://www.googleapis.com/drive/v3/files/' + fileId + '/permissions', {
+            method: 'POST',
+            headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ role: 'reader', type: 'anyone' })
+          }).then(function () {
+            resolve('https://drive.google.com/file/d/' + fileId + '/view?usp=sharing');
+          }).catch(function () {
+            resolve('https://drive.google.com/file/d/' + fileId + '/view?usp=sharing');
+          });
+        } else {
+          _gDriveToken = null; /* token may have expired */
+          reject(new Error('Drive upload failed (' + xhr.status + '). Please try again.'));
+        }
+      };
+      xhr.onerror = function () { reject(new Error('Network error uploading to Drive.')); };
+      xhr.send(form);
+    });
+  });
+}
 
 document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -849,32 +919,45 @@ var STUDENTS = [{"prog":"BME","reg":"25BME0031","name":"S VARUN","school":"SMEC"
 })();
 
 /* ================================================================
-   ADMIN AUTH — Email OTP via Supabase
+   ADMIN AUTH — Magic Link via Supabase
    Only shown when ?admin is in the URL.
-   After login, stores JWT in sessionStorage so the user stays
-   logged in until the browser tab is closed.
+   Flow: user enters email → Supabase emails a "Sign in" link →
+   clicking it redirects back here with #access_token=... in the URL
+   → page detects the token and logs the user in automatically.
    ================================================================ */
 (function () {
+  var ALLOWED  = 'sharancm2009@gmail.com';
+  var SS_KEY   = 'admin_jwt_bamee402';
+  var REDIRECT = 'https://sharanchandran.com/courses.html?admin';
+
+  /* ── 1. Check for magic-link redirect (hash token from Supabase) ── */
+  var hashParams = {};
+  window.location.hash.substring(1).split('&').forEach(function (pair) {
+    var kv = pair.split('=');
+    if (kv[0]) hashParams[decodeURIComponent(kv[0])] = decodeURIComponent(kv[1] || '');
+  });
+  if (hashParams.access_token && (hashParams.type === 'magiclink' || hashParams.type === 'recovery')) {
+    var jwt = hashParams.access_token;
+    sessionStorage.setItem(SS_KEY, jwt);
+    history.replaceState(null, '', window.location.pathname + '?admin');
+    _showPanels(jwt);
+    return; /* skip overlay entirely */
+  }
+
   if (window.location.search.indexOf('admin') === -1) return;
 
-  var ALLOWED = 'sharancm2009@gmail.com'; /* only this email is authorised */
-  var SS_KEY  = 'admin_jwt_bamee402';
-  var stored  = sessionStorage.getItem(SS_KEY);
-  var pendingEmail = '';
-
-  var step1   = document.getElementById('auth-step1');
-  var step2   = document.getElementById('auth-step2');
-  var emailIn = document.getElementById('auth-email');
-  var otpIn   = document.getElementById('auth-otp');
-  var s1      = document.getElementById('auth-s1');
-  var s2      = document.getElementById('auth-s2');
+  var stored = sessionStorage.getItem(SS_KEY);
+  var step1  = document.getElementById('auth-step1');
+  var step2  = document.getElementById('auth-step2');
+  var emailIn= document.getElementById('auth-email');
+  var s1     = document.getElementById('auth-s1');
+  var s2     = document.getElementById('auth-s2');
 
   function _openOverlay() {
     document.getElementById('admin-auth-overlay').style.display = 'flex';
   }
 
-  /* Validate stored token against Supabase before trusting it.
-     Expired / stale tokens will get a 401 → clear and show login. */
+  /* ── 2. Validate stored token before trusting it ── */
   if (stored) {
     fetch(SB_URL + '/auth/v1/user', {
       headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + stored }
@@ -886,6 +969,7 @@ var STUDENTS = [{"prog":"BME","reg":"25BME0031","name":"S VARUN","school":"SMEC"
     _openOverlay();
   }
 
+  /* ── 3. Send magic link ── */
   document.getElementById('btn-send-otp').addEventListener('click', function () {
     var email = emailIn.value.trim().toLowerCase();
     if (!email) { s1.textContent='Enter your email.'; s1.className='auth-status err'; return; }
@@ -893,14 +977,17 @@ var STUDENTS = [{"prog":"BME","reg":"25BME0031","name":"S VARUN","school":"SMEC"
       s1.textContent='❌ This email is not authorised to manage this course.';
       s1.className='auth-status err'; return;
     }
-    s1.textContent='Sending code…'; s1.className='auth-status';
+    s1.textContent='Sending link…'; s1.className='auth-status';
     this.disabled = true;
-    pendingEmail  = email;
 
     fetch(SB_URL + '/auth/v1/otp', {
       method: 'POST',
       headers: { 'apikey': SB_KEY, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: email, create_user: false })
+      body: JSON.stringify({
+        email: email,
+        create_user: false,
+        options: { emailRedirectTo: REDIRECT }
+      })
     })
     .then(function (r) {
       if (!r.ok) return r.json().then(function (e) {
@@ -908,8 +995,8 @@ var STUDENTS = [{"prog":"BME","reg":"25BME0031","name":"S VARUN","school":"SMEC"
       });
       step1.style.display = 'none';
       step2.style.display = '';
-      s2.textContent = '✉ Code sent to ' + email + '. Check your inbox (and spam folder).';
-      s2.className = 'auth-status ok';
+      s2.textContent = '';
+      s2.className = 'auth-status';
     })
     .catch(function (e) {
       s1.textContent = '❌ ' + e.message;
@@ -918,46 +1005,17 @@ var STUDENTS = [{"prog":"BME","reg":"25BME0031","name":"S VARUN","school":"SMEC"
     });
   });
 
-  document.getElementById('btn-verify-otp').addEventListener('click', function () {
-    var token = otpIn.value.trim();
-    if (!token || token.length < 6) { s2.textContent='Enter the 6-digit code.'; s2.className='auth-status err'; return; }
-    s2.textContent = 'Verifying…'; s2.className = 'auth-status';
-    this.disabled = true;
-
-    fetch(SB_URL + '/auth/v1/verify', {
-      method: 'POST',
-      headers: { 'apikey': SB_KEY, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ type: 'email', token: token, email: pendingEmail })
-    })
-    .then(function (r) {
-      if (!r.ok) return r.json().then(function (e) {
-        throw new Error(e.msg || e.error_description || 'Invalid or expired code');
-      });
-      return r.json();
-    })
-    .then(function (data) {
-      var jwt = data.access_token;
-      sessionStorage.setItem(SS_KEY, jwt);
-      document.getElementById('admin-auth-overlay').style.display = 'none';
-      _showPanels(jwt);
-    })
-    .catch(function (e) {
-      s2.textContent = '❌ ' + e.message;
-      s2.className = 'auth-status err';
-      document.getElementById('btn-verify-otp').disabled = false;
-    });
-  });
-
+  /* ── 4. Back button ── */
   document.getElementById('btn-auth-back').addEventListener('click', function () {
     step2.style.display = 'none';
     step1.style.display = '';
     s1.textContent = '';
     document.getElementById('btn-send-otp').disabled = false;
-    otpIn.value = '';
   });
 
   function _showPanels(jwt) {
-    window.ADMIN_TOKEN = jwt; /* used by add-material script */
+    window.ADMIN_TOKEN = jwt;
+    document.getElementById('admin-auth-overlay').style.display = 'none';
     var stuPanel = document.getElementById('admin-upload-panel');
     if (stuPanel) stuPanel.style.display = 'block';
     var matPanel = document.getElementById('admin-mat-panel');
@@ -1039,24 +1097,13 @@ var STUDENTS = [{"prog":"BME","reg":"25BME0031","name":"S VARUN","school":"SMEC"
       var file = fileEl.files[0];
       if (!file) { statusEl.textContent='❌ Please select a file.'; statusEl.className='upload-status err'; saveBtn.disabled=false; return; }
 
-      var safeName    = Date.now() + '_' + file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
-      var storagePath = 'course_' + COURSE_ID + '/' + safeName;
-      statusEl.textContent = 'Uploading file…';
-
-      fetch(SB_URL + '/storage/v1/object/course-materials/' + storagePath, {
-        method:  'POST',
-        headers: {
-          'apikey':        SB_KEY,
-          'Authorization': 'Bearer ' + window.ADMIN_TOKEN,
-          'Content-Type':  file.type || 'application/octet-stream',
-          'x-upsert':      'true'
-        },
-        body: file
+      statusEl.textContent = 'Opening Google sign-in…';
+      _uploadToDrive(file, function (pct) {
+        statusEl.textContent = 'Uploading to Drive… ' + pct + '%';
       })
-      .then(function (r) {
-        if (!r.ok) return r.json().then(function (e) { throw new Error('Storage: ' + (e.message || r.status)); });
-        statusEl.textContent = 'File uploaded — saving record…';
-        return insertRow(storagePath, null);
+      .then(function (driveUrl) {
+        statusEl.textContent = 'File on Drive — saving record…';
+        return insertRow(null, driveUrl);
       })
       .then(function () {
         statusEl.textContent = '✅ Saved! Reload the Materials tab to see it.';
