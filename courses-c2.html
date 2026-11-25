@@ -632,7 +632,7 @@ function renderMd(md) {
    LOAD COURSE INSTRUCTIONS FROM SUPABASE
    ================================================================ */
 fetch(SB_URL + '/rest/v1/courses?id=eq.' + COURSE_ID + '&select=*', {
-  headers: { 'apikey': SB_KEY }
+  headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
 })
 .then(function (r) { return r.json(); })
 .then(function (data) {
@@ -847,16 +847,18 @@ var STUDENTS = [
   var ICONS = {book:'📖',video:'🎥',ppt:'📊',notes:'📝',link:'🔗',other:'📁'};
 
   fetch(SB_URL + '/rest/v1/course_materials?course_id=eq.' + COURSE_ID + '&is_visible=eq.true&order=created_at.desc', {
-    headers: { 'apikey': SB_KEY }
+    headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
   })
-  .then(function (r) { return r.json(); })
+  .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
   .then(function (data) {
-    allMats = data || [];
+    allMats = Array.isArray(data) ? data : [];
     document.getElementById('stat-materials').textContent = allMats.length;
     renderMats('');
   })
   .catch(function () {
-    grid.innerHTML = '<p class="mat-empty">Could not load materials. Please check your connection.</p>';
+    allMats = [];
+    document.getElementById('stat-materials').textContent = '0';
+    renderMats('');
   });
 
   function renderMats(type) {
@@ -911,18 +913,29 @@ var STUDENTS = [
   var stored  = sessionStorage.getItem(SS_KEY);
   var pendingEmail = '';
 
-  /* Already have a token from this session — show panels straight away */
-  if (stored) { _showPanels(stored); return; }
-
-  /* Show the login overlay */
-  document.getElementById('admin-auth-overlay').style.display = 'flex';
-
   var step1   = document.getElementById('auth-step1');
   var step2   = document.getElementById('auth-step2');
   var emailIn = document.getElementById('auth-email');
   var otpIn   = document.getElementById('auth-otp');
   var s1      = document.getElementById('auth-s1');
   var s2      = document.getElementById('auth-s2');
+
+  function _openOverlay() {
+    document.getElementById('admin-auth-overlay').style.display = 'flex';
+  }
+
+  /* Validate stored token against Supabase before trusting it.
+     Expired / stale tokens will get a 401 → clear and show login. */
+  if (stored) {
+    fetch(SB_URL + '/auth/v1/user', {
+      headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + stored }
+    }).then(function (r) {
+      if (r.ok) { _showPanels(stored); }
+      else { sessionStorage.removeItem(SS_KEY); _openOverlay(); }
+    }).catch(function () { sessionStorage.removeItem(SS_KEY); _openOverlay(); });
+  } else {
+    _openOverlay();
+  }
 
   document.getElementById('btn-send-otp').addEventListener('click', function () {
     var email = emailIn.value.trim().toLowerCase();
@@ -1115,11 +1128,11 @@ var STUDENTS = [
   var TYPE_ICONS = { announcement:'📢', quiz:'📝', project:'🗂', assignment:'📌' };
 
   fetch(SB_URL + '/rest/v1/announcements?course_id=eq.' + COURSE_ID + '&is_visible=eq.true&order=created_at.desc', {
-    headers: { 'apikey': SB_KEY }
+    headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
   })
-  .then(function (r) { return r.json(); })
+  .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
   .then(function (data) {
-    var anns = data || [];
+    var anns = Array.isArray(data) ? data : [];
     document.getElementById('stat-announcements').textContent = anns.length;
     if (anns.length === 0) {
       list.innerHTML = '<div class="empty-panel"><h3>No announcements yet</h3><p>Check back soon.</p></div>';
