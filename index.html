@@ -86,22 +86,71 @@ header {
   z-index: 5;
   box-shadow: 0 5px 24px #0b1b2a22;
 }
+/* ── Sticky header shell ───────────────────────────────── */
+header { position: sticky; top: 0; z-index: 200; }
+
+/* ── Brand + nav row ───────────────────────────────────── */
 .nav {
   display: flex;
   align-items: center;
-  gap: .75rem;
-  padding: .7rem 0;
+  gap: 1.2rem;
+  padding: .6rem 0;
   flex-wrap: nowrap;
 }
-.brand { font-weight: 750; letter-spacing: .02em; color: #fff; flex-shrink: 0; }
-.brand small { display: block; color: #b9d9e1; font-weight: 400; font-size: .68rem; }
-nav { display: flex; align-items: center; gap: .65rem; flex-wrap: nowrap; flex: 1; justify-content: flex-end; }
-nav a { color: #e5f2f5; font-size: .82rem; white-space: nowrap; }
-/* pill buttons stay on same row, slightly smaller */
-nav a.nav-training-link,
-nav a.nav-projects-view-link,
-nav a.nav-courses-link,
-nav a.nav-project-link { font-size: .78rem; padding: .28rem .7rem; }
+.brand {
+  font-size: .88rem; font-weight: 750; letter-spacing: .04em;
+  color: #fff; flex-shrink: 0; line-height: 1.2;
+  text-transform: uppercase;
+}
+.brand small {
+  display: block; color: rgba(255,255,255,.55);
+  font-weight: 400; font-size: .67rem; letter-spacing: .02em;
+  text-transform: none;
+}
+
+/* ── Regular nav links ─────────────────────────────────── */
+nav {
+  display: flex; align-items: center;
+  gap: 0; flex-wrap: nowrap; flex: 1; justify-content: flex-end;
+}
+nav a {
+  color: rgba(255,255,255,.75); font-size: .78rem; font-weight: 500;
+  white-space: nowrap; padding: .3rem .55rem;
+  border-radius: 6px; transition: color .18s, background .18s;
+  letter-spacing: .01em;
+}
+nav a:hover { color: #fff; background: rgba(255,255,255,.08); }
+
+/* ── Divider before pill group ─────────────────────────── */
+nav .nav-divider {
+  width: 1px; height: 18px; background: rgba(255,255,255,.18);
+  margin: 0 .5rem; flex-shrink: 0;
+}
+
+/* ── Unified pill style ────────────────────────────────── */
+nav a.nav-pill {
+  display: inline-flex; align-items: center; gap: .32rem;
+  padding: .32rem .75rem;
+  border-radius: 999px;
+  font-size: .76rem; font-weight: 700; letter-spacing: .02em;
+  color: #fff !important; white-space: nowrap;
+  transition: opacity .18s, transform .18s, box-shadow .18s;
+  box-shadow: 0 2px 8px rgba(0,0,0,.18);
+  text-decoration: none;
+}
+nav a.nav-pill:hover {
+  opacity: .9; transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(0,0,0,.22);
+}
+nav a.nav-pill svg { flex-shrink: 0; }
+
+/* Individual pill colours */
+nav a.nav-courses-link  { background: linear-gradient(135deg,#2060a8,#1b4c8a); }
+nav a.nav-projects-view-link { background: linear-gradient(135deg,#1e8a84,#36a6a0); }
+nav a.nav-training-link { background: linear-gradient(135deg,#1a6e78,#148f98); }
+nav a.nav-project-link  { background: linear-gradient(135deg,#9e7a28,#c9a84c); }
+
+/* ── Mobile ────────────────────────────────────────────── */
 
 /* =========================================================
    3. HERO
@@ -640,10 +689,11 @@ footer a { color: #9fe3dc; }
 }
 
 @media (max-width: 780px) {
-  .nav { align-items: flex-start; flex-direction: column; flex-wrap: wrap; }
-  nav { gap: .5rem; flex-wrap: wrap; justify-content: flex-start; }
-  nav a { font-size: .82rem; }
-  nav a.nav-training-link, nav a.nav-projects-view-link, nav a.nav-courses-link, nav a.nav-project-link { font-size: .78rem; }
+  .nav { align-items: flex-start; flex-direction: column; flex-wrap: wrap; gap: .5rem; }
+  nav { gap: .3rem; flex-wrap: wrap; justify-content: flex-start; }
+  nav a { font-size: .76rem; padding: .25rem .45rem; }
+  nav a.nav-pill { font-size: .73rem; padding: .28rem .65rem; }
+  nav .nav-divider { display: none; }
   .grid, .two-col { grid-template-columns: 1fr; }
   .hero { padding: 3.7rem 0 3rem; }
   .hero-inner { flex-direction: column-reverse; text-align: center; }
@@ -1072,63 +1122,32 @@ footer a { color: #9fe3dc; }
   margin-top: .5rem;
 }
 
-/* Nav FDP highlight link */
-nav a.nav-training-link {
-  background: linear-gradient(135deg, #1b7b82, #36a6a0);
-  color: #fff !important;
-  padding: .3rem .8rem;
-  border-radius: 999px;
-  font-weight: 700;
-  font-size: .82rem;
-  transition: opacity .2s, transform .2s;
-}
-nav a.nav-training-link:hover { opacity: .88; transform: translateY(-1px); text-decoration: none; }
-
-nav a.nav-courses-link {
-  background: linear-gradient(135deg, #1b6faf, var(--blue));
-  color: #fff !important; padding: .3rem .8rem; border-radius: 999px;
-  font-weight: 700; font-size: .78rem; transition: opacity .2s, transform .2s;
-}
-nav a.nav-courses-link:hover { opacity: .88; transform: translateY(-1px); }
-nav a.nav-projects-view-link {
-  background: linear-gradient(135deg, #2a807c, var(--teal));
-  color: #fff !important; padding: .3rem .8rem; border-radius: 999px;
-  font-weight: 700; font-size: .82rem; transition: opacity .2s, transform .2s;
-}
-nav a.nav-projects-view-link:hover { opacity: .88; transform: translateY(-1px); }
-nav a.nav-project-link {
-  background: linear-gradient(135deg, #b99a55, #9c7d35);
-  color: #fff !important;
-  padding: .3rem .8rem;
-  border-radius: 999px;
-  font-weight: 700;
-  font-size: .82rem;
-  transition: opacity .2s, transform .2s;
-}
-nav a.nav-project-link:hover { opacity: .88; transform: translateY(-1px); text-decoration: none; }
+/* pill colours already defined in nav section above */
 
 /* ============================================================
    PROJECT REGISTRATION MODAL
    ============================================================ */
 .proj-overlay {
   position: fixed; inset: 0; z-index: 1001;
-  background: rgba(10,20,40,.8);
-  backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
+  background: rgba(10,20,40,.75);
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
   opacity: 0; pointer-events: none;
-  transition: opacity .3s;
-  display: flex; align-items: center; justify-content: center;
-  padding: 1rem;
+  transition: opacity .28s;
+  display: flex; align-items: flex-start; justify-content: center;
+  padding: 2vh 1rem;
+  overflow-y: auto;          /* overlay itself scrolls on short screens */
 }
 .proj-overlay.open { opacity: 1; pointer-events: auto; }
 .proj-modal {
   background: #fff;
-  border-radius: 24px;
-  width: min(820px, 100%);
-  max-height: 92vh;
-  overflow-y: auto;
-  transform: translateY(28px) scale(.96);
-  transition: transform .38s cubic-bezier(.34,1.56,.64,1);
-  box-shadow: 0 32px 80px rgba(0,0,0,.35);
+  border-radius: 20px;
+  width: min(760px, 100%);
+  /* No max-height: the overlay scrolls, so the modal never clips */
+  flex-shrink: 0;
+  transform: translateY(24px) scale(.97);
+  transition: transform .35s cubic-bezier(.34,1.56,.64,1);
+  box-shadow: 0 24px 64px rgba(0,0,0,.32);
+  margin: auto;              /* vertical centering when content is short */
 }
 .proj-overlay.open .proj-modal { transform: translateY(0) scale(1); }
 
@@ -1505,7 +1524,32 @@ footer {
   <div class="wrap nav">
     <a class="brand" href="#home">SHARAN CHANDRAN M<small>Academic · Research · Student Mentorship</small></a>
     <nav aria-label="Main navigation">
-      <a href="#about">About</a><a href="#news">News</a><a href="news.html">📰 Field Updates</a><a href="#research">Research</a><a href="#consultancy">Consultancy</a><a href="#mentorship">Mentorship</a><a href="#publications">Publications</a><a href="#patents">Patents</a><a href="#contact">Contact</a><a href="courses.html" class="nav-courses-link">📚 Courses</a><a href="projects.html" class="nav-projects-view-link">🗂 Projects</a><a href="#" class="nav-training-link" id="nav-fdp">🎓 FDP &amp; Training</a><a href="#" class="nav-project-link" id="nav-projects">📋 Register Project</a>
+      <a href="#about">About</a>
+      <a href="#news">News</a>
+      <a href="news.html">Field Updates</a>
+      <a href="#research">Research</a>
+      <a href="#consultancy">Consultancy</a>
+      <a href="#mentorship">Mentorship</a>
+      <a href="#publications">Publications</a>
+      <a href="#patents">Patents</a>
+      <a href="#contact">Contact</a>
+      <span class="nav-divider" aria-hidden="true"></span>
+      <a href="courses.html" class="nav-pill nav-courses-link">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        Courses
+      </a>
+      <a href="projects.html" class="nav-pill nav-projects-view-link">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+        Projects
+      </a>
+      <a href="#" class="nav-pill nav-training-link" id="nav-fdp">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+        FDP &amp; Training
+      </a>
+      <a href="#" class="nav-pill nav-project-link" id="nav-projects">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Register Project
+      </a>
     </nav>
   </div>
 </header>
