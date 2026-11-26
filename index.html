@@ -1260,6 +1260,21 @@ footer a { color: #9fe3dc; }
   .proj-member-row { grid-template-columns: 1fr; }
 }
 
+/* Visitors map section */
+.visitors-section { background: var(--navy); padding: 3.5rem 0 2.5rem; }
+.visitors-section .section-title { color: #fff; }
+#visitors-list {
+  display: flex; flex-wrap: wrap; gap: .55rem; justify-content: center;
+}
+.vc-chip {
+  display: inline-flex; align-items: center; gap: .4rem;
+  background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1);
+  border-radius: 20px; padding: .28rem .75rem;
+  font-size: .78rem; color: rgba(255,255,255,.85);
+}
+.vc-chip .vc-flag { font-size: 1rem; line-height: 1; }
+.vc-chip .vc-cnt { font-weight: 700; color: var(--teal); margin-left: .25rem; }
+
 /* Footer gradient */
 footer {
   background: linear-gradient(135deg, #0d1f35, #10263f);
@@ -1531,9 +1546,9 @@ footer {
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
         Projects
       </a>
-      <a href="#" class="nav-pill nav-training-link" id="nav-fdp">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
-        FDP &amp; Training
+      <a href="#contact" class="nav-pill nav-training-link" id="nav-fdp">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Contact for Training
       </a>
     </div>
   </div>
@@ -2054,6 +2069,17 @@ footer {
     <div class="card"><h3>Institution</h3><p>School of Mechanical Engineering<br>VIT Vellore, Tamil Nadu, India</p></div>
     <div class="card"><h3>LinkedIn profile</h3><p><a href="https://www.linkedin.com/in/sharan-chandran-445a3334/">https://www.linkedin.com/in/sharan-chandran-445a3334/</a></p></div>
     <div class="card"><h3>Google Scholar</h3><p><a href="https://scholar.google.co.in/citations?user=aNTYahwAAAAJ&hl=en">Google Scholar</a></p></div>
+  </div>
+</section>
+
+<!-- ===== VISITORS MAP SECTION ===== -->
+<section id="visitors" class="visitors-section">
+  <div class="wrap">
+    <h2 class="section-title" style="text-align:center;margin-bottom:.4rem;">🌍 Global Reach</h2>
+    <p style="text-align:center;color:var(--muted);font-size:.9rem;margin-bottom:1.8rem;">Visitors from around the world</p>
+    <div id="visitors-map" style="width:100%;height:380px;"></div>
+    <div id="visitors-list" style="margin-top:1.4rem;"></div>
+    <p id="visitors-map-attr" style="text-align:center;font-size:.7rem;color:var(--muted);margin-top:.6rem;opacity:.6;"></p>
   </div>
 </section>
 </main>
@@ -3188,6 +3214,132 @@ window.SITE_CONFIG = {
       }
     });
   }
+})();
+</script>
+
+<!-- ===== VISITOR TRACKING + MAP ===== -->
+<script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/map.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/geodata/worldLow.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+<script>
+(function () {
+  var SB_URL = 'https://gmgaoutklvhiudovvkie.supabase.co';
+  var SB_KEY = 'sb_publishable_aHL1lexC4P7JLAcT8Y391A_MjKyxcfN';
+
+  /* ---- Country code → flag emoji ---- */
+  function flag(code) {
+    if (!code || code.length !== 2) return '🌐';
+    return String.fromCodePoint(
+      code.toUpperCase().charCodeAt(0) + 127397,
+      code.toUpperCase().charCodeAt(1) + 127397
+    );
+  }
+
+  /* ---- Track this visit via Supabase RPC ---- */
+  function trackVisit() {
+    fetch('https://ipapi.co/json/')
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (!d.country_code) return;
+        fetch(SB_URL + '/rest/v1/rpc/increment_visitor', {
+          method: 'POST',
+          headers: { 'apikey': SB_KEY, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ cc: d.country_code, cn: d.country_name || d.country_code })
+        }).catch(function(){});
+      }).catch(function(){});
+  }
+
+  /* ---- Fetch stats and render ---- */
+  function renderMap(data) {
+    var mapEl = document.getElementById('visitors-map');
+    if (!mapEl || typeof am5 === 'undefined') return;
+
+    var root = am5.Root.new('visitors-map');
+    root.setThemes([am5themes_Animated.new(root)]);
+
+    var chart = root.container.children.push(
+      am5map.MapChart.new(root, {
+        panX: 'rotateX', panY: 'none',
+        projection: am5map.geoNaturalEarth1(),
+        layout: root.horizontalLayout
+      })
+    );
+
+    // Background
+    chart.set('background', am5.Rectangle.new(root, {
+      fill: am5.color(0x10263f), fillOpacity: 1
+    }));
+
+    var maxCount = data.reduce(function (m, d) { return Math.max(m, d.visit_count); }, 1);
+
+    var polygonSeries = chart.series.push(
+      am5map.MapPolygonSeries.new(root, {
+        geoJSON: am5geodata_worldLow,
+        valueField: 'value',
+        calculateAggregates: true
+      })
+    );
+
+    polygonSeries.mapPolygons.template.setAll({
+      tooltipText: '{name}: {value} visits',
+      interactive: true,
+      fill: am5.color(0x1b4c65),
+      stroke: am5.color(0x10263f),
+      strokeWidth: 0.5
+    });
+
+    polygonSeries.mapPolygons.template.states.create('hover', {
+      fill: am5.color(0x36a6a0)
+    });
+
+    polygonSeries.set('heatRules', [{
+      target: polygonSeries.mapPolygons.template,
+      dataField: 'value',
+      min: am5.color(0x1b4c65),
+      max: am5.color(0x36a6a0),
+      key: 'fill'
+    }]);
+
+    var countryMap = {};
+    data.forEach(function (d) { countryMap[d.country_code] = d.visit_count; });
+
+    polygonSeries.data.setAll(
+      Object.keys(countryMap).map(function (cc) {
+        return { id: cc, value: countryMap[cc] };
+      })
+    );
+
+    document.getElementById('visitors-map-attr').textContent = 'Map powered by amCharts 5';
+  }
+
+  function renderList(data) {
+    var el = document.getElementById('visitors-list');
+    if (!el) return;
+    var sorted = data.slice().sort(function (a, b) { return b.visit_count - a.visit_count; });
+    el.innerHTML = sorted.slice(0, 30).map(function (d) {
+      return '<span class="vc-chip"><span class="vc-flag">' + flag(d.country_code) + '</span>' +
+             d.country_name + '<span class="vc-cnt">' + d.visit_count + '</span></span>';
+    }).join('');
+  }
+
+  function loadStats() {
+    fetch(SB_URL + '/rest/v1/visitor_stats?order=visit_count.desc&select=country_code,country_name,visit_count', {
+      headers: { 'apikey': SB_KEY }
+    })
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      if (!Array.isArray(data)) return;
+      renderMap(data);
+      renderList(data);
+    }).catch(function(){});
+  }
+
+  // Track visit silently, then load and display stats
+  trackVisit();
+  window.addEventListener('load', function () {
+    setTimeout(loadStats, 500);
+  });
 })();
 </script>
 </body>
