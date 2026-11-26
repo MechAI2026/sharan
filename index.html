@@ -1261,19 +1261,32 @@ footer a { color: #9fe3dc; }
 }
 
 /* Visitors map section */
-.visitors-section { background: var(--navy); padding: 3.5rem 0 2.5rem; }
+.visitors-section { background: #070f1a; padding: 3rem 0 2.5rem; }
 .visitors-section .section-title { color: #fff; }
+#visitors-map { border-radius: 12px; overflow: hidden; }
 #visitors-list {
-  display: flex; flex-wrap: wrap; gap: .55rem; justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: .6rem; margin-top: 1.4rem;
 }
-.vc-chip {
-  display: inline-flex; align-items: center; gap: .4rem;
-  background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1);
-  border-radius: 20px; padding: .28rem .75rem;
-  font-size: .78rem; color: rgba(255,255,255,.85);
+.vc-card {
+  display: flex; align-items: center; gap: .65rem;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 10px; padding: .6rem .9rem;
+  transition: background .2s;
 }
-.vc-chip .vc-flag { font-size: 1rem; line-height: 1; }
-.vc-chip .vc-cnt { font-weight: 700; color: var(--teal); margin-left: .25rem; }
+.vc-card:hover { background: rgba(54,166,160,.12); border-color: rgba(54,166,160,.3); }
+.vc-rank {
+  font-size: .7rem; font-weight: 700; color: rgba(255,255,255,.3);
+  min-width: 1.4rem; text-align: center;
+}
+.vc-rank.top { color: var(--gold); }
+.vc-flag { font-size: 1.4rem; line-height: 1; flex-shrink: 0; }
+.vc-info { flex: 1; min-width: 0; }
+.vc-name { font-size: .78rem; color: rgba(255,255,255,.8); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.vc-cnt { font-size: 1.05rem; font-weight: 800; color: var(--teal); line-height: 1.1; }
+.vc-label { font-size: .65rem; color: rgba(255,255,255,.35); text-transform: uppercase; letter-spacing: .04em; }
 
 /* Footer gradient */
 footer {
@@ -2077,9 +2090,10 @@ footer {
   <div class="wrap">
     <h2 class="section-title" style="text-align:center;margin-bottom:.4rem;">🌍 Global Reach</h2>
     <p style="text-align:center;color:var(--muted);font-size:.9rem;margin-bottom:1.8rem;">Visitors from around the world</p>
-    <div id="visitors-map" style="width:100%;height:380px;"></div>
-    <div id="visitors-list" style="margin-top:1.4rem;"></div>
-    <p id="visitors-map-attr" style="text-align:center;font-size:.7rem;color:var(--muted);margin-top:.6rem;opacity:.6;"></p>
+    <p id="visitors-total" style="text-align:center;font-size:.85rem;color:rgba(255,255,255,.45);margin-bottom:1rem;letter-spacing:.03em;"></p>
+    <div id="visitors-map" style="width:100%;height:280px;border-radius:12px;overflow:hidden;"></div>
+    <div id="visitors-list"></div>
+    <p id="visitors-map-attr" style="text-align:center;font-size:.65rem;color:rgba(255,255,255,.2);margin-top:.8rem;"></p>
   </div>
 </section>
 </main>
@@ -3260,19 +3274,16 @@ window.SITE_CONFIG = {
 
     var chart = root.container.children.push(
       am5map.MapChart.new(root, {
-        panX: 'rotateX', panY: 'none',
-        projection: am5map.geoNaturalEarth1(),
-        layout: root.horizontalLayout
+        panX: 'none', panY: 'none', wheelY: 'none',
+        projection: am5map.geoNaturalEarth1()
       })
     );
 
-    // Background
     chart.set('background', am5.Rectangle.new(root, {
-      fill: am5.color(0x10263f), fillOpacity: 1
+      fill: am5.color(0x070f1a), fillOpacity: 1
     }));
 
-    var maxCount = data.reduce(function (m, d) { return Math.max(m, d.visit_count); }, 1);
-
+    /* ---- Base (no-data) countries: near-invisible dark ---- */
     var polygonSeries = chart.series.push(
       am5map.MapPolygonSeries.new(root, {
         geoJSON: am5geodata_worldLow,
@@ -3284,20 +3295,21 @@ window.SITE_CONFIG = {
     polygonSeries.mapPolygons.template.setAll({
       tooltipText: '{name}: {value} visits',
       interactive: true,
-      fill: am5.color(0x1b4c65),
-      stroke: am5.color(0x10263f),
-      strokeWidth: 0.5
+      fill: am5.color(0x0d2035),   // very dark base
+      stroke: am5.color(0x1a3550),
+      strokeWidth: 0.6
     });
 
     polygonSeries.mapPolygons.template.states.create('hover', {
-      fill: am5.color(0x36a6a0)
+      fill: am5.color(0xf0d080)
     });
 
+    /* ---- Heat: gold (few) → teal (many) ---- */
     polygonSeries.set('heatRules', [{
       target: polygonSeries.mapPolygons.template,
       dataField: 'value',
-      min: am5.color(0x1b4c65),
-      max: am5.color(0x36a6a0),
+      min: am5.color(0xc9a84c),   // gold for 1+ visit
+      max: am5.color(0x36a6a0),   // teal for highest
       key: 'fill'
     }]);
 
@@ -3317,9 +3329,21 @@ window.SITE_CONFIG = {
     var el = document.getElementById('visitors-list');
     if (!el) return;
     var sorted = data.slice().sort(function (a, b) { return b.visit_count - a.visit_count; });
-    el.innerHTML = sorted.slice(0, 30).map(function (d) {
-      return '<span class="vc-chip"><span class="vc-flag">' + flag(d.country_code) + '</span>' +
-             d.country_name + '<span class="vc-cnt">' + d.visit_count + '</span></span>';
+    var total = sorted.reduce(function (s, d) { return s + d.visit_count; }, 0);
+    var totalEl = document.getElementById('visitors-total');
+    if (totalEl) totalEl.textContent = total.toLocaleString() + ' total visits across ' + sorted.length + ' countries';
+    el.innerHTML = sorted.slice(0, 24).map(function (d, i) {
+      var rank = i + 1;
+      var rankClass = rank <= 3 ? ' top' : '';
+      var rankLabel = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '#' + rank;
+      return '<div class="vc-card">' +
+        '<span class="vc-rank' + rankClass + '">' + rankLabel + '</span>' +
+        '<span class="vc-flag">' + flag(d.country_code) + '</span>' +
+        '<div class="vc-info">' +
+          '<div class="vc-name">' + d.country_name + '</div>' +
+          '<div class="vc-cnt">' + d.visit_count.toLocaleString() + '</div>' +
+        '</div>' +
+        '</div>';
     }).join('');
   }
 
