@@ -54,7 +54,16 @@ header p{font-size:.8rem;color:rgba(255,255,255,.7)}
   color:#fff;padding:2.5rem 2rem 2rem;text-align:center;
 }
 .hero-stats h2{font-size:1.5rem;margin-bottom:.3rem}
-.hero-stats p{color:rgba(255,255,255,.7);font-size:.95rem;max-width:560px;margin:0 auto 1.5rem}
+.hero-stats p{color:rgba(255,255,255,.7);font-size:.95rem;max-width:560px;margin:0 auto 1rem}
+.listing-notice{
+  display:inline-flex;align-items:flex-start;gap:.5rem;
+  background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.4);
+  border-radius:8px;padding:.6rem 1rem;margin-bottom:1.4rem;
+  color:rgba(255,255,255,.85);font-size:.82rem;line-height:1.5;
+  max-width:580px;text-align:left;
+}
+.listing-notice svg{flex-shrink:0;margin-top:1px;stroke:#c9a84c}
+.listing-notice strong{color:#c9a84c;font-weight:600;}
 .stats-row{display:flex;justify-content:center;gap:2rem;flex-wrap:wrap}
 .stat-box{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);
   padding:.8rem 1.5rem;border-radius:14px;min-width:100px}
@@ -214,6 +223,10 @@ footer a:hover{color:#fff}
 <div class="hero-stats">
   <h2>Student &amp; Research Projects</h2>
   <p>All approved projects mentored and guided across schools and disciplines. Reports are stored securely and not publicly accessible.</p>
+  <div class="listing-notice">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    Projects listed here are registered through this portal <strong>from November 2026 onwards</strong>. Earlier projects are not reflected in this showcase.
+  </div>
   <div class="stats-row">
     <div class="stat-box"><div class="num" id="stat-total">—</div><div class="lbl">Total Projects</div></div>
     <div class="stat-box"><div class="num" id="stat-ongoing">—</div><div class="lbl">Ongoing</div></div>
