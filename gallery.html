@@ -466,6 +466,20 @@ textarea.form-control { resize: vertical; min-height: 70px; }
 /* =========================================================
    RESPONSIVE
    ========================================================= */
+@media (max-width: 780px) {
+  .hdr-top { flex-wrap: nowrap; }
+  .hdr-pills {
+    flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden;
+    -webkit-overflow-scrolling: touch; scrollbar-width: none;
+    flex-shrink: 1; min-width: 0; padding-bottom: 2px;
+  }
+  .hdr-pills::-webkit-scrollbar { display: none; }
+  .nav-pill { font-size: .72rem; padding: .28rem .62rem; flex-shrink: 0; }
+}
+@media (max-width: 480px) {
+  .nav-pill { font-size: .68rem; padding: .24rem .52rem; }
+  .brand { font-size: .78rem; }
+}
 @media (max-width: 1100px) { .gallery-grid { columns: 3; } }
 @media (max-width: 750px)  { .gallery-grid { columns: 2; } }
 @media (max-width: 450px)  { .gallery-grid { columns: 1; } }
@@ -908,7 +922,7 @@ async function checkAdminPass() {
   const pass = document.getElementById('admin-pass').value;
   const hash = await sha256(pass);
   // Store the actual hash of "gallery@2026" for comparison
-  const correctHash = await sha256('Nrisimha@2026');
+  const correctHash = await sha256('gallery@2026');
   if (hash === correctHash) {
     sessionStorage.setItem('gallery_admin', '1');
     grantAdmin();
