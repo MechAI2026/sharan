@@ -681,9 +681,20 @@ footer a { color: #9fe3dc; }
 }
 
 @media (max-width: 780px) {
-  .hdr-top { flex-wrap: wrap; gap: .5rem; padding: .5rem 0 .35rem; }
-  .hdr-pills { flex-wrap: wrap; gap: .35rem; flex-shrink: 1; max-width: 100%; }
-  .nav-pill { font-size: .72rem; padding: .28rem .6rem; }
+  .hdr-top { flex-wrap: nowrap; gap: .5rem; padding: .52rem 0 .38rem; }
+  /* Pills scroll horizontally — never overflow or wrap */
+  .hdr-pills {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    flex-shrink: 1;
+    min-width: 0;
+    padding-bottom: 2px; /* avoid clipping box-shadow */
+  }
+  .hdr-pills::-webkit-scrollbar { display: none; }
+  .nav-pill { font-size: .72rem; padding: .28rem .62rem; flex-shrink: 0; }
   .hdr-nav-row nav a { font-size: .72rem; padding: .2rem .4rem; }
   .grid, .two-col { grid-template-columns: 1fr; }
   .hero { padding: 3.7rem 0 3rem; }
@@ -692,11 +703,8 @@ footer a { color: #9fe3dc; }
 }
 
 @media (max-width: 480px) {
-  /* On very small screens, hide Register Project pill from header
-     (it's still accessible as a button on the page) */
-  .nav-project-link { display: none; }
-  .hdr-pills { justify-content: flex-end; }
-  .nav-pill { font-size: .7rem; padding: .25rem .5rem; }
+  .nav-pill { font-size: .68rem; padding: .24rem .52rem; }
+  .brand { font-size: .78rem; }
 }
 
 @media (max-width: 768px) {
@@ -1262,6 +1270,63 @@ footer a { color: #9fe3dc; }
 }
 
 /* Visitors map section */
+/* =========================================================
+   PUBLICATIONS (dynamic)
+   ========================================================= */
+.pub-toolbar {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: .6rem; flex-wrap: wrap; margin-bottom: 1rem;
+}
+.pub-filter-row {
+  display: flex; gap: .4rem; flex-wrap: wrap;
+}
+.pub-filter-btn {
+  padding: .3rem .75rem; border-radius: 999px; border: 1.5px solid var(--line);
+  background: var(--paper); color: var(--muted); font-size: .75rem; font-weight: 600;
+  cursor: pointer; transition: all .15s;
+}
+.pub-filter-btn:hover { border-color: var(--teal); color: var(--teal); }
+.pub-filter-btn.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+.pub-count-badge {
+  font-size: .78rem; color: var(--muted); white-space: nowrap;
+}
+.pub-loading {
+  text-align: center; padding: 2rem; color: var(--muted); font-size: .9rem;
+}
+.pub-loading::after { content: ''; animation: dots 1.5s infinite; }
+@keyframes dots { 0%{content:'.'} 33%{content:'..'} 66%{content:'...'} 100%{content:'.'} }
+.pub-year-group { margin-bottom: 1.2rem; }
+.pub-year-label {
+  font-size: .68rem; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--blue); font-weight: 800; margin-bottom: .4rem;
+  padding-bottom: .3rem; border-bottom: 2px solid var(--line);
+}
+.pub-type-badge {
+  display: inline-block; font-size: .65rem; font-weight: 700;
+  letter-spacing: .06em; text-transform: uppercase;
+  padding: .1rem .45rem; border-radius: 999px; margin-right: .4rem;
+  vertical-align: middle;
+}
+.pub-type-article   { background: #e8f4fd; color: #1565c0; }
+.pub-type-chapter   { background: #fef3e2; color: #b45309; }
+.pub-type-conference{ background: #f0fdf4; color: #166534; }
+.pub-type-other     { background: #f4f4f5; color: #52525b; }
+.pub-citations {
+  display: inline-flex; align-items: center; gap: .25rem;
+  font-size: .75rem; color: var(--muted); margin-left: .5rem;
+}
+.pub-citations svg { opacity: .5; }
+.pub-refresh {
+  display: inline-flex; align-items: center; gap: .3rem;
+  font-size: .75rem; color: var(--blue); cursor: pointer;
+  background: none; border: none; padding: 0; font-family: inherit;
+}
+.pub-refresh:hover { color: var(--teal); }
+.pub-source-note {
+  font-size: .73rem; color: var(--muted); text-align: right;
+  margin-top: .8rem;
+}
+
 /* =========================================================
    GALLERY PREVIEW (index.html)
    ========================================================= */
@@ -1963,24 +2028,31 @@ footer {
   </div>
 </section>
 <section id="publications">
-  <div class="section-head"><div class="kicker">Scholarship</div><h2>Recent publications</h2><p class="lead">Selected publications. DOI links open the publisher record where available.</p></div>
+  <div class="section-head">
+    <div class="kicker">Scholarship</div>
+    <h2>Publications</h2>
+    <p class="lead">Auto-fetched from OpenAlex · updates automatically when new papers are indexed.</p>
+  </div>
   <div class="card">
-    <div class="pub"><h3>Influence of combined alkali and plasma surface treatment on mechanical properties of natural fiber composites</h3><p>Varma, M. & Chandran, S. (2026). <em>Composite Interfaces</em>, 33(4), 845–869. <a href="https://doi.org/10.1080/09276440.2025.2556071" target="_blank" rel="noopener">DOI</a></p></div>
-    <div class="pub"><h3>Impact on mechanical properties of combined alkali-plasma treated natural fiber reinforced-epoxy/reduced graphene oxide biocomposites</h3><p>Kailas R. et al., including Chandran, S. (2025). <em>Composite Interfaces</em>. <a href="https://doi.org/10.1080/09276440.2025.2609004" target="_blank" rel="noopener">DOI</a></p></div>
-    <div class="pub"><h3>The effect of glow discharge air plasma surface treatment on mechanical properties of natural fiber reinforced-epoxy sustainable biocomposites</h3><p>Varma, M. & Chandran, S. (2025). <em>Composite Interfaces</em>. <a href="https://doi.org/10.1080/09276440.2025.2460340" target="_blank" rel="noopener">DOI</a></p></div>
-    <div class="pub"><h3>A comprehensive review on the machining and joining characteristics of natural fiber-reinforced polymeric composites</h3><p>Varma, M. et al., including Chandran, S. (2024). <em>Polymer Composites</em>. <a href="https://doi.org/10.1002/pc.28148" target="_blank" rel="noopener">DOI</a></p></div>
-    <div class="pub"><h3>Sustainable recycling of polymers</h3><p>Shivanshu, Abhiraj, Vishnu V., and Sharan Chandran (corresponding author) (2024). <em>Polymer Bulletin</em>.</p></div>
-    <div class="pub"><h3>A review on the recent applications of synthetic biopolymers in 3D printing for biomedical applications</h3><p>Shiva, S. et al., including Sharan Chandran (corresponding author) (2023). <em>Journal of Materials Science: Materials in Medicine</em>, 34(12).</p></div>
-    <div class="pub"><h3>Experimental and numerical damage analysis of low-velocity drop weight impact of polyethylene self-reinforced composite laminates for transportation applications</h3><p>Chandran, S. et al. (2023). <em>Journal of Thermoplastic Composite Materials</em>.</p></div>
-    <details style="margin-top:1rem"><summary style="cursor:pointer;font-weight:700;color:var(--blue)">Show additional publications</summary>
-      <div class="pub"><h3>Lightweight and sustainable self-reinforced composites</h3><p>Kumar, V. V. et al., including Chandran, S. (2023). In <em>Lightweight and Sustainable Composite Materials</em>, pp. 19–46.</p></div>
-      <div class="pub"><h3>Microbond multiple fiber pull-out test to evaluate interface properties of UHMWPE/LDPE self-reinforced polymer composites</h3><p>Chandran, M. S., Chebiyyam, Y., & Padmanabhan, K. (2021). <em>Journal of Engineering Research</em>, 9(3), 278–293.</p></div>
-      <div class="pub"><h3>A fractographic study of PE, PP self-reinforced composites in quasi-static loading conditions</h3><p>Chandran, M. S. & Padmanabhan, K. (2020). In <em>Recent Advances in Mechanical Engineering</em>, Springer, pp. 603–618.</p></div>
-      <div class="pub"><h3>A novel correlative formulation of the interfacial, quasi-static and dynamic behaviour of polyamide self-reinforced polymer composites</h3><p>Chandran, M. S. & Padmanabhan, K. (2020/2021). <em>Materials Today: Proceedings</em>.</p></div>
-      <div class="pub"><h3>Effective powertrain isolation of off-highway vehicles</h3><p>Sakhala, P. et al., including Chandran (2019). SAE Technical Paper 2019-28-0106.</p></div>
-      <div class="pub"><h3>A comparative investigation of interfacial adhesion behaviour of polyamide-based self-reinforced polymer composites by single fibre and multiple fibre pull-out tests</h3><p>Chandran, M. S. et al. (2019). <em>Journal of Adhesion Science and Technology</em>, pp. 511–530.</p></div>
-      <div class="pub"><h3>Microbond fibre bundle pullout technique to evaluate the interfacial adhesion of polyethylene and polypropylene self-reinforced composites</h3><p>Chandran, M. S. & Padmanabhan, K. (2019). <em>Applied Adhesion Science</em>, 7(1), 5.</p></div>
-    </details>
+    <!-- Toolbar -->
+    <div class="pub-toolbar">
+      <div class="pub-filter-row" id="pub-filters">
+        <button class="pub-filter-btn active" data-type="all">All</button>
+        <button class="pub-filter-btn" data-type="article">Journal Articles</button>
+        <button class="pub-filter-btn" data-type="book-chapter">Book Chapters</button>
+        <button class="pub-filter-btn" data-type="conference">Conference Papers</button>
+      </div>
+      <span class="pub-count-badge" id="pub-count"></span>
+    </div>
+    <!-- Dynamic content -->
+    <div id="pub-list"><div class="pub-loading">Loading publications</div></div>
+    <div class="pub-source-note" id="pub-source-note" style="display:none;">
+      Data via <a href="https://openalex.org" target="_blank" rel="noopener">OpenAlex</a> ·
+      <button class="pub-refresh" onclick="loadPublications(true)">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+        Refresh
+      </button>
+    </div>
   </div>
 </section>
 <section id="patents">
@@ -3337,6 +3409,191 @@ window.SITE_CONFIG = {
 <!-- ===== VISITOR TRACKING + MAP ===== -->
 <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
 <script src="https://cdn.amcharts.com/lib/5/map.js"></script>
+<!-- Publications: auto-fetch from OpenAlex -->
+<script>
+(function() {
+  var allWorks = [];
+  var activeType = 'all';
+
+  function typeLabel(type) {
+    if (!type) return 'other';
+    var t = type.toLowerCase();
+    if (t === 'article' || t === 'journal-article') return 'article';
+    if (t.includes('chapter') || t.includes('book')) return 'book-chapter';
+    if (t.includes('conference') || t.includes('proceeding')) return 'conference';
+    return 'other';
+  }
+
+  function typeBadge(type) {
+    var t = typeLabel(type);
+    var labels = {article:'Journal Article','book-chapter':'Book Chapter',conference:'Conference',other:'Other'};
+    var cls = {article:'pub-type-article','book-chapter':'pub-type-chapter',conference:'pub-type-conference',other:'pub-type-other'};
+    return '<span class="pub-type-badge '+(cls[t]||cls.other)+'">'+(labels[t]||'Other')+'</span>';
+  }
+
+  function esc(s) {
+    return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function renderPublications() {
+    var works = activeType === 'all'
+      ? allWorks
+      : allWorks.filter(function(w){ return typeLabel(w.type) === activeType; });
+
+    document.getElementById('pub-count').textContent = works.length + ' publication' + (works.length !== 1 ? 's' : '');
+
+    if (works.length === 0) {
+      document.getElementById('pub-list').innerHTML = '<p style="color:var(--muted);text-align:center;padding:1.5rem 0;">No publications in this category.</p>';
+      return;
+    }
+
+    var byYear = {};
+    works.forEach(function(w) {
+      var yr = w.publication_year || 'Unknown';
+      if (!byYear[yr]) byYear[yr] = [];
+      byYear[yr].push(w);
+    });
+    var years = Object.keys(byYear).sort(function(a,b){ return b - a; });
+
+    var html = '';
+    years.forEach(function(yr) {
+      html += '<div class="pub-year-group"><div class="pub-year-label">'+yr+'</div>';
+      byYear[yr].forEach(function(w) {
+        var authors = (w.authorships||[]).map(function(a){ return a.author&&a.author.display_name||''; }).filter(Boolean);
+        var authStr = authors.length > 3 ? authors.slice(0,3).join(', ')+' <em>et al.</em>' : authors.join(', ');
+
+        var venue = '';
+        if (w.primary_location && w.primary_location.source && w.primary_location.source.display_name) {
+          venue = '<em>'+esc(w.primary_location.source.display_name)+'</em>';
+        }
+
+        var doiLink = '';
+        if (w.doi) {
+          var doi = w.doi.replace('https://doi.org/','');
+          doiLink = ' <a href="https://doi.org/'+esc(doi)+'" target="_blank" rel="noopener" style="font-weight:700;color:var(--blue);">DOI ↗</a>';
+        }
+
+        var citeHtml = '';
+        if (w.cited_by_count && w.cited_by_count > 0) {
+          citeHtml = ' <span class="pub-citations">'+w.cited_by_count+' citations</span>';
+        }
+
+        html += '<div class="pub">'
+          +'<h3>'+typeBadge(w.type)+esc(w.title||'Untitled')+'</h3>'
+          +'<p>'+esc(authStr)+(venue?' · '+venue:'')+(w.publication_year?' ('+w.publication_year+')':'')+doiLink+citeHtml+'</p>'
+          +'</div>';
+      });
+      html += '</div>';
+    });
+
+    document.getElementById('pub-list').innerHTML = html;
+    document.getElementById('pub-source-note').style.display = '';
+  }
+
+  async function resolveAuthorId() {
+    var cached = localStorage.getItem('oa_author_id');
+    var cachedAt = parseInt(localStorage.getItem('oa_author_id_at')||'0');
+    if (cached && Date.now() - cachedAt < 86400000) return cached;
+
+    // Search OpenAlex for Sharan Chandran at VIT India
+    var url = 'https://api.openalex.org/authors?search=Sharan+Chandran&filter=affiliations.institution.country_code:IN&per_page=5';
+    var r = await fetch(url);
+    var data = await r.json();
+    var results = (data.results||[]);
+    if (!results.length) return null;
+
+    // Pick author with most works
+    var best = results.reduce(function(a,b){ return (b.works_count||0)>(a.works_count||0)?b:a; }, results[0]);
+    if (best && best.id) {
+      var id = best.id.replace('https://openalex.org/','');
+      localStorage.setItem('oa_author_id', id);
+      localStorage.setItem('oa_author_id_at', Date.now().toString());
+      return id;
+    }
+    return null;
+  }
+
+  window.loadPublications = async function(forceRefresh) {
+    document.getElementById('pub-list').innerHTML = '<div class="pub-loading">Loading publications</div>';
+    document.getElementById('pub-source-note').style.display = 'none';
+
+    try {
+      if (forceRefresh) {
+        localStorage.removeItem('oa_author_id');
+        localStorage.removeItem('oa_author_id_at');
+        localStorage.removeItem('oa_works');
+        localStorage.removeItem('oa_works_at');
+      }
+
+      // Check works cache (6 hours)
+      var cachedWorks = localStorage.getItem('oa_works');
+      var cachedAt = parseInt(localStorage.getItem('oa_works_at')||'0');
+      if (cachedWorks && !forceRefresh && Date.now()-cachedAt < 21600000) {
+        allWorks = JSON.parse(cachedWorks);
+        renderPublications();
+        return;
+      }
+
+      var authorId = await resolveAuthorId();
+      if (!authorId) throw new Error('Author not found');
+
+      var worksUrl = 'https://api.openalex.org/works'
+        +'?filter=author.id:'+authorId
+        +'&sort=publication_year:desc'
+        +'&per_page=100'
+        +'&select=title,publication_year,primary_location,authorships,doi,type,cited_by_count';
+
+      var wr = await fetch(worksUrl);
+      var wdata = await wr.json();
+      allWorks = wdata.results||[];
+
+      localStorage.setItem('oa_works', JSON.stringify(allWorks));
+      localStorage.setItem('oa_works_at', Date.now().toString());
+      renderPublications();
+
+    } catch(err) {
+      document.getElementById('pub-list').innerHTML = fallbackHtml();
+      document.getElementById('pub-count').textContent = '';
+    }
+  };
+
+  // Filter button listeners
+  document.getElementById('pub-filters').addEventListener('click', function(e) {
+    var btn = e.target.closest('.pub-filter-btn');
+    if (!btn) return;
+    document.querySelectorAll('.pub-filter-btn').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    activeType = btn.dataset.type;
+    renderPublications();
+  });
+
+  function fallbackHtml() {
+    var pubs = [
+      {t:'Influence of combined alkali and plasma surface treatment on mechanical properties of natural fiber composites',a:'Varma, M. & Chandran, S.',j:'Composite Interfaces',y:2026,doi:'10.1080/09276440.2025.2556071'},
+      {t:'Impact on mechanical properties of combined alkali-plasma treated natural fiber reinforced-epoxy/reduced graphene oxide biocomposites',a:'Kailas R. et al.',j:'Composite Interfaces',y:2025,doi:'10.1080/09276440.2025.2609004'},
+      {t:'The effect of glow discharge air plasma surface treatment on mechanical properties of natural fiber reinforced-epoxy sustainable biocomposites',a:'Varma, M. & Chandran, S.',j:'Composite Interfaces',y:2025,doi:'10.1080/09276440.2025.2460340'},
+      {t:'A comprehensive review on the machining and joining characteristics of natural fiber-reinforced polymeric composites',a:'Varma, M. et al.',j:'Polymer Composites',y:2024,doi:'10.1002/pc.28148'},
+      {t:'Sustainable recycling of polymers',a:'Shivanshu et al.',j:'Polymer Bulletin',y:2024},
+      {t:'A review on the recent applications of synthetic biopolymers in 3D printing for biomedical applications',a:'Shiva, S. et al.',j:'Journal of Materials Science: Materials in Medicine',y:2023},
+      {t:'Experimental and numerical damage analysis of low-velocity drop weight impact of polyethylene self-reinforced composite laminates',a:'Chandran, S. et al.',j:'Journal of Thermoplastic Composite Materials',y:2023},
+      {t:'Lightweight and sustainable self-reinforced composites',a:'Kumar, V. V. et al.',j:'Lightweight and Sustainable Composite Materials',y:2023},
+      {t:'Microbond multiple fiber pull-out test to evaluate interface properties of UHMWPE/LDPE self-reinforced polymer composites',a:'Chandran, M. S. et al.',j:'Journal of Engineering Research',y:2021},
+      {t:'A novel correlative formulation of the interfacial, quasi-static and dynamic behaviour of polyamide self-reinforced polymer composites',a:'Chandran, M. S. & Padmanabhan, K.',j:'Materials Today: Proceedings',y:2020},
+      {t:'A fractographic study of PE, PP self-reinforced composites in quasi-static loading conditions',a:'Chandran, M. S. & Padmanabhan, K.',j:'Recent Advances in Mechanical Engineering, Springer',y:2020},
+      {t:'A comparative investigation of interfacial adhesion behaviour of polyamide-based self-reinforced polymer composites',a:'Chandran, M. S. et al.',j:'Journal of Adhesion Science and Technology',y:2019},
+      {t:'Microbond fibre bundle pullout technique to evaluate the interfacial adhesion of polyethylene and polypropylene self-reinforced composites',a:'Chandran, M. S. & Padmanabhan, K.',j:'Applied Adhesion Science',y:2019}
+    ];
+    return pubs.map(function(p){
+      return '<div class="pub"><h3>'+esc(p.t)+'</h3><p>'+esc(p.a)+' · <em>'+esc(p.j)+'</em> ('+p.y+')'
+        +(p.doi?' <a href="https://doi.org/'+p.doi+'" target="_blank" rel="noopener" style="font-weight:700;color:var(--blue);">DOI ↗</a>':'')+'</p></div>';
+    }).join('');
+  }
+
+  // Boot
+  loadPublications(false);
+})();
+</script>
+
 <!-- Gallery Preview -->
 <script>
 (function() {
