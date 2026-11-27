@@ -323,6 +323,57 @@ ul.clean li { margin: .4rem 0; }
 }
 .pub-show-more button:hover { background: var(--blue); color: #fff; }
 
+.pub-metrics-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 1.2rem;
+}
+.pub-metric-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: linear-gradient(135deg, #f0f4ff 0%, #e8eeff 100%);
+  border: 1.5px solid #c7d4f7;
+  border-radius: 12px;
+  padding: .55rem 1.1rem;
+  min-width: 72px;
+}
+.pub-metric-val {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--navy);
+  line-height: 1.1;
+  letter-spacing: -.02em;
+}
+.pub-metric-label {
+  font-size: .68rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  margin-top: 2px;
+  white-space: nowrap;
+}
+.pub-scholar-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: auto;
+  font-size: .8rem;
+  font-weight: 600;
+  color: var(--blue);
+  text-decoration: none;
+  border: 1.5px solid var(--blue);
+  border-radius: 20px;
+  padding: .3rem .9rem;
+  transition: background .15s, color .15s;
+}
+.pub-scholar-link:hover { background: var(--blue); color: #fff; }
+@media (max-width: 600px) {
+  .pub-scholar-link { margin-left: 0; }
+}
+
 .right-column-stack { display: flex; flex-direction: column; gap: 20px; }
 .phd-list li { margin-bottom: 12px; }
 .phd-list li span { color: #64748b; }
@@ -2059,7 +2110,30 @@ footer {
   <div class="section-head">
     <div class="kicker">Scholarship</div>
     <h2>Publications</h2>
-    <p class="lead">Auto-fetched from OpenAlex · updates automatically when new papers are indexed.</p>
+    <p class="lead">Auto-fetched from OpenAlex &amp; Semantic Scholar · updates automatically.</p>
+  </div>
+  <!-- Scholar metrics row -->
+  <div class="pub-metrics-row" id="pub-metrics-row" style="display:none;">
+    <div class="pub-metric-chip">
+      <span class="pub-metric-val" id="stat-hindex">—</span>
+      <span class="pub-metric-label">h-index</span>
+    </div>
+    <div class="pub-metric-chip">
+      <span class="pub-metric-val" id="stat-i10">—</span>
+      <span class="pub-metric-label">i10-index</span>
+    </div>
+    <div class="pub-metric-chip">
+      <span class="pub-metric-val" id="stat-citations">—</span>
+      <span class="pub-metric-label">Citations</span>
+    </div>
+    <div class="pub-metric-chip">
+      <span class="pub-metric-val" id="stat-total">—</span>
+      <span class="pub-metric-label">Publications</span>
+    </div>
+    <a href="https://scholar.google.com/citations?user=aNTYahwAAAAJ" target="_blank" rel="noopener" class="pub-scholar-link">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      Google Scholar
+    </a>
   </div>
   <div class="card">
     <!-- Toolbar -->
@@ -2075,7 +2149,7 @@ footer {
     <!-- Dynamic content -->
     <div id="pub-list"><div class="pub-loading">Loading publications</div></div>
     <div class="pub-source-note" id="pub-source-note" style="display:none;">
-      Data via <a href="https://openalex.org" target="_blank" rel="noopener">OpenAlex</a> ·
+      Data via <a href="https://openalex.org" target="_blank" rel="noopener">OpenAlex</a> + <a href="https://www.semanticscholar.org" target="_blank" rel="noopener">Semantic Scholar</a> ·
       <button class="pub-refresh" onclick="loadPublications(true)">
         <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
         Refresh
@@ -3437,12 +3511,15 @@ window.SITE_CONFIG = {
 <!-- ===== VISITOR TRACKING + MAP ===== -->
 <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
 <script src="https://cdn.amcharts.com/lib/5/map.js"></script>
-<!-- Publications: auto-fetch from OpenAlex -->
+<!-- Publications: auto-fetch from OpenAlex + Semantic Scholar -->
 <script>
 (function() {
   var allWorks = [];
   var activeType = 'all';
+  var SHOW_LIMIT = 10;
+  var showAll = false;
 
+  /* ── helpers ────────────────────────────────────────────── */
   function typeLabel(type) {
     if (!type) return 'other';
     var t = type.toLowerCase();
@@ -3451,35 +3528,41 @@ window.SITE_CONFIG = {
     if (t.includes('conference') || t.includes('proceeding')) return 'conference';
     return 'other';
   }
-
   function typeBadge(type) {
     var t = typeLabel(type);
     var labels = {article:'Journal Article','book-chapter':'Book Chapter',conference:'Conference',other:'Other'};
     var cls = {article:'pub-type-article','book-chapter':'pub-type-chapter',conference:'pub-type-conference',other:'pub-type-other'};
     return '<span class="pub-type-badge '+(cls[t]||cls.other)+'">'+(labels[t]||'Other')+'</span>';
   }
+  function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function titleKey(t){ return String(t||'').toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,40); }
 
-  function esc(s) {
-    return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  /* ── metrics display ────────────────────────────────────── */
+  function showMetrics(h, i10, cites, total) {
+    var row = document.getElementById('pub-metrics-row');
+    if (!row) return;
+    function set(id, v){ var el=document.getElementById(id); if(el && v!=null) el.textContent=v; }
+    set('stat-hindex', h != null ? h : '—');
+    set('stat-i10',    i10 != null ? i10 : '—');
+    set('stat-citations', cites != null ? cites.toLocaleString() : '—');
+    set('stat-total',  total != null ? total : '—');
+    row.style.display = '';
   }
 
-  var SHOW_LIMIT = 10;
-  var showAll = false;
-
+  /* ── render ─────────────────────────────────────────────── */
   function pubItemHtml(w) {
     var authors = (w.authorships||[]).map(function(a){ return a.author&&a.author.display_name||''; }).filter(Boolean);
     var authStr = authors.length > 3 ? authors.slice(0,3).join(', ')+' <em>et al.</em>' : authors.join(', ');
     var venue = '';
-    if (w.primary_location && w.primary_location.source && w.primary_location.source.display_name) {
+    if (w.primary_location && w.primary_location.source && w.primary_location.source.display_name)
       venue = '<em>'+esc(w.primary_location.source.display_name)+'</em>';
-    }
     var doiLink = '';
     if (w.doi) {
       var doi = w.doi.replace('https://doi.org/','');
       doiLink = ' <a href="https://doi.org/'+esc(doi)+'" target="_blank" rel="noopener" style="font-weight:700;color:var(--blue);">DOI ↗</a>';
     }
     var citeHtml = w.cited_by_count && w.cited_by_count > 0
-      ? ' <span class="pub-citations">'+w.cited_by_count+' citations</span>' : '';
+      ? ' <span class="pub-citations">'+w.cited_by_count+' cited</span>' : '';
     return '<div class="pub">'
       +'<h3>'+typeBadge(w.type)+esc(w.title||'Untitled')+'</h3>'
       +'<p>'+esc(authStr)+(venue?' · '+venue:'')+(w.publication_year?' ('+w.publication_year+')':'')+doiLink+citeHtml+'</p>'
@@ -3491,40 +3574,29 @@ window.SITE_CONFIG = {
       ? allWorks
       : allWorks.filter(function(w){ return typeLabel(w.type) === activeType; });
 
-    document.getElementById('pub-count').textContent = works.length + ' publication' + (works.length !== 1 ? 's' : '');
+    document.getElementById('pub-count').textContent = works.length + ' publication' + (works.length!==1?'s':'');
 
-    if (works.length === 0) {
+    if (!works.length) {
       document.getElementById('pub-list').innerHTML = '<p style="color:var(--muted);text-align:center;padding:1.5rem 0;">No publications in this category.</p>';
       return;
     }
 
     var visible = showAll ? works : works.slice(0, SHOW_LIMIT);
-
-    // Group visible works by year
     var byYear = {};
-    visible.forEach(function(w) {
-      var yr = w.publication_year || 'Unknown';
-      if (!byYear[yr]) byYear[yr] = [];
-      byYear[yr].push(w);
-    });
-    var years = Object.keys(byYear).sort(function(a,b){ return b - a; });
+    visible.forEach(function(w){ var yr=w.publication_year||'Unknown'; (byYear[yr]=byYear[yr]||[]).push(w); });
+    var years = Object.keys(byYear).sort(function(a,b){ return b-a; });
 
     var html = '';
-    years.forEach(function(yr) {
+    years.forEach(function(yr){
       html += '<div class="pub-year-group"><div class="pub-year-label">'+yr+'</div>';
       byYear[yr].forEach(function(w){ html += pubItemHtml(w); });
       html += '</div>';
     });
-
-    // Show more / show less button
     if (works.length > SHOW_LIMIT) {
-      var remaining = works.length - SHOW_LIMIT;
-      html += '<div class="pub-show-more">'
-        + '<button onclick="window._pubToggle()">'
-        + (showAll ? '↑ Show less' : '↓ Show ' + remaining + ' more publications')
-        + '</button></div>';
+      var rem = works.length - SHOW_LIMIT;
+      html += '<div class="pub-show-more"><button onclick="window._pubToggle()">'
+        +(showAll?'↑ Show less':'↓ Show '+rem+' more publications')+'</button></div>';
     }
-
     document.getElementById('pub-list').innerHTML = html;
     document.getElementById('pub-source-note').style.display = '';
   }
@@ -3532,89 +3604,198 @@ window.SITE_CONFIG = {
   window._pubToggle = function() {
     showAll = !showAll;
     renderPublications();
-    if (!showAll) {
-      document.getElementById('pub-list').scrollTop = 0;
-    }
+    if (!showAll) document.getElementById('pub-list').scrollTop = 0;
   };
 
-  async function resolveAuthorId() {
-    var cached = localStorage.getItem('oa_author_id');
-    var cachedAt = parseInt(localStorage.getItem('oa_author_id_at')||'0');
-    if (cached && Date.now() - cachedAt < 86400000) return cached;
+  /* ── OpenAlex ───────────────────────────────────────────── */
+  async function fetchOpenAlex() {
+    // 1. Resolve author
+    var cachedId  = localStorage.getItem('oa_author_id');
+    var cachedIdAt = parseInt(localStorage.getItem('oa_author_id_at')||'0');
+    var authorId = (cachedId && Date.now()-cachedIdAt < 86400000) ? cachedId : null;
 
-    // Search OpenAlex for Sharan Chandran at VIT India
-    var url = 'https://api.openalex.org/authors?search=Sharan+Chandran&filter=affiliations.institution.country_code:IN&per_page=5';
-    var r = await fetch(url);
-    var data = await r.json();
-    var results = (data.results||[]);
-    if (!results.length) return null;
-
-    // Pick author with most works
-    var best = results.reduce(function(a,b){ return (b.works_count||0)>(a.works_count||0)?b:a; }, results[0]);
-    if (best && best.id) {
-      var id = best.id.replace('https://openalex.org/','');
-      localStorage.setItem('oa_author_id', id);
-      localStorage.setItem('oa_author_id_at', Date.now().toString());
-      return id;
+    if (!authorId) {
+      var r = await fetch('https://api.openalex.org/authors?search=Sharan+Chandran&filter=affiliations.institution.country_code:IN&per_page=5&select=id,display_name,works_count,cited_by_count,summary_stats');
+      var d = await r.json();
+      var results = (d.results||[]);
+      var best = results.reduce(function(a,b){ return (b.works_count||0)>(a.works_count||0)?b:a; }, results[0]||{});
+      if (best && best.id) {
+        authorId = best.id.replace('https://openalex.org/','');
+        localStorage.setItem('oa_author_id', authorId);
+        localStorage.setItem('oa_author_id_at', Date.now().toString());
+        // Cache metrics
+        var ss = best.summary_stats||{};
+        localStorage.setItem('oa_meta', JSON.stringify({h:ss.h_index, i10:ss.i10_index, cites:best.cited_by_count}));
+      }
     }
-    return null;
+
+    // Show metrics from cache immediately while works load
+    try {
+      var meta = JSON.parse(localStorage.getItem('oa_meta')||'{}');
+      if (meta.h != null) showMetrics(meta.h, meta.i10, meta.cites, null);
+    } catch(e){}
+
+    if (!authorId) return [];
+
+    // 2. Fetch works
+    var cachedWorks = localStorage.getItem('oa_works');
+    var cachedAt = parseInt(localStorage.getItem('oa_works_at')||'0');
+    if (cachedWorks && Date.now()-cachedAt < 21600000) return JSON.parse(cachedWorks);
+
+    // Fetch up to 200 works (2 pages of 100)
+    var works = [];
+    for (var page = 1; page <= 2; page++) {
+      var wr = await fetch('https://api.openalex.org/works?filter=author.id:'+authorId
+        +'&sort=publication_year:desc&per_page=100&page='+page
+        +'&select=title,publication_year,primary_location,authorships,doi,type,cited_by_count');
+      var wd = await wr.json();
+      var batch = wd.results||[];
+      works = works.concat(batch);
+      if (batch.length < 100) break;
+    }
+    localStorage.setItem('oa_works', JSON.stringify(works));
+    localStorage.setItem('oa_works_at', Date.now().toString());
+    return works;
   }
 
+  /* ── Semantic Scholar ───────────────────────────────────── */
+  async function fetchSemanticScholar() {
+    // Search for author
+    var ar = await fetch('https://api.semanticscholar.org/graph/v1/author/search'
+      +'?query=Sharan+Chandran+VIT+Vellore+composites'
+      +'&fields=authorId,name,paperCount,hIndex,affiliations&limit=5');
+    var ad = await ar.json();
+    var authors = (ad.data||[]);
+    if (!authors.length) return {works:[], hIndex:null};
+
+    // Pick best match (most papers)
+    var best = authors.reduce(function(a,b){ return (b.paperCount||0)>(a.paperCount||0)?b:a; }, authors[0]);
+    var ssId = best.authorId;
+    var ssH  = best.hIndex;
+
+    // Fetch papers (up to 200)
+    var papers = [];
+    var offset = 0;
+    var limit  = 100;
+    while (true) {
+      var pr = await fetch('https://api.semanticscholar.org/graph/v1/author/'+ssId+'/papers'
+        +'?fields=title,year,authors,venue,citationCount,externalIds,publicationTypes'
+        +'&limit='+limit+'&offset='+offset);
+      var pd = await pr.json();
+      var batch = pd.data||[];
+      papers = papers.concat(batch);
+      if (batch.length < limit || papers.length >= 200) break;
+      offset += limit;
+      await new Promise(function(r){ setTimeout(r, 400); }); // rate-limit: 1 req/sec
+    }
+
+    // Normalise to OpenAlex shape
+    var works = papers.map(function(p){
+      var doi = (p.externalIds||{}).DOI;
+      var types = (p.publicationTypes||[]);
+      var type = types.some(function(t){ return /conference/i.test(t); }) ? 'conference'
+               : types.some(function(t){ return /book/i.test(t) || /chapter/i.test(t); }) ? 'book-chapter'
+               : 'article';
+      return {
+        title: p.title,
+        publication_year: p.year,
+        doi: doi ? 'https://doi.org/'+doi : null,
+        type: type,
+        cited_by_count: p.citationCount||0,
+        authorships: (p.authors||[]).map(function(a){ return {author:{display_name:a.name}}; }),
+        primary_location: {source:{display_name:p.venue||''}}
+      };
+    });
+    return {works:works, hIndex:ssH};
+  }
+
+  /* ── merge & deduplicate ────────────────────────────────── */
+  function mergeWorks(oa, ss) {
+    var seen = {};
+    var merged = [];
+    function add(w) {
+      var key = w.doi
+        ? w.doi.replace('https://doi.org/','').toLowerCase()
+        : titleKey(w.title);
+      if (!key || seen[key]) return;
+      seen[key] = true;
+      merged.push(w);
+    }
+    oa.forEach(add);
+    ss.forEach(add);
+    // Sort by year desc
+    merged.sort(function(a,b){ return (b.publication_year||0)-(a.publication_year||0); });
+    return merged;
+  }
+
+  /* ── main loader ────────────────────────────────────────── */
   window.loadPublications = async function(forceRefresh) {
     document.getElementById('pub-list').innerHTML = '<div class="pub-loading">Loading publications</div>';
     document.getElementById('pub-source-note').style.display = 'none';
+    showAll = false;
+
+    if (forceRefresh) {
+      ['oa_author_id','oa_author_id_at','oa_works','oa_works_at','oa_meta','ss_works','ss_works_at'].forEach(function(k){ localStorage.removeItem(k); });
+    }
 
     try {
-      if (forceRefresh) {
-        localStorage.removeItem('oa_author_id');
-        localStorage.removeItem('oa_author_id_at');
-        localStorage.removeItem('oa_works');
-        localStorage.removeItem('oa_works_at');
+      // Run both sources in parallel
+      var ssCached = localStorage.getItem('ss_works');
+      var ssAt     = parseInt(localStorage.getItem('ss_works_at')||'0');
+      var ssPromise;
+
+      if (ssCached && !forceRefresh && Date.now()-ssAt < 21600000) {
+        ssPromise = Promise.resolve({works:JSON.parse(ssCached), hIndex:null});
+      } else {
+        ssPromise = fetchSemanticScholar().then(function(res){
+          localStorage.setItem('ss_works', JSON.stringify(res.works));
+          localStorage.setItem('ss_works_at', Date.now().toString());
+          return res;
+        }).catch(function(){ return {works:[], hIndex:null}; });
       }
 
-      // Check works cache (6 hours)
-      var cachedWorks = localStorage.getItem('oa_works');
-      var cachedAt = parseInt(localStorage.getItem('oa_works_at')||'0');
-      if (cachedWorks && !forceRefresh && Date.now()-cachedAt < 21600000) {
-        allWorks = JSON.parse(cachedWorks);
-        renderPublications();
-        return;
-      }
+      var oaPromise = fetchOpenAlex().catch(function(){ return []; });
 
-      var authorId = await resolveAuthorId();
-      if (!authorId) throw new Error('Author not found');
+      var results = await Promise.all([oaPromise, ssPromise]);
+      var oaWorks  = results[0];
+      var ssResult = results[1];
+      var ssWorks  = ssResult.works;
+      var ssH      = ssResult.hIndex;
 
-      var worksUrl = 'https://api.openalex.org/works'
-        +'?filter=author.id:'+authorId
-        +'&sort=publication_year:desc'
-        +'&per_page=100'
-        +'&select=title,publication_year,primary_location,authorships,doi,type,cited_by_count';
+      allWorks = mergeWorks(oaWorks, ssWorks);
 
-      var wr = await fetch(worksUrl);
-      var wdata = await wr.json();
-      allWorks = wdata.results||[];
+      // Update metrics with final total and SS h-index if OA didn't give one
+      try {
+        var meta = JSON.parse(localStorage.getItem('oa_meta')||'{}');
+        showMetrics(
+          meta.h != null ? meta.h : ssH,
+          meta.i10 != null ? meta.i10 : null,
+          meta.cites != null ? meta.cites : null,
+          allWorks.length
+        );
+      } catch(e){ showMetrics(ssH, null, null, allWorks.length); }
 
-      localStorage.setItem('oa_works', JSON.stringify(allWorks));
-      localStorage.setItem('oa_works_at', Date.now().toString());
+      if (!allWorks.length) throw new Error('no works');
       renderPublications();
 
     } catch(err) {
       allWorks = fallbackWorks();
       renderPublications();
-      document.getElementById('pub-count').textContent = allWorks.length + ' publications';
     }
   };
 
-  // Filter button listeners
+  /* ── filter buttons ─────────────────────────────────────── */
   document.getElementById('pub-filters').addEventListener('click', function(e) {
     var btn = e.target.closest('.pub-filter-btn');
     if (!btn) return;
     document.querySelectorAll('.pub-filter-btn').forEach(function(b){ b.classList.remove('active'); });
     btn.classList.add('active');
     activeType = btn.dataset.type;
+    showAll = false;
     renderPublications();
   });
 
+  /* ── static fallback ────────────────────────────────────── */
   function fallbackWorks() {
     var pubs = [
       {t:'Influence of combined alkali and plasma surface treatment on mechanical properties of natural fiber composites',a:'Varma, M. & Chandran, S.',j:'Composite Interfaces',y:2026,doi:'10.1080/09276440.2025.2556071'},
@@ -3631,17 +3812,9 @@ window.SITE_CONFIG = {
       {t:'A comparative investigation of interfacial adhesion behaviour of polyamide-based self-reinforced polymer composites',a:'Chandran, M. S. et al.',j:'Journal of Adhesion Science and Technology',y:2019},
       {t:'Microbond fibre bundle pullout technique to evaluate the interfacial adhesion of polyethylene and polypropylene self-reinforced composites',a:'Chandran, M. S. & Padmanabhan, K.',j:'Applied Adhesion Science',y:2019}
     ];
-    // Convert to OpenAlex-compatible shape so renderPublications can handle them
     return pubs.map(function(p){
-      return {
-        title: p.t,
-        publication_year: p.y,
-        doi: p.doi ? 'https://doi.org/'+p.doi : null,
-        type: 'article',
-        cited_by_count: 0,
-        authorships: [{author:{display_name:p.a}}],
-        primary_location: {source:{display_name:p.j}}
-      };
+      return {title:p.t,publication_year:p.y,doi:p.doi?'https://doi.org/'+p.doi:null,type:'article',
+        cited_by_count:0,authorships:[{author:{display_name:p.a}}],primary_location:{source:{display_name:p.j}}};
     });
   }
 
