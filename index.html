@@ -2110,7 +2110,6 @@ footer {
   <div class="section-head">
     <div class="kicker">Scholarship</div>
     <h2>Publications</h2>
-    <p class="lead">Auto-fetched from OpenAlex &amp; Semantic Scholar · updates automatically.</p>
   </div>
   <!-- Scholar metrics row -->
   <div class="pub-metrics-row" id="pub-metrics-row" style="display:none;">
@@ -3608,28 +3607,55 @@ window.SITE_CONFIG = {
   };
 
   /* ── OpenAlex ───────────────────────────────────────────── */
+  // Known DOIs from your papers — used to look up the exact OpenAlex author ID
+  var KNOWN_DOIS = [
+    '10.1002/pc.28148',
+    '10.1080/09276440.2025.2460340',
+    '10.1080/09276440.2025.2556071'
+  ];
+
   async function fetchOpenAlex() {
-    // 1. Resolve author
-    var cachedId  = localStorage.getItem('oa_author_id');
+    // 1. Resolve author via known DOI (much more reliable than name search)
+    var cachedId   = localStorage.getItem('oa_author_id');
     var cachedIdAt = parseInt(localStorage.getItem('oa_author_id_at')||'0');
-    var authorId = (cachedId && Date.now()-cachedIdAt < 86400000) ? cachedId : null;
+    var authorId   = (cachedId && Date.now()-cachedIdAt < 86400000) ? cachedId : null;
 
     if (!authorId) {
-      var r = await fetch('https://api.openalex.org/authors?search=Sharan+Chandran&filter=affiliations.institution.country_code:IN&per_page=5&select=id,display_name,works_count,cited_by_count,summary_stats');
-      var d = await r.json();
-      var results = (d.results||[]);
-      var best = results.reduce(function(a,b){ return (b.works_count||0)>(a.works_count||0)?b:a; }, results[0]||{});
-      if (best && best.id) {
-        authorId = best.id.replace('https://openalex.org/','');
+      // Try each DOI until we find a Chandran authorship
+      for (var i = 0; i < KNOWN_DOIS.length; i++) {
+        try {
+          var wr = await fetch('https://api.openalex.org/works?filter=doi:'+encodeURIComponent(KNOWN_DOIS[i])+'&select=authorships');
+          var wd = await wr.json();
+          var work = (wd.results||[])[0];
+          if (!work) continue;
+          // Find the authorship whose name contains "Chandran"
+          var match = (work.authorships||[]).find(function(a){
+            return a.author && /chandran/i.test(a.author.display_name);
+          });
+          if (match && match.author && match.author.id) {
+            authorId = match.author.id.replace('https://openalex.org/','');
+            break;
+          }
+        } catch(e) { continue; }
+      }
+
+      if (!authorId) return []; // couldn't resolve
+
+      // Now fetch author profile to get metrics
+      try {
+        var ar = await fetch('https://api.openalex.org/'+authorId+'?select=id,display_name,works_count,cited_by_count,summary_stats');
+        var ad = await ar.json();
+        var ss = ad.summary_stats||{};
         localStorage.setItem('oa_author_id', authorId);
         localStorage.setItem('oa_author_id_at', Date.now().toString());
-        // Cache metrics
-        var ss = best.summary_stats||{};
-        localStorage.setItem('oa_meta', JSON.stringify({h:ss.h_index, i10:ss.i10_index, cites:best.cited_by_count}));
+        localStorage.setItem('oa_meta', JSON.stringify({h:ss.h_index, i10:ss.i10_index, cites:ad.cited_by_count}));
+      } catch(e) {
+        localStorage.setItem('oa_author_id', authorId);
+        localStorage.setItem('oa_author_id_at', Date.now().toString());
       }
     }
 
-    // Show metrics from cache immediately while works load
+    // Show metrics from cache while works load
     try {
       var meta = JSON.parse(localStorage.getItem('oa_meta')||'{}');
       if (meta.h != null) showMetrics(meta.h, meta.i10, meta.cites, null);
@@ -3817,6 +3843,24 @@ window.SITE_CONFIG = {
         cited_by_count:0,authorships:[{author:{display_name:p.a}}],primary_location:{source:{display_name:p.j}}};
     });
   }
+
+  // Clear any previously cached wrong author data
+  (function() {
+    var id = localStorage.getItem('oa_author_id');
+    // If cached ID looks like it came from name-search (we now use DOI-based lookup),
+    // bust the cache once so the page re-resolves with the correct author.
+    var busted = localStorage.getItem('oa_doi_busted');
+    if (!busted) {
+      localStorage.removeItem('oa_author_id');
+      localStorage.removeItem('oa_author_id_at');
+      localStorage.removeItem('oa_works');
+      localStorage.removeItem('oa_works_at');
+      localStorage.removeItem('oa_meta');
+      localStorage.removeItem('ss_works');
+      localStorage.removeItem('ss_works_at');
+      localStorage.setItem('oa_doi_busted', '1');
+    }
+  })();
 
   // Boot
   loadPublications(false);
