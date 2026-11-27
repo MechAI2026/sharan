@@ -295,6 +295,34 @@ ul.clean li { margin: .4rem 0; }
 .pub h3 { font-size: 1rem; line-height: 1.45; margin: 0 0 .25rem; color: var(--navy); }
 .pub p  { font-size: .9rem; color: var(--muted); margin: 0; }
 
+#pub-list {
+  max-height: 640px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--blue) rgba(0,0,0,.08);
+  padding-right: 6px;
+}
+#pub-list::-webkit-scrollbar { width: 5px; }
+#pub-list::-webkit-scrollbar-track { background: rgba(0,0,0,.06); border-radius: 4px; }
+#pub-list::-webkit-scrollbar-thumb { background: var(--blue); border-radius: 4px; }
+
+.pub-show-more {
+  text-align: center;
+  padding: .9rem 0 .2rem;
+}
+.pub-show-more button {
+  background: none;
+  border: 1.5px solid var(--blue);
+  color: var(--blue);
+  border-radius: 20px;
+  padding: .4rem 1.4rem;
+  font-size: .88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .18s, color .18s;
+}
+.pub-show-more button:hover { background: var(--blue); color: #fff; }
+
 .right-column-stack { display: flex; flex-direction: column; gap: 20px; }
 .phd-list li { margin-bottom: 12px; }
 .phd-list li span { color: #64748b; }
@@ -3435,6 +3463,29 @@ window.SITE_CONFIG = {
     return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
+  var SHOW_LIMIT = 10;
+  var showAll = false;
+
+  function pubItemHtml(w) {
+    var authors = (w.authorships||[]).map(function(a){ return a.author&&a.author.display_name||''; }).filter(Boolean);
+    var authStr = authors.length > 3 ? authors.slice(0,3).join(', ')+' <em>et al.</em>' : authors.join(', ');
+    var venue = '';
+    if (w.primary_location && w.primary_location.source && w.primary_location.source.display_name) {
+      venue = '<em>'+esc(w.primary_location.source.display_name)+'</em>';
+    }
+    var doiLink = '';
+    if (w.doi) {
+      var doi = w.doi.replace('https://doi.org/','');
+      doiLink = ' <a href="https://doi.org/'+esc(doi)+'" target="_blank" rel="noopener" style="font-weight:700;color:var(--blue);">DOI ↗</a>';
+    }
+    var citeHtml = w.cited_by_count && w.cited_by_count > 0
+      ? ' <span class="pub-citations">'+w.cited_by_count+' citations</span>' : '';
+    return '<div class="pub">'
+      +'<h3>'+typeBadge(w.type)+esc(w.title||'Untitled')+'</h3>'
+      +'<p>'+esc(authStr)+(venue?' · '+venue:'')+(w.publication_year?' ('+w.publication_year+')':'')+doiLink+citeHtml+'</p>'
+      +'</div>';
+  }
+
   function renderPublications() {
     var works = activeType === 'all'
       ? allWorks
@@ -3447,8 +3498,11 @@ window.SITE_CONFIG = {
       return;
     }
 
+    var visible = showAll ? works : works.slice(0, SHOW_LIMIT);
+
+    // Group visible works by year
     var byYear = {};
-    works.forEach(function(w) {
+    visible.forEach(function(w) {
       var yr = w.publication_year || 'Unknown';
       if (!byYear[yr]) byYear[yr] = [];
       byYear[yr].push(w);
@@ -3458,37 +3512,30 @@ window.SITE_CONFIG = {
     var html = '';
     years.forEach(function(yr) {
       html += '<div class="pub-year-group"><div class="pub-year-label">'+yr+'</div>';
-      byYear[yr].forEach(function(w) {
-        var authors = (w.authorships||[]).map(function(a){ return a.author&&a.author.display_name||''; }).filter(Boolean);
-        var authStr = authors.length > 3 ? authors.slice(0,3).join(', ')+' <em>et al.</em>' : authors.join(', ');
-
-        var venue = '';
-        if (w.primary_location && w.primary_location.source && w.primary_location.source.display_name) {
-          venue = '<em>'+esc(w.primary_location.source.display_name)+'</em>';
-        }
-
-        var doiLink = '';
-        if (w.doi) {
-          var doi = w.doi.replace('https://doi.org/','');
-          doiLink = ' <a href="https://doi.org/'+esc(doi)+'" target="_blank" rel="noopener" style="font-weight:700;color:var(--blue);">DOI ↗</a>';
-        }
-
-        var citeHtml = '';
-        if (w.cited_by_count && w.cited_by_count > 0) {
-          citeHtml = ' <span class="pub-citations">'+w.cited_by_count+' citations</span>';
-        }
-
-        html += '<div class="pub">'
-          +'<h3>'+typeBadge(w.type)+esc(w.title||'Untitled')+'</h3>'
-          +'<p>'+esc(authStr)+(venue?' · '+venue:'')+(w.publication_year?' ('+w.publication_year+')':'')+doiLink+citeHtml+'</p>'
-          +'</div>';
-      });
+      byYear[yr].forEach(function(w){ html += pubItemHtml(w); });
       html += '</div>';
     });
+
+    // Show more / show less button
+    if (works.length > SHOW_LIMIT) {
+      var remaining = works.length - SHOW_LIMIT;
+      html += '<div class="pub-show-more">'
+        + '<button onclick="window._pubToggle()">'
+        + (showAll ? '↑ Show less' : '↓ Show ' + remaining + ' more publications')
+        + '</button></div>';
+    }
 
     document.getElementById('pub-list').innerHTML = html;
     document.getElementById('pub-source-note').style.display = '';
   }
+
+  window._pubToggle = function() {
+    showAll = !showAll;
+    renderPublications();
+    if (!showAll) {
+      document.getElementById('pub-list').scrollTop = 0;
+    }
+  };
 
   async function resolveAuthorId() {
     var cached = localStorage.getItem('oa_author_id');
@@ -3552,8 +3599,9 @@ window.SITE_CONFIG = {
       renderPublications();
 
     } catch(err) {
-      document.getElementById('pub-list').innerHTML = fallbackHtml();
-      document.getElementById('pub-count').textContent = '';
+      allWorks = fallbackWorks();
+      renderPublications();
+      document.getElementById('pub-count').textContent = allWorks.length + ' publications';
     }
   };
 
@@ -3567,7 +3615,7 @@ window.SITE_CONFIG = {
     renderPublications();
   });
 
-  function fallbackHtml() {
+  function fallbackWorks() {
     var pubs = [
       {t:'Influence of combined alkali and plasma surface treatment on mechanical properties of natural fiber composites',a:'Varma, M. & Chandran, S.',j:'Composite Interfaces',y:2026,doi:'10.1080/09276440.2025.2556071'},
       {t:'Impact on mechanical properties of combined alkali-plasma treated natural fiber reinforced-epoxy/reduced graphene oxide biocomposites',a:'Kailas R. et al.',j:'Composite Interfaces',y:2025,doi:'10.1080/09276440.2025.2609004'},
@@ -3583,10 +3631,18 @@ window.SITE_CONFIG = {
       {t:'A comparative investigation of interfacial adhesion behaviour of polyamide-based self-reinforced polymer composites',a:'Chandran, M. S. et al.',j:'Journal of Adhesion Science and Technology',y:2019},
       {t:'Microbond fibre bundle pullout technique to evaluate the interfacial adhesion of polyethylene and polypropylene self-reinforced composites',a:'Chandran, M. S. & Padmanabhan, K.',j:'Applied Adhesion Science',y:2019}
     ];
+    // Convert to OpenAlex-compatible shape so renderPublications can handle them
     return pubs.map(function(p){
-      return '<div class="pub"><h3>'+esc(p.t)+'</h3><p>'+esc(p.a)+' · <em>'+esc(p.j)+'</em> ('+p.y+')'
-        +(p.doi?' <a href="https://doi.org/'+p.doi+'" target="_blank" rel="noopener" style="font-weight:700;color:var(--blue);">DOI ↗</a>':'')+'</p></div>';
-    }).join('');
+      return {
+        title: p.t,
+        publication_year: p.y,
+        doi: p.doi ? 'https://doi.org/'+p.doi : null,
+        type: 'article',
+        cited_by_count: 0,
+        authorships: [{author:{display_name:p.a}}],
+        primary_location: {source:{display_name:p.j}}
+      };
+    });
   }
 
   // Boot
