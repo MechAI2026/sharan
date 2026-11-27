@@ -140,6 +140,7 @@ header {
 .nav-projects-view-link { background: linear-gradient(135deg,#1e8a84,#36a6a0); }
 .nav-training-link      { background: linear-gradient(135deg,#1a6e78,#148f98); }
 .nav-project-link       { background: linear-gradient(135deg,#9e7a28,#c9a84c); }
+.nav-gallery-link       { background: linear-gradient(135deg,#7a3fa8,#9b5de5); }
 
 /* ── Mobile ────────────────────────────────────────────── */
 
@@ -1261,6 +1262,72 @@ footer a { color: #9fe3dc; }
 }
 
 /* Visitors map section */
+/* =========================================================
+   GALLERY PREVIEW (index.html)
+   ========================================================= */
+.gallery-preview-section {
+  padding: 3.5rem 0 3rem;
+  background: #fff;
+  border-top: 1px solid var(--line);
+}
+.gallery-preview-head {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem;
+}
+.gallery-view-all {
+  display: inline-flex; align-items: center; gap: .4rem;
+  background: var(--navy); color: #fff !important;
+  font-size: .8rem; font-weight: 700; padding: .55rem 1.1rem;
+  border-radius: 999px; text-decoration: none; white-space: nowrap;
+  transition: background .18s, transform .18s;
+  box-shadow: 0 3px 10px rgba(16,38,63,.2);
+}
+.gallery-view-all:hover { background: #1f6b86; transform: translateY(-1px); }
+.gallery-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto auto;
+  gap: .75rem;
+}
+.gp-item {
+  border-radius: 12px; overflow: hidden; position: relative;
+  cursor: pointer; display: block; text-decoration: none;
+  box-shadow: 0 4px 16px rgba(0,0,0,.1);
+  background: #0d1f33;
+  transition: transform .22s, box-shadow .22s;
+}
+.gp-item:hover { transform: translateY(-4px) scale(1.01); box-shadow: 0 10px 28px rgba(0,0,0,.18); }
+.gp-item img {
+  width: 100%; height: 220px; object-fit: cover; display: block;
+  transition: transform .4s;
+}
+.gp-item:hover img { transform: scale(1.04); }
+.gp-item-label {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: linear-gradient(to top, rgba(10,22,38,.88) 0%, transparent 100%);
+  padding: .8rem .75rem .6rem;
+  color: #fff; font-size: .78rem; font-weight: 600;
+  opacity: 0; transition: opacity .25s;
+}
+.gp-item:hover .gp-item-label { opacity: 1; }
+.gp-skeleton {
+  border-radius: 12px; height: 220px;
+  background: linear-gradient(90deg,#e2e8f0 25%,#f0f4f8 50%,#e2e8f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+@keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+.gallery-preview-empty {
+  text-align: center; padding: 2.5rem;
+  display: flex; justify-content: center;
+}
+@media (max-width: 700px) {
+  .gallery-preview-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 450px) {
+  .gallery-preview-grid { grid-template-columns: 1fr; }
+}
+
 .visitors-section { background: #070f1a; padding: 3rem 0 2.5rem; }
 .visitors-section .section-title { color: #fff; }
 #visitors-map { border-radius: 12px; overflow: hidden; }
@@ -1558,6 +1625,10 @@ footer {
       <a href="projects.html" class="nav-pill nav-projects-view-link">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
         Projects
+      </a>
+      <a href="gallery.html" class="nav-pill nav-gallery-link">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+        Gallery
       </a>
       <a href="#contact" class="nav-pill nav-training-link" id="nav-fdp">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
@@ -2082,6 +2153,38 @@ footer {
     <div class="card"><h3>Institution</h3><p>School of Mechanical Engineering<br>VIT Vellore, Tamil Nadu, India</p></div>
     <div class="card"><h3>LinkedIn profile</h3><p><a href="https://www.linkedin.com/in/sharan-chandran-445a3334/">https://www.linkedin.com/in/sharan-chandran-445a3334/</a></p></div>
     <div class="card"><h3>Google Scholar</h3><p><a href="https://scholar.google.co.in/citations?user=aNTYahwAAAAJ&hl=en">Google Scholar</a></p></div>
+  </div>
+</section>
+
+<!-- ===== GALLERY PREVIEW SECTION ===== -->
+<section id="gallery-preview" class="gallery-preview-section">
+  <div class="wrap">
+    <div class="gallery-preview-head">
+      <div>
+        <div class="kicker">Photo Gallery</div>
+        <h2 style="margin:.2rem 0 .3rem;">From the Field &amp; Beyond</h2>
+        <p class="lead" style="font-size:.95rem;">Snapshots of research, events, workshops, and academic milestones.</p>
+      </div>
+      <a href="gallery.html" class="gallery-view-all">
+        View All Photos
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+    <div class="gallery-preview-grid" id="gallery-preview-grid">
+      <!-- loaded from Supabase -->
+      <div class="gp-skeleton"></div>
+      <div class="gp-skeleton gp-tall"></div>
+      <div class="gp-skeleton"></div>
+      <div class="gp-skeleton gp-tall"></div>
+      <div class="gp-skeleton"></div>
+      <div class="gp-skeleton gp-tall"></div>
+    </div>
+    <div class="gallery-preview-empty" id="gallery-preview-empty" style="display:none;">
+      <a href="gallery.html" class="gallery-view-all" style="margin:0 auto;">
+        Open Gallery
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
   </div>
 </section>
 
@@ -3234,6 +3337,36 @@ window.SITE_CONFIG = {
 <!-- ===== VISITOR TRACKING + MAP ===== -->
 <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
 <script src="https://cdn.amcharts.com/lib/5/map.js"></script>
+<!-- Gallery Preview -->
+<script>
+(function() {
+  var SB_URL = 'https://gmgaoutklvhiudovvkie.supabase.co';
+  var SB_KEY = 'sb_publishable_aHL1lexC4P7JLAcT8Y391A_MjKyxcfN';
+  fetch(SB_URL + '/rest/v1/gallery_items?select=title,public_url,category&order=created_at.desc&limit=6',
+    { headers: { 'apikey': SB_KEY } })
+  .then(function(r){ return r.ok ? r.json() : []; })
+  .then(function(photos) {
+    var grid = document.getElementById('gallery-preview-grid');
+    var empty = document.getElementById('gallery-preview-empty');
+    if (!photos || photos.length === 0) {
+      grid.style.display = 'none';
+      empty.style.display = 'flex';
+      return;
+    }
+    grid.innerHTML = photos.map(function(p) {
+      return '<a href="gallery.html" class="gp-item">' +
+        '<img src="' + esc(p.public_url) + '" alt="' + esc(p.title) + '" loading="lazy">' +
+        '<div class="gp-item-label">' + esc(p.title) + '</div>' +
+        '</a>';
+    }).join('');
+    function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  }).catch(function() {
+    document.getElementById('gallery-preview-grid').style.display = 'none';
+    document.getElementById('gallery-preview-empty').style.display = 'flex';
+  });
+})();
+</script>
+
 <script src="https://cdn.amcharts.com/lib/5/geodata/worldLow.js"></script>
 <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
 <script>

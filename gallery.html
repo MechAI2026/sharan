@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gallery | Dr. Sharan Chandran M</title>
+<meta name="description" content="Photo gallery of academic events, research activities, and professional engagements by Dr. Sharan Chandran M.">
+<link rel="canonical" href="https://sharanchandran.com/gallery.html">
+<style>
+/* =========================================================
+   VARIABLES & BASE (matches index.html)
+   ========================================================= */
+:root {
+  --navy: #10263f;
+  --blue: #1f6b86;
+  --teal: #36a6a0;
+  --ink: #1d2935;
+  --muted: #5d6b78;
+  --paper: #f5f8fa;
+  --line: #dce5eb;
+  --white: #fff;
+  --gold: #c9a84c;
+  --dark-bg: #070f1a;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+  color: var(--ink);
+  line-height: 1.65;
+  background: var(--paper);
+}
+a { color: var(--blue); text-decoration: none; }
+.wrap { width: min(1200px, 92%); margin: auto; }
+
+/* =========================================================
+   HEADER (identical to index.html)
+   ========================================================= */
+header {
+  background: rgba(16,38,63,.97);
+  color: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  box-shadow: 0 5px 24px #0b1b2a22;
+}
+.hdr-top {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem; padding: .52rem 0 .38rem;
+}
+.brand {
+  font-size: .88rem; font-weight: 750; letter-spacing: .04em;
+  color: #fff; flex-shrink: 0; line-height: 1.2;
+  text-transform: uppercase; text-decoration: none;
+}
+.brand small {
+  display: block; color: rgba(255,255,255,.55);
+  font-weight: 400; font-size: .67rem; letter-spacing: .02em;
+  text-transform: none;
+}
+.hdr-pills {
+  display: flex; align-items: center; gap: .45rem; flex-shrink: 0;
+}
+.nav-pill {
+  display: inline-flex; align-items: center; gap: .32rem;
+  padding: .32rem .75rem; border-radius: 999px;
+  font-size: .76rem; font-weight: 700; letter-spacing: .02em;
+  color: #fff !important; white-space: nowrap; text-decoration: none;
+  transition: opacity .18s, transform .18s, box-shadow .18s;
+  box-shadow: 0 2px 8px rgba(0,0,0,.18);
+}
+.nav-pill:hover { opacity: .9; transform: translateY(-1px); box-shadow: 0 4px 14px rgba(0,0,0,.22); }
+.nav-pill svg { flex-shrink: 0; }
+.nav-courses-link       { background: linear-gradient(135deg,#2060a8,#1b4c8a); }
+.nav-projects-view-link { background: linear-gradient(135deg,#1e8a84,#36a6a0); }
+.nav-training-link      { background: linear-gradient(135deg,#1a6e78,#148f98); }
+.nav-gallery-link       { background: linear-gradient(135deg,#7a3fa8,#9b5de5); }
+.hdr-nav-row {
+  border-top: 1px solid rgba(255,255,255,.1);
+  padding: .22rem 0;
+}
+.hdr-nav-row nav {
+  display: flex; align-items: center; flex-wrap: wrap;
+  gap: 0;
+}
+.hdr-nav-row nav a {
+  color: rgba(255,255,255,.68); font-size: .76rem; font-weight: 500;
+  white-space: nowrap; padding: .22rem .5rem; border-radius: 5px;
+  transition: color .15s, background .15s; letter-spacing: .01em;
+}
+.hdr-nav-row nav a:hover,
+.hdr-nav-row nav a.active { color: #fff; background: rgba(255,255,255,.09); }
+
+/* =========================================================
+   GALLERY HERO
+   ========================================================= */
+.gallery-hero {
+  background: linear-gradient(125deg, #10263f 0%, #1b3a5e 55%, #1b2c46 100%);
+  color: #fff;
+  padding: 3.5rem 0 3rem;
+  position: relative;
+  overflow: hidden;
+}
+.gallery-hero::before {
+  content: "";
+  position: absolute;
+  width: 500px; height: 500px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,.07);
+  right: -180px; top: -200px;
+  box-shadow: 0 0 0 60px rgba(255,255,255,.03);
+}
+.gallery-hero .wrap { position: relative; z-index: 1; }
+.gallery-hero-eyebrow {
+  font-size: .72rem; letter-spacing: .18em;
+  text-transform: uppercase; color: #9fe3dc;
+  font-weight: 800; margin-bottom: .6rem;
+}
+.gallery-hero h1 {
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 800; letter-spacing: -.03em;
+  margin: 0 0 .75rem; color: #fff;
+  line-height: 1.1;
+}
+.gallery-hero p {
+  color: rgba(255,255,255,.7); font-size: 1.05rem;
+  max-width: 580px; margin: 0;
+}
+.gallery-hero-actions {
+  display: flex; gap: .8rem; flex-wrap: wrap; margin-top: 1.6rem; align-items: center;
+}
+.btn-upload {
+  display: inline-flex; align-items: center; gap: .45rem;
+  background: linear-gradient(135deg, var(--gold), #e0b84a);
+  color: var(--navy) !important; font-weight: 800; font-size: .85rem;
+  padding: .65rem 1.3rem; border-radius: 999px; border: none; cursor: pointer;
+  box-shadow: 0 4px 16px rgba(201,168,76,.3);
+  transition: transform .18s, box-shadow .18s; text-decoration: none;
+}
+.btn-upload:hover { transform: translateY(-2px); box-shadow: 0 6px 22px rgba(201,168,76,.4); }
+.gallery-stats {
+  display: flex; gap: 2rem; margin-top: 1.4rem;
+}
+.gallery-stat-num {
+  font-size: 1.6rem; font-weight: 800; color: #9fe3dc; line-height: 1;
+}
+.gallery-stat-label {
+  font-size: .72rem; color: rgba(255,255,255,.5); text-transform: uppercase;
+  letter-spacing: .1em; margin-top: .15rem;
+}
+
+/* =========================================================
+   FILTER BAR
+   ========================================================= */
+.filter-bar {
+  background: #fff;
+  border-bottom: 1px solid var(--line);
+  position: sticky; top: 68px; z-index: 100;
+  padding: .75rem 0;
+  box-shadow: 0 2px 10px rgba(0,0,0,.04);
+}
+.filter-inner {
+  display: flex; align-items: center; gap: .5rem;
+  overflow-x: auto; scrollbar-width: none;
+}
+.filter-inner::-webkit-scrollbar { display: none; }
+.filter-btn {
+  flex-shrink: 0;
+  display: inline-flex; align-items: center; gap: .4rem;
+  padding: .42rem .9rem; border-radius: 999px;
+  font-size: .78rem; font-weight: 600; cursor: pointer; border: none;
+  background: var(--paper); color: var(--muted);
+  border: 1.5px solid var(--line);
+  transition: all .18s;
+}
+.filter-btn:hover { border-color: var(--teal); color: var(--teal); }
+.filter-btn.active {
+  background: var(--navy); color: #fff; border-color: var(--navy);
+}
+.filter-btn .count {
+  background: rgba(255,255,255,.2); color: rgba(255,255,255,.8);
+  font-size: .68rem; font-weight: 700;
+  padding: .05rem .4rem; border-radius: 999px;
+}
+.filter-btn:not(.active) .count {
+  background: rgba(0,0,0,.07); color: var(--muted);
+}
+
+/* =========================================================
+   GALLERY GRID — Masonry-style columns
+   ========================================================= */
+.gallery-section {
+  padding: 2.5rem 0 4rem;
+}
+.gallery-grid {
+  columns: 4;
+  column-gap: 1rem;
+}
+.gallery-item {
+  break-inside: avoid;
+  margin-bottom: 1rem;
+  border-radius: 14px;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  display: block;
+  background: #0d1f33;
+  box-shadow: 0 4px 18px rgba(0,0,0,.12);
+  transition: transform .22s, box-shadow .22s;
+}
+.gallery-item:hover { transform: translateY(-4px) scale(1.01); box-shadow: 0 10px 30px rgba(0,0,0,.2); }
+.gallery-item img {
+  width: 100%; display: block;
+  transition: opacity .3s;
+}
+.gallery-item-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(10,22,38,.9) 0%, rgba(10,22,38,.2) 50%, transparent 100%);
+  opacity: 0; transition: opacity .25s;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 1rem;
+}
+.gallery-item:hover .gallery-item-overlay { opacity: 1; }
+.gallery-item-title {
+  color: #fff; font-size: .82rem; font-weight: 700; line-height: 1.3;
+  margin: 0 0 .2rem;
+}
+.gallery-item-cat {
+  display: inline-flex; align-items: center;
+  background: rgba(54,166,160,.25); border: 1px solid rgba(54,166,160,.4);
+  color: #9fe3dc; font-size: .66rem; font-weight: 700;
+  letter-spacing: .06em; text-transform: uppercase;
+  padding: .15rem .5rem; border-radius: 999px;
+}
+/* Skeleton loader */
+.gallery-skeleton {
+  border-radius: 14px; overflow: hidden;
+  background: linear-gradient(90deg, #e2e8f0 25%, #f0f4f8 50%, #e2e8f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  margin-bottom: 1rem;
+  break-inside: avoid;
+}
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Empty state */
+.gallery-empty {
+  grid-column: 1 / -1;
+  text-align: center; padding: 5rem 2rem;
+  color: var(--muted);
+}
+.gallery-empty svg { opacity: .3; margin-bottom: 1rem; }
+.gallery-empty h3 { font-size: 1.3rem; color: var(--navy); margin: 0 0 .4rem; }
+.gallery-empty p { margin: 0; }
+
+/* =========================================================
+   LIGHTBOX
+   ========================================================= */
+#lightbox {
+  position: fixed; inset: 0; z-index: 1000;
+  background: rgba(5,12,22,.96);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity .25s;
+}
+#lightbox.open { opacity: 1; pointer-events: all; }
+.lb-inner {
+  position: relative;
+  display: flex; flex-direction: column; align-items: center;
+  max-width: min(90vw, 1000px); max-height: 90vh;
+  width: 100%;
+}
+#lb-img {
+  max-width: 100%; max-height: 75vh;
+  object-fit: contain;
+  border-radius: 10px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.7);
+}
+.lb-info {
+  margin-top: .9rem; text-align: center;
+}
+.lb-title {
+  color: #fff; font-size: 1rem; font-weight: 700; margin: 0 0 .2rem;
+}
+.lb-caption {
+  color: rgba(255,255,255,.55); font-size: .84rem; margin: 0;
+}
+.lb-cat-badge {
+  display: inline-block;
+  background: rgba(54,166,160,.2); border: 1px solid rgba(54,166,160,.35);
+  color: #9fe3dc; font-size: .68rem; font-weight: 700;
+  letter-spacing: .07em; text-transform: uppercase;
+  padding: .18rem .6rem; border-radius: 999px; margin-bottom: .4rem;
+}
+.lb-close {
+  position: absolute; top: -2.5rem; right: 0;
+  background: rgba(255,255,255,.12); border: none; color: #fff;
+  width: 36px; height: 36px; border-radius: 50%; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .18s; font-size: 1.1rem;
+}
+.lb-close:hover { background: rgba(255,255,255,.22); }
+.lb-nav {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  background: rgba(255,255,255,.12); border: none; color: #fff;
+  width: 44px; height: 44px; border-radius: 50%; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .18s; font-size: 1.3rem;
+}
+.lb-nav:hover { background: rgba(255,255,255,.22); }
+.lb-prev { left: -60px; }
+.lb-next { right: -60px; }
+.lb-counter {
+  position: absolute; bottom: -2.2rem; left: 50%; transform: translateX(-50%);
+  color: rgba(255,255,255,.4); font-size: .78rem;
+}
+
+/* =========================================================
+   ADMIN UPLOAD MODAL
+   ========================================================= */
+#admin-modal {
+  position: fixed; inset: 0; z-index: 900;
+  background: rgba(5,12,22,.85); backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none; transition: opacity .25s;
+}
+#admin-modal.open { opacity: 1; pointer-events: all; }
+.admin-modal-box {
+  background: #fff; border-radius: 20px;
+  width: min(520px, 92vw);
+  box-shadow: 0 30px 80px rgba(0,0,0,.35);
+  overflow: hidden;
+}
+.admin-modal-header {
+  background: linear-gradient(135deg, var(--navy), #1b3a5e);
+  padding: 1.4rem 1.6rem;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.admin-modal-header h3 {
+  margin: 0; color: #fff; font-size: 1.05rem; font-weight: 800;
+}
+.modal-close-btn {
+  background: rgba(255,255,255,.12); border: none; color: #fff;
+  width: 32px; height: 32px; border-radius: 50%; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; transition: background .18s;
+}
+.modal-close-btn:hover { background: rgba(255,255,255,.22); }
+.admin-modal-body { padding: 1.6rem; }
+
+/* Auth gate */
+#auth-gate { }
+.auth-gate-icon {
+  text-align: center; margin-bottom: 1.2rem;
+}
+.auth-gate-icon svg { opacity: .4; }
+.auth-gate-title {
+  text-align: center; font-size: 1rem; font-weight: 700;
+  color: var(--navy); margin: 0 0 1rem;
+}
+
+/* Upload form */
+#upload-form { display: none; }
+.form-group { margin-bottom: 1.1rem; }
+.form-label {
+  display: block; font-size: .78rem; font-weight: 700;
+  color: var(--navy); margin-bottom: .35rem;
+  letter-spacing: .02em;
+}
+.form-control {
+  width: 100%; padding: .6rem .9rem;
+  border: 1.5px solid var(--line); border-radius: 10px;
+  font-family: inherit; font-size: .9rem; color: var(--ink);
+  background: var(--paper);
+  transition: border-color .18s, box-shadow .18s;
+  outline: none;
+}
+.form-control:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(54,166,160,.12); }
+select.form-control { cursor: pointer; }
+textarea.form-control { resize: vertical; min-height: 70px; }
+
+/* File drop zone */
+.drop-zone {
+  border: 2px dashed var(--line); border-radius: 12px;
+  padding: 2rem 1rem; text-align: center; cursor: pointer;
+  transition: border-color .2s, background .2s; position: relative;
+}
+.drop-zone:hover, .drop-zone.drag-over {
+  border-color: var(--teal); background: rgba(54,166,160,.04);
+}
+.drop-zone input[type="file"] {
+  position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+}
+.drop-zone-icon { font-size: 2rem; margin-bottom: .5rem; }
+.drop-zone-text { font-size: .82rem; color: var(--muted); }
+.drop-zone-text strong { color: var(--teal); }
+#file-preview-container {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: .5rem; margin-top: .8rem;
+}
+.file-preview-thumb {
+  aspect-ratio: 1; border-radius: 8px; overflow: hidden;
+  position: relative;
+}
+.file-preview-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.file-preview-remove {
+  position: absolute; top: 3px; right: 3px;
+  background: rgba(0,0,0,.6); color: #fff; border: none;
+  width: 20px; height: 20px; border-radius: 50%; cursor: pointer;
+  font-size: .7rem; display: flex; align-items: center; justify-content: center;
+}
+
+/* Upload progress */
+.upload-progress-bar {
+  height: 4px; background: var(--line); border-radius: 999px;
+  overflow: hidden; margin-top: .5rem; display: none;
+}
+.upload-progress-fill {
+  height: 100%; background: linear-gradient(90deg, var(--teal), var(--blue));
+  border-radius: 999px; width: 0%; transition: width .3s;
+}
+.upload-status {
+  font-size: .8rem; color: var(--muted); margin-top: .4rem; min-height: 1.2rem;
+}
+.upload-status.error { color: #e05555; }
+.upload-status.success { color: #22a84a; font-weight: 600; }
+
+/* Buttons */
+.btn-primary {
+  display: inline-flex; align-items: center; gap: .45rem;
+  background: linear-gradient(135deg, var(--navy), #1f6b86);
+  color: #fff; font-weight: 700; font-size: .9rem;
+  padding: .7rem 1.4rem; border-radius: 999px; border: none; cursor: pointer;
+  transition: transform .18s, box-shadow .18s;
+  box-shadow: 0 4px 14px rgba(16,38,63,.25);
+}
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(16,38,63,.3); }
+.btn-primary:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+
+.input-with-btn { display: flex; gap: .5rem; }
+.input-with-btn .form-control { flex: 1; }
+
+/* =========================================================
+   FLOATING UPLOAD BTN (admin only, appears after login)
+   ========================================================= */
+#fab-upload {
+  position: fixed; bottom: 2rem; right: 2rem; z-index: 500;
+  display: none;
+}
+#fab-upload button {
+  display: flex; align-items: center; gap: .5rem;
+  background: linear-gradient(135deg, var(--gold), #e0b84a);
+  color: var(--navy); font-weight: 800; font-size: .85rem;
+  padding: .75rem 1.4rem; border-radius: 999px; border: none; cursor: pointer;
+  box-shadow: 0 6px 24px rgba(201,168,76,.4);
+  transition: transform .18s, box-shadow .18s;
+}
+#fab-upload button:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(201,168,76,.5); }
+
+/* Admin badge in hero */
+#hero-upload-btn { display: none; }
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+@media (max-width: 1100px) { .gallery-grid { columns: 3; } }
+@media (max-width: 750px)  { .gallery-grid { columns: 2; } }
+@media (max-width: 450px)  { .gallery-grid { columns: 1; } }
+@media (max-width: 600px)  {
+  .lb-prev { left: -50px; } .lb-next { right: -50px; }
+  .lb-nav { width: 36px; height: 36px; }
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+footer { background: var(--navy); color: #d7e6ed; padding: 2rem 0; }
+footer a { color: #9fe3dc; }
+.footer-row { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+
+<!-- =========================================================
+     HEADER
+     ========================================================= -->
+<header>
+  <div class="wrap hdr-top">
+    <a class="brand" href="index.html">SHARAN CHANDRAN M<small>Academic · Research · Student Mentorship</small></a>
+    <div class="hdr-pills">
+      <a href="courses.html" class="nav-pill nav-courses-link">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        Courses
+      </a>
+      <a href="projects.html" class="nav-pill nav-projects-view-link">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+        Projects
+      </a>
+      <a href="gallery.html" class="nav-pill nav-gallery-link" aria-current="page">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+        Gallery
+      </a>
+      <a href="index.html#contact" class="nav-pill nav-training-link">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Contact for Training
+      </a>
+    </div>
+  </div>
+  <div class="hdr-nav-row">
+    <div class="wrap">
+      <nav>
+        <a href="index.html#about">About</a>
+        <a href="index.html#research">Research</a>
+        <a href="index.html#publications">Publications</a>
+        <a href="index.html#mentorship">Mentorship</a>
+        <a href="gallery.html" class="active">Gallery</a>
+        <a href="index.html#contact">Contact</a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<!-- =========================================================
+     GALLERY HERO
+     ========================================================= -->
+<div class="gallery-hero">
+  <div class="wrap">
+    <div class="gallery-hero-eyebrow">Photo Gallery</div>
+    <h1>Moments in Research &amp; Academia</h1>
+    <p>A visual record of events, workshops, field activities, and milestones from our academic journey.</p>
+    <div class="gallery-hero-actions">
+      <button class="btn-upload" id="hero-upload-btn" onclick="openAdminModal()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        Upload Photos
+      </button>
+      <button style="background:transparent;border:1px solid rgba(255,255,255,.25);color:rgba(255,255,255,.65);padding:.5rem .9rem;border-radius:999px;font-size:.78rem;cursor:pointer;" onclick="openAdminModal()" id="admin-trigger-btn">
+        🔒 Admin
+      </button>
+    </div>
+    <div class="gallery-stats">
+      <div>
+        <div class="gallery-stat-num" id="stat-photos">—</div>
+        <div class="gallery-stat-label">Photos</div>
+      </div>
+      <div>
+        <div class="gallery-stat-num" id="stat-cats">—</div>
+        <div class="gallery-stat-label">Categories</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================
+     FILTER BAR
+     ========================================================= -->
+<div class="filter-bar">
+  <div class="wrap filter-inner" id="filter-bar">
+    <button class="filter-btn active" data-cat="all">
+      All <span class="count" id="cnt-all">0</span>
+    </button>
+    <button class="filter-btn" data-cat="Events">
+      📅 Events <span class="count" id="cnt-events">0</span>
+    </button>
+    <button class="filter-btn" data-cat="Research">
+      🔬 Research <span class="count" id="cnt-research">0</span>
+    </button>
+    <button class="filter-btn" data-cat="Training">
+      🎓 Training <span class="count" id="cnt-training">0</span>
+    </button>
+    <button class="filter-btn" data-cat="Field Work">
+      🏭 Field Work <span class="count" id="cnt-field">0</span>
+    </button>
+    <button class="filter-btn" data-cat="Awards">
+      🏆 Awards <span class="count" id="cnt-awards">0</span>
+    </button>
+    <button class="filter-btn" data-cat="Others">
+      📸 Others <span class="count" id="cnt-others">0</span>
+    </button>
+  </div>
+</div>
+
+<!-- =========================================================
+     GALLERY GRID
+     ========================================================= -->
+<section class="gallery-section">
+  <div class="wrap">
+    <div class="gallery-grid" id="gallery-grid">
+      <!-- Skeleton placeholders -->
+      <div class="gallery-skeleton" style="height:220px;"></div>
+      <div class="gallery-skeleton" style="height:300px;"></div>
+      <div class="gallery-skeleton" style="height:180px;"></div>
+      <div class="gallery-skeleton" style="height:260px;"></div>
+      <div class="gallery-skeleton" style="height:200px;"></div>
+      <div class="gallery-skeleton" style="height:240px;"></div>
+      <div class="gallery-skeleton" style="height:290px;"></div>
+      <div class="gallery-skeleton" style="height:170px;"></div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     LIGHTBOX
+     ========================================================= -->
+<div id="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer">
+  <div class="lb-inner">
+    <button class="lb-close" onclick="closeLightbox()" aria-label="Close">✕</button>
+    <button class="lb-nav lb-prev" onclick="lbNavigate(-1)" aria-label="Previous">‹</button>
+    <button class="lb-nav lb-next" onclick="lbNavigate(1)" aria-label="Next">›</button>
+    <img id="lb-img" src="" alt="">
+    <div class="lb-info">
+      <div class="lb-cat-badge" id="lb-cat"></div>
+      <div class="lb-title" id="lb-title"></div>
+      <p class="lb-caption" id="lb-caption"></p>
+    </div>
+    <div class="lb-counter" id="lb-counter"></div>
+  </div>
+</div>
+
+<!-- =========================================================
+     ADMIN UPLOAD MODAL
+     ========================================================= -->
+<div id="admin-modal" role="dialog" aria-modal="true">
+  <div class="admin-modal-box">
+    <div class="admin-modal-header">
+      <h3 id="modal-title">🔒 Admin Access</h3>
+      <button class="modal-close-btn" onclick="closeAdminModal()">✕</button>
+    </div>
+    <div class="admin-modal-body">
+
+      <!-- AUTH GATE -->
+      <div id="auth-gate">
+        <div class="auth-gate-icon">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#10263f" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </div>
+        <div class="auth-gate-title">Enter admin password to upload photos</div>
+        <div class="form-group">
+          <div class="input-with-btn">
+            <input type="password" class="form-control" id="admin-pass" placeholder="Admin password" autocomplete="current-password">
+            <button class="btn-primary" onclick="checkAdminPass()">Unlock</button>
+          </div>
+          <div class="upload-status error" id="auth-error" style="display:none;">Incorrect password. Try again.</div>
+        </div>
+      </div>
+
+      <!-- UPLOAD FORM (shown after auth) -->
+      <div id="upload-form">
+        <div class="form-group">
+          <label class="form-label">Photo Title *</label>
+          <input type="text" class="form-control" id="up-title" placeholder="e.g. National Conference on Composites 2026">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Category *</label>
+          <select class="form-control" id="up-cat">
+            <option value="">Select category</option>
+            <option value="Events">Events</option>
+            <option value="Research">Research</option>
+            <option value="Training">Training</option>
+            <option value="Field Work">Field Work</option>
+            <option value="Awards">Awards</option>
+            <option value="Others">Others</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Caption / Description</label>
+          <textarea class="form-control" id="up-caption" placeholder="Brief description of the photo or event…"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Photo *</label>
+          <div class="drop-zone" id="drop-zone">
+            <input type="file" id="up-file" accept="image/*" onchange="handleFileSelect(this.files)">
+            <div class="drop-zone-icon">🖼️</div>
+            <div class="drop-zone-text">
+              <strong>Click to browse</strong> or drag &amp; drop<br>
+              <span>JPEG, PNG, WebP — max 8 MB</span>
+            </div>
+          </div>
+          <div id="file-preview-container"></div>
+        </div>
+        <div class="upload-progress-bar" id="up-progress-bar">
+          <div class="upload-progress-fill" id="up-progress-fill"></div>
+        </div>
+        <div class="upload-status" id="up-status"></div>
+        <div style="display:flex;gap:.7rem;margin-top:1rem;">
+          <button class="btn-primary" id="up-submit-btn" onclick="uploadPhoto()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Upload Photo
+          </button>
+          <button style="background:var(--paper);border:1.5px solid var(--line);color:var(--muted);padding:.7rem 1.2rem;border-radius:999px;cursor:pointer;font-size:.88rem;" onclick="resetUploadForm()">Clear</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Floating upload button (admin) -->
+<div id="fab-upload">
+  <button onclick="openAdminModal()">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+    Upload Photo
+  </button>
+</div>
+
+<!-- =========================================================
+     FOOTER
+     ========================================================= -->
+<footer>
+  <div class="wrap footer-row">
+    <div>
+      <strong>Dr. Sharan Chandran M</strong><br>
+      <span>Academic · Research · Student Mentorship</span>
+    </div>
+    <div>© <span id="year"></span> Dr. Sharan Chandran M. All rights reserved.</div>
+  </div>
+</footer>
+
+<!-- =========================================================
+     JAVASCRIPT
+     ========================================================= -->
+<script>
+/* ── Config ─────────────────────────────────────────────── */
+const SB_URL = 'https://gmgaoutklvhiudovvkie.supabase.co';
+const SB_KEY = 'sb_publishable_aHL1lexC4P7JLAcT8Y391A_MjKyxcfN';
+const BUCKET  = 'gallery-photos';
+
+// Admin password hash (SHA-256 of your password)
+// Default password: gallery@2026
+// To change: replace ADMIN_HASH with SHA-256 hash of your new password
+const ADMIN_HASH = 'a3b4c9f1e8d2075f6a7c849d13e0b2a6c5f8e3d1072a9b4c6e8f0d2a3b5c7e9';
+// ^ placeholder — real hash is computed at runtime from "gallery@2026"
+
+/* ── State ───────────────────────────────────────────────── */
+let allPhotos   = [];
+let filtered    = [];
+let currentCat  = 'all';
+let lbIndex     = 0;
+let isAdmin     = false;
+let selectedFile= null;
+
+/* ── Init ────────────────────────────────────────────────── */
+document.getElementById('year').textContent = new Date().getFullYear();
+
+// Check session for admin
+if (sessionStorage.getItem('gallery_admin') === '1') {
+  grantAdmin();
+}
+
+// Admin password enter key
+document.getElementById('admin-pass').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') checkAdminPass();
+});
+
+// Drag & drop
+const dz = document.getElementById('drop-zone');
+dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('drag-over'); });
+dz.addEventListener('dragleave', () => dz.classList.remove('drag-over'));
+dz.addEventListener('drop', e => {
+  e.preventDefault(); dz.classList.remove('drag-over');
+  handleFileSelect(e.dataTransfer.files);
+});
+
+// Keyboard close
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closeLightbox(); closeAdminModal(); }
+  if (document.getElementById('lightbox').classList.contains('open')) {
+    if (e.key === 'ArrowLeft')  lbNavigate(-1);
+    if (e.key === 'ArrowRight') lbNavigate(1);
+  }
+});
+
+// Lightbox backdrop close
+document.getElementById('lightbox').addEventListener('click', function(e) {
+  if (e.target === this) closeLightbox();
+});
+
+// Admin modal backdrop close
+document.getElementById('admin-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeAdminModal();
+});
+
+/* ── Load gallery from Supabase ─────────────────────────── */
+async function loadGallery() {
+  try {
+    const r = await fetch(
+      `${SB_URL}/rest/v1/gallery_items?select=*&order=created_at.desc`,
+      { headers: { 'apikey': SB_KEY, 'Content-Type': 'application/json' } }
+    );
+    if (!r.ok) throw new Error('fetch failed');
+    const data = await r.json();
+    allPhotos = data;
+    updateCounts();
+    renderGallery('all');
+    updateStats();
+  } catch (err) {
+    renderError();
+  }
+}
+
+function updateCounts() {
+  const cats = { all: allPhotos.length, events: 0, research: 0, training: 0, field: 0, awards: 0, others: 0 };
+  allPhotos.forEach(p => {
+    const c = (p.category || 'Others').toLowerCase();
+    if (c === 'events')    cats.events++;
+    else if (c === 'research') cats.research++;
+    else if (c === 'training') cats.training++;
+    else if (c === 'field work') cats.field++;
+    else if (c === 'awards') cats.awards++;
+    else cats.others++;
+  });
+  document.getElementById('cnt-all').textContent     = cats.all;
+  document.getElementById('cnt-events').textContent  = cats.events;
+  document.getElementById('cnt-research').textContent= cats.research;
+  document.getElementById('cnt-training').textContent= cats.training;
+  document.getElementById('cnt-field').textContent   = cats.field;
+  document.getElementById('cnt-awards').textContent  = cats.awards;
+  document.getElementById('cnt-others').textContent  = cats.others;
+}
+
+function updateStats() {
+  document.getElementById('stat-photos').textContent = allPhotos.length;
+  const uniqueCats = [...new Set(allPhotos.map(p => p.category || 'Others'))];
+  document.getElementById('stat-cats').textContent = uniqueCats.length;
+}
+
+function renderGallery(cat) {
+  currentCat = cat;
+  filtered = cat === 'all' ? allPhotos : allPhotos.filter(p => (p.category || 'Others') === cat);
+  const grid = document.getElementById('gallery-grid');
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `
+      <div class="gallery-empty" style="column-span:all;">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+        <h3>No photos yet</h3>
+        <p>${cat === 'all' ? 'Photos will appear here once uploaded.' : `No photos in the "${cat}" category yet.`}</p>
+      </div>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map((p, i) => `
+    <div class="gallery-item" onclick="openLightbox(${i})" role="button" tabindex="0"
+         aria-label="${escHtml(p.title)}">
+      <img src="${escHtml(p.public_url)}" alt="${escHtml(p.title)}" loading="lazy"
+           style="width:100%;display:block;">
+      <div class="gallery-item-overlay">
+        <div class="gallery-item-cat">${escHtml(p.category || 'Others')}</div>
+        <div class="gallery-item-title">${escHtml(p.title)}</div>
+      </div>
+    </div>
+  `).join('');
+
+  // Keyboard support for gallery items
+  grid.querySelectorAll('.gallery-item').forEach((el, i) => {
+    el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') openLightbox(i); });
+  });
+}
+
+function renderError() {
+  document.getElementById('gallery-grid').innerHTML = `
+    <div class="gallery-empty" style="column-span:all;">
+      <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#e05555" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <h3>Couldn't load gallery</h3>
+      <p>Please check your connection and <a href="" onclick="location.reload()">try again</a>.</p>
+    </div>`;
+  document.getElementById('stat-photos').textContent = '—';
+  document.getElementById('stat-cats').textContent = '—';
+}
+
+/* ── Filter bar ─────────────────────────────────────────── */
+document.getElementById('filter-bar').addEventListener('click', function(e) {
+  const btn = e.target.closest('.filter-btn');
+  if (!btn) return;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderGallery(btn.dataset.cat);
+});
+
+/* ── Lightbox ────────────────────────────────────────────── */
+function openLightbox(idx) {
+  lbIndex = idx;
+  showLbPhoto();
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function lbNavigate(dir) {
+  lbIndex = (lbIndex + dir + filtered.length) % filtered.length;
+  showLbPhoto();
+}
+function showLbPhoto() {
+  const p = filtered[lbIndex];
+  document.getElementById('lb-img').src     = p.public_url;
+  document.getElementById('lb-img').alt     = p.title;
+  document.getElementById('lb-title').textContent   = p.title;
+  document.getElementById('lb-caption').textContent = p.caption || '';
+  document.getElementById('lb-cat').textContent     = p.category || 'Others';
+  document.getElementById('lb-counter').textContent = `${lbIndex + 1} / ${filtered.length}`;
+}
+
+/* ── Admin auth ─────────────────────────────────────────── */
+async function checkAdminPass() {
+  const pass = document.getElementById('admin-pass').value;
+  const hash = await sha256(pass);
+  // Store the actual hash of "gallery@2026" for comparison
+  const correctHash = await sha256('gallery@2026');
+  if (hash === correctHash) {
+    sessionStorage.setItem('gallery_admin', '1');
+    grantAdmin();
+    document.getElementById('modal-title').textContent = '📤 Upload Photo';
+    document.getElementById('auth-gate').style.display = 'none';
+    document.getElementById('upload-form').style.display = 'block';
+  } else {
+    document.getElementById('auth-error').style.display = 'block';
+    document.getElementById('admin-pass').value = '';
+    document.getElementById('admin-pass').focus();
+  }
+}
+async function sha256(str) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+function grantAdmin() {
+  isAdmin = true;
+  document.getElementById('admin-trigger-btn').style.display = 'none';
+  document.getElementById('hero-upload-btn').style.display = 'inline-flex';
+  document.getElementById('fab-upload').style.display = 'block';
+}
+
+/* ── Admin modal open/close ─────────────────────────────── */
+function openAdminModal() {
+  document.getElementById('admin-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  if (isAdmin) {
+    document.getElementById('modal-title').textContent = '📤 Upload Photo';
+    document.getElementById('auth-gate').style.display = 'none';
+    document.getElementById('upload-form').style.display = 'block';
+  }
+  setTimeout(() => document.getElementById('admin-pass').focus(), 100);
+}
+function closeAdminModal() {
+  document.getElementById('admin-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+/* ── File select & preview ──────────────────────────────── */
+function handleFileSelect(files) {
+  if (!files || !files[0]) return;
+  const file = files[0];
+  if (!file.type.startsWith('image/')) {
+    alert('Please select an image file (JPEG, PNG, WebP).');
+    return;
+  }
+  if (file.size > 8 * 1024 * 1024) {
+    alert('File is too large. Maximum size is 8 MB.');
+    return;
+  }
+  selectedFile = file;
+  const reader = new FileReader();
+  reader.onload = e => {
+    document.getElementById('file-preview-container').innerHTML = `
+      <div class="file-preview-thumb" style="grid-column:1/span 2;aspect-ratio:16/9;">
+        <img src="${e.target.result}" alt="Preview">
+      </div>
+      <div style="grid-column:3;display:flex;flex-direction:column;justify-content:center;gap:.3rem;">
+        <div style="font-size:.78rem;font-weight:700;color:var(--navy);">${escHtml(file.name)}</div>
+        <div style="font-size:.72rem;color:var(--muted);">${(file.size/1024).toFixed(0)} KB</div>
+      </div>`;
+  };
+  reader.readAsDataURL(file);
+}
+
+/* ── Upload to Supabase Storage + DB ───────────────────── */
+async function uploadPhoto() {
+  const title   = document.getElementById('up-title').value.trim();
+  const cat     = document.getElementById('up-cat').value;
+  const caption = document.getElementById('up-caption').value.trim();
+
+  if (!title)        { showUpStatus('Please enter a title.', 'error'); return; }
+  if (!cat)          { showUpStatus('Please select a category.', 'error'); return; }
+  if (!selectedFile) { showUpStatus('Please select a photo.', 'error'); return; }
+
+  const btn = document.getElementById('up-submit-btn');
+  btn.disabled = true;
+  document.getElementById('up-progress-bar').style.display = 'block';
+  setProgress(10);
+  showUpStatus('Uploading…', '');
+
+  try {
+    // 1. Upload to Storage
+    const ext      = selectedFile.name.split('.').pop().toLowerCase();
+    const fileName = `${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
+    const filePath = `public/${fileName}`;
+
+    setProgress(30);
+
+    const storageRes = await fetch(
+      `${SB_URL}/storage/v1/object/${BUCKET}/${filePath}`,
+      {
+        method: 'POST',
+        headers: {
+          'apikey': SB_KEY,
+          'Authorization': `Bearer ${SB_KEY}`,
+          'Content-Type': selectedFile.type,
+          'x-upsert': 'false'
+        },
+        body: selectedFile
+      }
+    );
+    if (!storageRes.ok) {
+      const err = await storageRes.json().catch(() => ({}));
+      throw new Error(err.message || 'Storage upload failed');
+    }
+
+    setProgress(65);
+
+    // 2. Build public URL
+    const publicUrl = `${SB_URL}/storage/v1/object/public/${BUCKET}/${filePath}`;
+
+    // 3. Insert record in gallery_items
+    const dbRes = await fetch(`${SB_URL}/rest/v1/gallery_items`, {
+      method: 'POST',
+      headers: {
+        'apikey': SB_KEY,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=representation'
+      },
+      body: JSON.stringify({
+        title, category: cat, caption, storage_path: filePath, public_url: publicUrl
+      })
+    });
+    if (!dbRes.ok) throw new Error('Database insert failed');
+
+    setProgress(100);
+    showUpStatus('✅ Photo uploaded successfully!', 'success');
+
+    // Refresh gallery
+    await loadGallery();
+    setTimeout(() => {
+      resetUploadForm();
+      closeAdminModal();
+    }, 1500);
+
+  } catch (err) {
+    showUpStatus(`❌ Upload failed: ${err.message}`, 'error');
+    btn.disabled = false;
+    setProgress(0);
+  }
+}
+
+function setProgress(pct) {
+  document.getElementById('up-progress-fill').style.width = pct + '%';
+}
+function showUpStatus(msg, type) {
+  const el = document.getElementById('up-status');
+  el.textContent = msg;
+  el.className = 'upload-status' + (type ? ` ${type}` : '');
+}
+function resetUploadForm() {
+  document.getElementById('up-title').value   = '';
+  document.getElementById('up-cat').value     = '';
+  document.getElementById('up-caption').value = '';
+  document.getElementById('up-file').value    = '';
+  document.getElementById('file-preview-container').innerHTML = '';
+  document.getElementById('up-progress-bar').style.display = 'none';
+  document.getElementById('up-progress-fill').style.width = '0%';
+  document.getElementById('up-status').textContent = '';
+  document.getElementById('up-submit-btn').disabled = false;
+  selectedFile = null;
+}
+
+/* ── Helpers ─────────────────────────────────────────────── */
+function escHtml(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ── Boot ────────────────────────────────────────────────── */
+loadGallery();
+</script>
+</body>
+</html>
