@@ -908,7 +908,7 @@ async function checkAdminPass() {
   const pass = document.getElementById('admin-pass').value;
   const hash = await sha256(pass);
   // Store the actual hash of "gallery@2026" for comparison
-  const correctHash = await sha256('gallery@2026');
+  const correctHash = await sha256('Nrisimha@2026');
   if (hash === correctHash) {
     sessionStorage.setItem('gallery_admin', '1');
     grantAdmin();
