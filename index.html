@@ -3664,7 +3664,8 @@ window.SITE_CONFIG = {
 <script>
 (function() {
   /* ── All 38 publications from Google Scholar (sorted by citations desc, then year) ── */
-  var PUBS = [
+  window.PUBS = [];
+  var PUBS = window.PUBS = [
     {title:'A review on the recent applications of synthetic biopolymers in 3D printing for biomedical applications',authors:'Shiva S, Prabu A, Bajaj G, John AE, Chandran S, Kumar VV et al.',venue:'Journal of Materials Science: Materials in Medicine',volume:'34(12):62',year:2023,citations:149,type:'article'},
     {title:'Surface treatment of natural fibers for enhancing interfacial adhesion and mechanical properties in biocomposites — a comprehensive review',authors:'Varma M, Chandran S',venue:'Composite Interfaces',volume:'32(12):1729–1765',year:2025,citations:93,type:'article'},
     {title:'Sustainable recycling of polymers: a comprehensive review',authors:'Kolluru S, Thakur A, Tamakuwala D, Kumar VV, Ramakrishna S, Chandran S et al.',venue:'Polymer Bulletin',volume:'81(11):9569–9610',year:2024,citations:86,type:'article'},
@@ -4070,8 +4071,10 @@ window.SITE_CONFIG = {
 
   /* ── 5. RESEARCH IMPACT CANVAS CHART ───────────────────── */
   window.addEventListener('load', function () {
+    setTimeout(function () {
     var canvas = document.getElementById('impact-canvas');
-    if (!canvas || typeof PUBS === 'undefined') return;
+    var PUBS = window.PUBS;
+    if (!canvas || !PUBS || !PUBS.length) return;
     var ctx = canvas.getContext('2d');
     if (!ctx) return;
 
@@ -4183,10 +4186,10 @@ window.SITE_CONFIG = {
     var dmQuery = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)');
     if (dmQuery && dmQuery.addEventListener) {
       dmQuery.addEventListener('change', function () {
-        // Reset and redraw by re-triggering load
         canvas.dispatchEvent(new Event('redraw'));
       });
     }
+    }, 200); // end setTimeout — wait for PUBS to be ready
   });
 
 })();
