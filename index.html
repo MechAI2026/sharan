@@ -13,6 +13,7 @@
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#10263f">
 <meta name="description" content="Academic and research profile of Dr. Sharan Chandran M, Senior Assistant Professor at VIT Vellore. Research in sustainable composites, additive manufacturing, and materials engineering.">
 <title>Dr.Sharan Chandran M, PhD, PDF | Academic & Research Profile</title>
 <link rel="canonical" href="https://sharanchandran.com/">
@@ -1738,10 +1739,119 @@ footer {
   .mentor-cta { grid-template-columns: 1fr; padding: 1.5rem; }
   .mentor-cta .btn { justify-self: start; }
 }
+
+/* =========================================================
+   WEBBY UPGRADE — animations, interactivity, accessibility
+   ========================================================= */
+
+/* Skip to content */
+.skip-to-content {
+  position: absolute; top: -100px; left: 1rem; z-index: 9999;
+  background: var(--blue); color: #fff; padding: .5rem 1rem;
+  border-radius: 0 0 8px 8px; font-weight: 700; font-size: .9rem;
+  transition: top .2s;
+}
+.skip-to-content:focus { top: 0; }
+
+/* Reading progress bar */
+#read-progress {
+  position: fixed; top: 0; left: 0; height: 3px; width: 0%;
+  background: linear-gradient(90deg, var(--teal), #9fe3dc);
+  z-index: 9999; transition: width .1s linear;
+  box-shadow: 0 0 8px var(--teal);
+}
+
+/* Hero animated stats */
+.hero-stats {
+  display: flex; gap: 2rem; flex-wrap: wrap;
+  margin-top: 2rem; padding-top: 1.5rem;
+  border-top: 1px solid rgba(255,255,255,.18);
+}
+.hero-stat { display: flex; flex-direction: column; align-items: flex-start; }
+.hero-stat-num {
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 800; letter-spacing: -.04em;
+  color: #a7f3e6; line-height: 1;
+}
+.hero-stat-label {
+  font-size: .72rem; letter-spacing: .12em;
+  text-transform: uppercase; color: rgba(255,255,255,.65);
+  margin-top: .2rem; font-weight: 600;
+}
+
+/* Scroll cue */
+.scroll-cue {
+  display: flex; align-items: center; justify-content: flex-start;
+  margin-top: 1.5rem; color: rgba(255,255,255,.45);
+  animation: bounce 2s ease-in-out infinite;
+}
+@keyframes bounce {
+  0%,100% { transform: translateY(0); }
+  50%      { transform: translateY(6px); }
+}
+
+/* Scroll-reveal animations */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity .6s ease, transform .6s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: none;
+}
+.reveal-delay-1 { transition-delay: .1s; }
+.reveal-delay-2 { transition-delay: .2s; }
+.reveal-delay-3 { transition-delay: .3s; }
+
+/* Active nav link */
+.hdr-nav-row nav a.nav-active {
+  color: #fff;
+  background: rgba(255,255,255,.12);
+}
+
+/* Research impact chart section */
+#impact-chart-section {
+  padding: 2rem 0;
+}
+.impact-chart-wrap {
+  background: var(--white);
+  border-radius: 16px;
+  padding: 1.8rem 1.5rem 1rem;
+  box-shadow: 0 4px 20px rgba(16,38,63,.07);
+  overflow: hidden;
+}
+.impact-chart-title {
+  font-size: .75rem; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--blue); font-weight: 800; margin-bottom: 1rem;
+}
+#impact-canvas { width: 100%; display: block; cursor: default; }
+.chart-legend {
+  display: flex; gap: 1.5rem; flex-wrap: wrap; margin-top: .8rem;
+  font-size: .78rem; color: var(--muted);
+}
+.chart-legend span { display: flex; align-items: center; gap: .4rem; }
+.chart-legend span::before {
+  content: ""; width: 12px; height: 12px; border-radius: 3px;
+  flex-shrink: 0;
+}
+.chart-legend .leg-pubs::before { background: var(--blue); }
+.chart-legend .leg-cites::before { background: var(--teal); }
+
+/* Dark mode additions */
+@media (prefers-color-scheme: dark) {
+  .impact-chart-wrap { background: #1a2535; box-shadow: 0 4px 20px rgba(0,0,0,.3); }
+}
+
+@media (max-width: 600px) {
+  .hero-stats { gap: 1.2rem; }
+  .hero-stat-num { font-size: 1.9rem; }
+}
 </style>
 </head>
 <body>
   
+<a class="skip-to-content" href="#home">Skip to main content</a>
 <!-- Sanskrit Wisdom Banner -->
 <section class="sanskrit-banner">
  
@@ -1823,12 +1933,39 @@ footer {
         <label for="nl-email">Get research and mentoring updates by email</label>
         <div><input type="email" id="nl-email" name="email" placeholder="Your email" required><button class="btn primary" type="submit">Subscribe</button></div>
       </form>
+
+      <!-- Animated impact metrics -->
+      <div class="hero-stats" aria-label="Research impact metrics">
+        <div class="hero-stat">
+          <span class="hero-stat-num" data-target="588">0</span>
+          <span class="hero-stat-label">Citations</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-num" data-target="11">0</span>
+          <span class="hero-stat-label">h-index</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-num" data-target="35">0</span>
+          <span class="hero-stat-label">Publications</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-num" data-target="15">0</span>
+          <span class="hero-stat-label">Years active</span>
+        </div>
+      </div>
+
+      <!-- Scroll cue -->
+      <div class="scroll-cue" aria-hidden="true">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
     </div>
-    <img src="Professional Office Headshot.png" alt="Dr. Sharan Chandran M" class="profile-photo">
+    <img src="Professional Office Headshot.png" alt="Dr. Sharan Chandran M — Senior Assistant Professor, VIT Vellore" class="profile-photo">
   </div>
 </div>
+<!-- Reading progress bar -->
+<div id="read-progress" aria-hidden="true"></div>
 <main class="wrap">
-<section id="about">
+<section id="about" class="reveal">
   <div class="section-head"><div class="kicker">About</div><h2>Teaching, research and engineering in practice</h2></div>
   <div class="two-col">
     <div>
@@ -1844,8 +1981,25 @@ footer {
     </div>
   </div>
 </section>
+
+<!-- Research Impact Visualization -->
+<section id="impact-chart-section" class="reveal">
+  <div class="section-head">
+    <div class="kicker">Research Impact</div>
+    <h2>Publication & citation trajectory</h2>
+  </div>
+  <div class="impact-chart-wrap">
+    <div class="impact-chart-title">Publications per year · Citations per publication (bubble size)</div>
+    <canvas id="impact-canvas" height="220" aria-label="Bar chart showing publications and citations by year" role="img"></canvas>
+    <div class="chart-legend">
+      <span class="leg-pubs">Publications</span>
+      <span class="leg-cites">Citation weight</span>
+    </div>
+  </div>
+</section>
+
   <!-- NEWS SECTION -->
-<section id="news" class="news-section">
+<section id="news" class="news-section reveal">
   <div class="wrap">
     <h2 class="news-title">NEWS</h2>
     <p class="news-subtitle">Stay updated with latest NEWS</p>
@@ -1898,7 +2052,7 @@ footer {
   </div>
 </section>
 
-<section id="research">
+<section id="research" class="reveal">
   <div class="section-head"><div class="kicker">Research</div><h2>Research interests</h2><p class="lead">Research themes spanning materials performance, sustainable design, manufacturing, and computational approaches.</p></div>
   <div class="grid">
     <article class="card"><h3>Polymer & Natural-Fibre Composites</h3><p>Self-reinforced polymer composites, natural-fibre/epoxy systems, interfacial behaviour, and mechanical performance.</p></article>
@@ -1912,7 +2066,7 @@ footer {
   
 
 <!-- Professional Memberships & Industry Engagement -->
-<section id="professional-engagement" class="section professional-engagement">
+<section id="professional-engagement" class="section professional-engagement reveal">
   <div class="container">
 
     <div class="section-heading">
@@ -2106,7 +2260,7 @@ footer {
     <div class="card"><h3>B.Tech.</h3><p>Mechanical Engineering, TKM College of Engineering, Kerala University</p></div>
   </div>
 </section>
-<section id="publications">
+<section id="publications" class="reveal">
   <div class="section-head">
     <div class="kicker">Scholarship</div>
     <h2>Publications</h2>
@@ -2189,7 +2343,7 @@ footer {
   </div>
 </section>
 <!-- TESTIMONIALS SECTION -->
-<section id="testimonials" class="testimonials-section">
+<section id="testimonials" class="testimonials-section reveal">
 
   <div class="testimonials-heading">
     <div class="testimonials-kicker">TESTIMONIALS</div>
@@ -2297,7 +2451,7 @@ footer {
   </div>
 </div>
 </section>
-<section id="contact">
+<section id="contact" class="reveal">
   <div class="section-head"><div class="kicker">Contact</div><h2>Connect with me</h2><p class="lead">For research collaboration, academic engagement, student projects, or professional enquiries.</p></div>
   <div class="card" id="enquiry">
     <h3>Send an enquiry</h3>
@@ -3807,6 +3961,234 @@ window.SITE_CONFIG = {
   window.addEventListener('load', function () {
     setTimeout(loadStats, 500);
   });
+})();
+</script>
+
+<!-- ═══════════════════════════════════════════════
+     WEBBY AWARDS INTERACTIVITY
+     Animated counters · Reading progress · Scroll-reveal
+     Active nav · Research impact canvas chart
+════════════════════════════════════════════════ -->
+<script>
+(function () {
+  'use strict';
+
+  /* ── 1. READING PROGRESS BAR ───────────────────────────── */
+  var progressBar = document.getElementById('read-progress');
+  if (progressBar) {
+    function updateProgress() {
+      var scrollTop = window.scrollY || document.documentElement.scrollTop;
+      var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      var pct = docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0;
+      progressBar.style.width = pct + '%';
+    }
+    window.addEventListener('scroll', updateProgress, { passive: true });
+    updateProgress();
+  }
+
+  /* ── 2. ANIMATED HERO COUNTERS ─────────────────────────── */
+  function animateCounter(el) {
+    var target = parseInt(el.getAttribute('data-target'), 10);
+    if (isNaN(target)) return;
+    var duration = 1600;
+    var start = null;
+    function step(ts) {
+      if (!start) start = ts;
+      var progress = Math.min((ts - start) / duration, 1);
+      // ease-out cubic
+      var ease = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.floor(ease * target);
+      if (progress < 1) requestAnimationFrame(step);
+      else el.textContent = target;
+    }
+    requestAnimationFrame(step);
+  }
+
+  // Trigger counters once hero is in view (or on load if already visible)
+  var counters = document.querySelectorAll('.hero-stat-num[data-target]');
+  var countersStarted = false;
+  function startCounters() {
+    if (countersStarted) return;
+    countersStarted = true;
+    counters.forEach(function (el) { animateCounter(el); });
+  }
+
+  if ('IntersectionObserver' in window && counters.length) {
+    var heroObs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) startCounters(); });
+    }, { threshold: 0.3 });
+    var heroStats = document.querySelector('.hero-stats');
+    if (heroStats) heroObs.observe(heroStats); else startCounters();
+  } else {
+    window.addEventListener('load', startCounters);
+  }
+
+  /* ── 3. SCROLL-REVEAL ANIMATIONS ──────────────────────── */
+  if ('IntersectionObserver' in window) {
+    var revealEls = document.querySelectorAll('.reveal');
+    var revealObs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          revealObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    revealEls.forEach(function (el) { revealObs.observe(el); });
+  } else {
+    // Fallback: show everything
+    document.querySelectorAll('.reveal').forEach(function (el) {
+      el.classList.add('visible');
+    });
+  }
+
+  /* ── 4. ACTIVE NAV HIGHLIGHTING ────────────────────────── */
+  var sections = document.querySelectorAll('section[id], div[id]');
+  var navLinks = document.querySelectorAll('.hdr-nav-row nav a[href^="#"]');
+
+  function setActiveNav(id) {
+    navLinks.forEach(function (a) {
+      var href = a.getAttribute('href');
+      if (href === '#' + id) {
+        a.classList.add('nav-active');
+      } else {
+        a.classList.remove('nav-active');
+      }
+    });
+  }
+
+  if ('IntersectionObserver' in window && navLinks.length && sections.length) {
+    var sectionObs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) setActiveNav(e.target.id);
+      });
+    }, { rootMargin: '-30% 0px -60% 0px' });
+    sections.forEach(function (s) {
+      if (s.id) sectionObs.observe(s);
+    });
+  }
+
+  /* ── 5. RESEARCH IMPACT CANVAS CHART ───────────────────── */
+  window.addEventListener('load', function () {
+    var canvas = document.getElementById('impact-canvas');
+    if (!canvas || typeof PUBS === 'undefined') return;
+    var ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // Group PUBS by year
+    var yearMap = {};
+    PUBS.forEach(function (p) {
+      var y = parseInt(p.year, 10);
+      if (!y || y < 2008 || y > 2026) return;
+      if (!yearMap[y]) yearMap[y] = { count: 0, cites: 0 };
+      yearMap[y].count += 1;
+      yearMap[y].cites += (p.citations || 0);
+    });
+
+    var years = Object.keys(yearMap).map(Number).sort(function (a, b) { return a - b; });
+    if (!years.length) return;
+
+    var counts = years.map(function (y) { return yearMap[y].count; });
+    var cites  = years.map(function (y) { return yearMap[y].cites; });
+    var maxCount = Math.max.apply(null, counts);
+    var maxCites = Math.max.apply(null, cites);
+
+    // Responsive canvas sizing
+    var dpr = window.devicePixelRatio || 1;
+    var W = canvas.parentElement.offsetWidth || 700;
+    var H = 220;
+    canvas.width  = W * dpr;
+    canvas.height = H * dpr;
+    canvas.style.width  = W + 'px';
+    canvas.style.height = H + 'px';
+    ctx.scale(dpr, dpr);
+
+    // Dark-mode detection
+    var dark = document.documentElement.classList.contains('dark') ||
+               (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+
+    var PAD_L = 36, PAD_R = 16, PAD_T = 18, PAD_B = 36;
+    var chartW = W - PAD_L - PAD_R;
+    var chartH = H - PAD_T - PAD_B;
+    var barW = Math.max(8, Math.floor(chartW / years.length) - 6);
+
+    // Grid lines
+    ctx.strokeStyle = dark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.07)';
+    ctx.lineWidth = 1;
+    for (var g = 0; g <= 4; g++) {
+      var gy = PAD_T + chartH - (g / 4) * chartH;
+      ctx.beginPath();
+      ctx.moveTo(PAD_L, gy);
+      ctx.lineTo(W - PAD_R, gy);
+      ctx.stroke();
+    }
+
+    // Y-axis label (count)
+    ctx.fillStyle = dark ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.35)';
+    ctx.font = '10px system-ui,sans-serif';
+    ctx.textAlign = 'right';
+    for (var g2 = 0; g2 <= 4; g2++) {
+      var val = Math.round((g2 / 4) * maxCount);
+      var gy2 = PAD_T + chartH - (g2 / 4) * chartH;
+      ctx.fillText(val, PAD_L - 4, gy2 + 3);
+    }
+
+    // Bars
+    years.forEach(function (y, i) {
+      var x = PAD_L + (chartW / years.length) * i + (chartW / years.length - barW) / 2;
+
+      // Citation weight bar (behind, lighter teal)
+      var citeH = maxCites > 0 ? (cites[i] / maxCites) * chartH : 0;
+      var grad = ctx.createLinearGradient(0, PAD_T + chartH - citeH, 0, PAD_T + chartH);
+      grad.addColorStop(0, 'rgba(0,210,180,0.22)');
+      grad.addColorStop(1, 'rgba(0,210,180,0.06)');
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.roundRect
+        ? ctx.roundRect(x - 2, PAD_T + chartH - citeH, barW + 4, citeH, 3)
+        : ctx.rect(x - 2, PAD_T + chartH - citeH, barW + 4, citeH);
+      ctx.fill();
+
+      // Publication count bar
+      var pubH = maxCount > 0 ? (counts[i] / maxCount) * chartH : 0;
+      var pubGrad = ctx.createLinearGradient(0, PAD_T + chartH - pubH, 0, PAD_T + chartH);
+      pubGrad.addColorStop(0, '#00d2b4');
+      pubGrad.addColorStop(1, '#0089a0');
+      ctx.fillStyle = pubGrad;
+      ctx.beginPath();
+      ctx.roundRect
+        ? ctx.roundRect(x, PAD_T + chartH - pubH, barW, pubH, 3)
+        : ctx.rect(x, PAD_T + chartH - pubH, barW, pubH);
+      ctx.fill();
+
+      // Count label on bar
+      if (counts[i] > 0) {
+        ctx.fillStyle = dark ? '#fff' : '#004f5a';
+        ctx.font = 'bold 9px system-ui,sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(counts[i], x + barW / 2, PAD_T + chartH - pubH - 4);
+      }
+
+      // X-axis year label
+      ctx.fillStyle = dark ? 'rgba(255,255,255,0.45)' : 'rgba(0,0,0,0.4)';
+      ctx.font = '9px system-ui,sans-serif';
+      ctx.textAlign = 'center';
+      // Only show every other year if many bars
+      if (years.length <= 12 || i % 2 === 0) {
+        ctx.fillText(y, x + barW / 2, H - PAD_B + 14);
+      }
+    });
+
+    // Redraw on dark-mode toggle
+    var dmQuery = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)');
+    if (dmQuery && dmQuery.addEventListener) {
+      dmQuery.addEventListener('change', function () {
+        // Reset and redraw by re-triggering load
+        canvas.dispatchEvent(new Event('redraw'));
+      });
+    }
+  });
+
 })();
 </script>
 </body>
