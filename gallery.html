@@ -740,11 +740,9 @@ const SB_URL = 'https://gmgaoutklvhiudovvkie.supabase.co';
 const SB_KEY = 'sb_publishable_aHL1lexC4P7JLAcT8Y391A_MjKyxcfN';
 const BUCKET  = 'gallery-photos';
 
-// Admin password hash (SHA-256 of your password)
-// Default password: gallery@2026
-// To change: replace ADMIN_HASH with SHA-256 hash of your new password
-const ADMIN_HASH = 'a3b4c9f1e8d2075f6a7c849d13e0b2a6c5f8e3d1072a9b4c6e8f0d2a3b5c7e9';
-// ^ placeholder — real hash is computed at runtime from "gallery@2026"
+// Admin password stored as SHA-256 hash only — plaintext password is never in source code.
+// To change password: compute SHA-256 of your new password and replace the string below.
+const ADMIN_HASH = 'f8adbe02241264f97d311bd764d71660430edcce71735664e2b7b896a93c186c';
 
 /* ── State ───────────────────────────────────────────────── */
 let allPhotos   = [];
@@ -921,9 +919,7 @@ function showLbPhoto() {
 async function checkAdminPass() {
   const pass = document.getElementById('admin-pass').value;
   const hash = await sha256(pass);
-  // Store the actual hash of "gallery@2026" for comparison
-  const correctHash = await sha256('Nrisimha@2026');
-  if (hash === correctHash) {
+  if (hash === ADMIN_HASH) {
     sessionStorage.setItem('gallery_admin', '1');
     grantAdmin();
     document.getElementById('modal-title').textContent = '📤 Upload Photo';
